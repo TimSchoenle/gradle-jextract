@@ -6,22 +6,34 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
     test:
+        name: Test
         strategy:
           matrix:
             os: [ ubuntu-latest, windows-latest, macos-latest ]
 
         runs-on: ${{ matrix.os }}
         permissions:
-          contents: write
-          checks: write
-          id-token: write
+          contents: write # to write junit reports
+          checks: write # to write junit reports
+          id-token: write # to write junit reports
         steps:
-            -   name: Checkout source
+            - name: Harden Runner
+              uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+              with:
+                egress-policy: audit
+
+            -   name: Checkout
                 uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+                with:
+                  persist-credentials: false
 
             -   name: Set up JDK
                 uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
