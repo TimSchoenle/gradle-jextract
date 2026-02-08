@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: {}
+
 jobs:
     test:
         strategy:
@@ -13,6 +15,10 @@ jobs:
             os: [ ubuntu-latest, windows-latest, macos-latest ]
 
         runs-on: ${{ matrix.os }}
+        permissions:
+          contents: write
+          checks: write
+          id-token: write
         steps:
             -   name: Checkout source
                 uses: actions/checkout@v6
