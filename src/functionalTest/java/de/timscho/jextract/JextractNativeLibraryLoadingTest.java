@@ -222,7 +222,8 @@ class JextractNativeLibraryLoadingTest extends AbstractJextractFunctionalTest {
         this.writeBuildScript("25-jextract+2-4", lib);
 
         // Use shared mockSmartJextractTool
-        this.mockSmartJextractTool(this.gradleUserHome, "25-jextract+2-4", "com.test.injected", "InjectedHeader", false);
+        this.mockSmartJextractTool(
+                this.gradleUserHome, "25-jextract+2-4", "com.test.injected", "InjectedHeader", false);
 
         // Act
         final BuildResult result = this.createRunner(this.gradleUserHome).build();

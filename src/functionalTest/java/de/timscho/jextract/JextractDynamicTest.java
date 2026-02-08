@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
@@ -77,7 +76,8 @@ class JextractDynamicTest extends AbstractJextractFunctionalTest {
         this.verifyOutput(tempDir, config);
     }
 
-    private void writeDynamicBuildScript(final String version, final String headerName, final Map config) throws IOException {
+    private void writeDynamicBuildScript(final String version, final String headerName, final Map config)
+            throws IOException {
         final String pkg = (String) config.get("targetPackage");
         final List<String> args = (List<String>) config.get("compilerArgs");
 

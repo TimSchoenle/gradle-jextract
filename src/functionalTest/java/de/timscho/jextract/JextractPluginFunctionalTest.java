@@ -48,7 +48,8 @@ class JextractPluginFunctionalTest extends AbstractJextractFunctionalTest {
         assertThat(result.task(":generateAudioBindings").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
 
         final Path openglOut = this.testProjectDir.resolve("build/generated/sources/jextract/opengl/com/gl/gl_h.java");
-        final Path audioOut = this.testProjectDir.resolve("build/generated/sources/jextract/audio/com/audio/audio_h.java");
+        final Path audioOut =
+                this.testProjectDir.resolve("build/generated/sources/jextract/audio/com/audio/audio_h.java");
 
         assertThat(openglOut)
                 .as("OpenGL bindings should have been generated at " + openglOut)

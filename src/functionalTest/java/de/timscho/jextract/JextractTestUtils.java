@@ -7,8 +7,6 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 public class JextractTestUtils {
@@ -25,7 +23,8 @@ public class JextractTestUtils {
      * @throws IOException If writing fails.
      */
     public static void writeBuildScript(
-        final Path buildFile, @Nullable final String toolVersion, @Nullable final LibraryDefinition... libraries) throws IOException {
+            final Path buildFile, @Nullable final String toolVersion, @Nullable final LibraryDefinition... libraries)
+            throws IOException {
         final StringBuilder libsBlock = new StringBuilder(1024);
         if (libraries != null) {
             for (final LibraryDefinition lib : libraries) {
@@ -113,10 +112,15 @@ public class JextractTestUtils {
     @Builder
     public static class LibraryDefinition {
         String name;
+
         @Nullable String headerFile;
+
         @Nullable String targetPackage;
+
         @Nullable String headerClassName;
+
         @Nullable String libraryName;
+
         @Nullable String libraryPath;
 
         @Singular
@@ -124,7 +128,9 @@ public class JextractTestUtils {
 
         // Native library loading configuration
         @Nullable String nativeLibraryResourcePath;
+
         @Nullable String nativeLibraryExtractionDir;
+
         @Nullable Boolean nativeLibraryEnableCaching;
     }
 }

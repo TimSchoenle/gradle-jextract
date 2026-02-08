@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.annotation.Nullable;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
-import javax.annotation.Nullable;
 
 public abstract class AbstractJextractFunctionalTest {
     @TempDir
@@ -101,7 +101,8 @@ public abstract class AbstractJextractFunctionalTest {
                 .forwardOutput();
     }
 
-    protected void writeBuildScript(@Nullable final String toolVersion, final JextractTestUtils.LibraryDefinition... libraries)
+    protected void writeBuildScript(
+            @Nullable final String toolVersion, final JextractTestUtils.LibraryDefinition... libraries)
             throws IOException {
         JextractTestUtils.writeBuildScript(this.buildFile.toPath(), toolVersion, libraries);
     }

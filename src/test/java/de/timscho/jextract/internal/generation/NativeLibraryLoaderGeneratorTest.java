@@ -59,7 +59,8 @@ class NativeLibraryLoaderGeneratorTest {
         generator.generate();
 
         // Assert
-        final String content = Files.readString(this.tempDir.resolve("test/platform/PlatformLib_NativeLibraryLoader.java"));
+        final String content =
+                Files.readString(this.tempDir.resolve("test/platform/PlatformLib_NativeLibraryLoader.java"));
 
         // Check OS detection
         assertThat(content).as("Should detect Windows").contains("\"windows\"");
@@ -137,7 +138,8 @@ class NativeLibraryLoaderGeneratorTest {
         generator.generate();
 
         // Assert
-        final String content = Files.readString(this.tempDir.resolve("com/nocache/NoCacheLib_NativeLibraryLoader.java"));
+        final String content =
+                Files.readString(this.tempDir.resolve("com/nocache/NoCacheLib_NativeLibraryLoader.java"));
         assertThat(content).as("Should not have caching method").doesNotContain("getCachedLibrary");
         assertThat(content).as("Should not have hash computation").doesNotContain("computeHash");
     }

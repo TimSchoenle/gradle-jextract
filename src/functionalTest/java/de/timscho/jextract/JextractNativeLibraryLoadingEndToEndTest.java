@@ -1,6 +1,5 @@
 package de.timscho.jextract;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
