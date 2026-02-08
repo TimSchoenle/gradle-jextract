@@ -1,0 +1,48 @@
+# Auto detect text files and perform LF normalization
+# http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+* text=auto eol=lf
+# The above will handle all files NOT found below
+# These files are text and should be normalized (Convert crlf => lf)
+*.bat           text eol=crlf
+*.coffee        text
+*.css           text
+*.cql           text
+*.df            text
+*.ejs           text
+*.java          text
+*.json          text
+*.less          text
+*.properties    text
+*.sass          text
+*.scss          text
+*.sh            text eol=lf
+*.sql           text
+*.txt           text
+*.ts            text
+*.xml           text
+*.yaml          text
+*.yml           text
+
+# Documents
+*.markdown      text
+*.md            text
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.class         binary
+*.jar           binary
+*.war           binary
+
+## CONFIGS
+*.conf          text
+*.config        text
+.editorconfig   text
+.gitattributes  text
+.gitconfig      text
+.gitignore      text
+
+# Always use crlf line endings Gradle .bat file
+gradlew.bat text eol=crlf
+
+# Mark Gradle wrapper as a binary
+gradle/wrapper/gradle-wrapper.jar binary
