@@ -9,6 +9,7 @@ plugins {
 
 group = "de.timscho"
 version = "0.1.0"
+val gradlePluginId =  "de.timscho.jextract"
 
 java {
     toolchain {
@@ -70,7 +71,7 @@ spotless {
 gradlePlugin {
     plugins {
         create("jextract") {
-            id = "de.timscho.jextract"
+            id = gradlePluginId
             implementationClass = "de.timscho.jextract.JextractPlugin"
             displayName = "Modern Jextract Plugin"
             description = "Downloads and runs jextract to generate Java FFM bindings"
@@ -98,4 +99,24 @@ mavenPublishing {
 
 tasks.named("check") {
     dependsOn(testing.suites.named("functionalTest"))
+}
+
+val generateReadme by tasks.registering {
+    description = "Generates the README.md from the template with current version and snippets"
+    group = "documentation"
+
+    val template = layout.projectDirectory.file("README.tpl.md")
+
+    doLast {
+        copy {
+            from(template)
+            into(layout.projectDirectory)
+            rename { "README.md" }
+            expand(
+                "version" to project.version,
+                "group" to project.group,
+                "gradlePluginId" to gradlePluginId
+            )
+        }
+    }
 }
