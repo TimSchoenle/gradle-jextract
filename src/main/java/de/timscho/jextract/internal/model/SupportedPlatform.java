@@ -9,12 +9,13 @@ import org.jetbrains.annotations.Contract;
 @RequiredArgsConstructor
 @Getter
 public enum SupportedPlatform {
-    WINDOWS_X64("windows-x64"),
-    LINUX_X64("linux-x64"),
-    LINUX_ARM64("linux-aarch64"),
-    MACOS_X64("macos-x64"),
-    MACOS_ARM64("macos-aarch64");
+    WINDOWS_X64(PlatformType.WINDOWS, "windows-x64"),
+    LINUX_X64(PlatformType.LINUX, "linux-x64"),
+    LINUX_ARM64(PlatformType.LINUX, "linux-aarch64"),
+    MACOS_X64(PlatformType.MACOS, "macos-x64"),
+    MACOS_ARM64(PlatformType.MACOS, "macos-aarch64");
 
+    private final PlatformType platformType;
     private final String id;
 
     /**

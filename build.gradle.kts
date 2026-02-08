@@ -40,6 +40,7 @@ testing {
             dependencies {
                 implementation(project())
                 implementation(gradleTestKit())
+                implementation(libs.assertj)
             }
 
 

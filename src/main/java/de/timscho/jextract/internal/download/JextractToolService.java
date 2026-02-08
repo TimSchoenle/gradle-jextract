@@ -1,5 +1,6 @@
 package de.timscho.jextract.internal.download;
 
+import de.timscho.jextract.internal.model.PlatformType;
 import de.timscho.jextract.internal.model.SupportedPlatform;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 
 public abstract class JextractToolService implements BuildService<JextractToolService.Params> {
     public static final String DEFAULT_VERSION = "25-jextract+2-4";
-    private static final String FILE_INTEGRITY_NAME = ".gradleJextractDownload";
+    public static final String FILE_INTEGRITY_NAME = ".gradleJextractDownload";
     private static final int HTTP_OK = 200;
 
     public interface Params extends BuildServiceParameters {
@@ -54,7 +55,7 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
         final Path toolDir = this.resolveToolDir(folderName, logger);
 
         // Determine the correct binary name for the OS
-        final boolean isWindows = SupportedPlatform.getCurrentSupported() == SupportedPlatform.WINDOWS_X64;
+        final boolean isWindows = SupportedPlatform.getCurrentSupported().getPlatformType() == PlatformType.WINDOWS;
         final String binaryName = isWindows ? "jextract.bat" : "jextract";
         final Path relativePathWithBin = Path.of("bin", binaryName);
 

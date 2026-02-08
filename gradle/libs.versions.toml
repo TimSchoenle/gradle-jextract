@@ -1,0 +1,32 @@
+[versions]
+# Code Generation
+javaparser = "3.28.0"
+
+# Testing
+assertj = "3.27.7"
+
+# Annotations
+jspecify = "1.0.0"
+jetbrains-annotations = "26.0.2"
+
+# Plugins
+lombok = "9.2.0"
+spotless = "8.2.1"
+maven-publish = "0.36.0"
+
+[libraries]
+
+# Testing
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+
+# Code Generation
+javaparser = { module = "com.github.javaparser:javaparser-core", version.ref = "javaparser" }
+
+# Annotations
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+
+[plugins]
+lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }

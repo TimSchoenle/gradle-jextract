@@ -4,6 +4,7 @@ import de.timscho.jextract.extension.JextractExtension;
 import de.timscho.jextract.internal.download.JextractToolService;
 import de.timscho.jextract.task.JextractTask;
 import java.io.File;
+import java.nio.file.Path;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.Directory;
@@ -14,7 +15,8 @@ import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.Contract;
 
 public class JextractPlugin implements Plugin<Project> {
-    private static final String TASK_GROUP = "jextract";
+    public static final String TASK_GROUP = "jextract";
+    public static final Path RELATIVE_TOOL_CACHE = Path.of("caches", "jextract-tool");
 
     @Override
     public void apply(final Project project) {
@@ -27,7 +29,11 @@ public class JextractPlugin implements Plugin<Project> {
                 .registerIfAbsent("jextractTool", JextractToolService.class, spec -> {
                     spec.getParameters().getVersion().set(extension.getToolVersion());
 
-                    final File cacheDir = new File(project.getGradle().getGradleUserHomeDir(), "caches/jextract-tool");
+                    final File cacheDir = project.getGradle()
+                            .getGradleUserHomeDir()
+                            .toPath()
+                            .resolve(JextractPlugin.RELATIVE_TOOL_CACHE)
+                            .toFile();
                     spec.getParameters().getCacheDir().set(cacheDir);
                 });
 

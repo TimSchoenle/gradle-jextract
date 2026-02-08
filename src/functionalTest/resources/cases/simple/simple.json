@@ -1,0 +1,11 @@
+{
+  "targetPackage": "com.simple",
+  "compilerArgs": ["-DDEBUG"],
+  "expectedFiles": [
+    "com/simple/JextractResult.java"
+  ],
+  "expectedMethods": [
+      "hello",
+      "add"
+  ]
+}

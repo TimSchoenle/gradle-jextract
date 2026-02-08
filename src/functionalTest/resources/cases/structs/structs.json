@@ -1,0 +1,13 @@
+{
+    "targetPackage": "com.shapes",
+    "expectedClasses": [
+        "Point",
+        "Rect"
+    ],
+    "expectedMethods": [
+        "x",
+        "y",
+        "topLeft",
+        "bottomRight"
+    ]
+}

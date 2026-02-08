@@ -1,0 +1,6 @@
+{
+    "targetPackage": "com.events",
+    "expectedClasses": [
+        "Callback"
+    ]
+}
