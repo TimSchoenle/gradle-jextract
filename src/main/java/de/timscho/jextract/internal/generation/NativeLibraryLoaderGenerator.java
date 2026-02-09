@@ -7,7 +7,6 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -85,26 +84,6 @@ public final class NativeLibraryLoaderGenerator {
         final FieldDeclaration loadedField = loaderClass.addField(
                 PrimitiveType.booleanType(), "loaded", Modifier.Keyword.PRIVATE, Modifier.Keyword.STATIC);
         loadedField.getVariable(0).setInitializer(new BooleanLiteralExpr(false));
-
-        // Static initializer
-        final TryStmt tryStmt = new TryStmt();
-        final BlockStmt tryBody = new BlockStmt();
-        tryBody.addStatement(new MethodCallExpr(NativeLibraryLoaderGenerator.LOADER_METHOD_NAME));
-        tryStmt.setTryBlock(tryBody);
-
-        final CatchClause catchClause = new CatchClause();
-        catchClause.setParameter(new Parameter(StaticJavaParser.parseType("Exception"), "exception"));
-        final BlockStmt catchBody = new BlockStmt();
-        catchBody.addStatement(new ThrowStmt(new ObjectCreationExpr(
-                null,
-                new ClassOrInterfaceType(null, "RuntimeException"),
-                new NodeList<>(new StringLiteralExpr("Failed to load native library"), new NameExpr("exception")))));
-        catchClause.setBody(catchBody);
-        tryStmt.setCatchClauses(new NodeList<>(catchClause));
-
-        final BlockStmt staticBlock = new BlockStmt();
-        staticBlock.addStatement(tryStmt);
-        loaderClass.addMember(new InitializerDeclaration(true, staticBlock));
 
         // Private constructor
         final ConstructorDeclaration constructor = loaderClass.addConstructor(Modifier.Keyword.PRIVATE);
