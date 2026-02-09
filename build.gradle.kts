@@ -90,7 +90,7 @@ gradlePlugin {
 }
 
 mavenPublishing {
-    coordinates(group.toString(), gradlePluginId, version.toString())
+    coordinates(group.toString(), "gradle-jextract", version.toString())
 
     configure(GradlePlugin(javadocJar = JavadocJar.Javadoc()))
 
