@@ -33,12 +33,16 @@ public abstract class JextractDefinition {
      * Library name for system-installed libraries.
      * Uses System.mapLibraryName() at build time for jextract.
      * Example: "GL" → jextract receives "-l GL"
+     *
+     * @return the library name property
      */
     @Optional
     public abstract Property<String> getLibraryName();
 
     /**
      * Returns the nested configuration for loading native libraries from JAR resources.
+     *
+     * @return the nested configuration
      */
     @Nested
     @Optional
@@ -48,6 +52,8 @@ public abstract class JextractDefinition {
 
     /**
      * Configures native library loading from JAR resources using a closure/action.
+     *
+     * @param action the closure/action to configure the native library loading
      */
     public void nativeLibraryLoading(final Action<? super NativeLibraryLoadingConfig> action) {
         action.execute(this.nativeLibraryLoading);

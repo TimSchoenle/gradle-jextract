@@ -1,9 +1,6 @@
 package de.timscho.jextract.internal.generation;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.StaticJavaParser.parseType;
-
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -96,7 +93,7 @@ public final class NativeLibraryLoaderGenerator {
         tryStmt.setTryBlock(tryBody);
 
         final CatchClause catchClause = new CatchClause();
-        catchClause.setParameter(new Parameter(parseType("Exception"), "exception"));
+        catchClause.setParameter(new Parameter(StaticJavaParser.parseType("Exception"), "exception"));
         final BlockStmt catchBody = new BlockStmt();
         catchBody.addStatement(new ThrowStmt(new ObjectCreationExpr(
                 null,
@@ -143,7 +140,7 @@ public final class NativeLibraryLoaderGenerator {
         loadBody.addStatement(new IfStmt(new NameExpr("loaded"), new ReturnStmt(), null));
 
         final VariableDeclarator resourcePathVar = new VariableDeclarator(
-                parseType("String"),
+                StaticJavaParser.parseType("String"),
                 "resourcePath",
                 new MethodCallExpr(
                         "expandResourcePath",
@@ -154,7 +151,9 @@ public final class NativeLibraryLoaderGenerator {
         loadBody.addStatement(resourcePathDecl);
 
         final VariableDeclarator extractDirVar = new VariableDeclarator(
-                parseType("java.nio.file.Path"), "extractionDir", new MethodCallExpr("getExtractionDirectory"));
+                StaticJavaParser.parseType("java.nio.file.Path"),
+                "extractionDir",
+                new MethodCallExpr("getExtractionDirectory"));
         final VariableDeclarationExpr extractDirDecl = new VariableDeclarationExpr(
                 new NodeList<>(new com.github.javaparser.ast.Modifier(Modifier.Keyword.FINAL)),
                 new NodeList<>(extractDirVar));
@@ -162,7 +161,7 @@ public final class NativeLibraryLoaderGenerator {
 
         if (this.config.getEnableCaching().getOrElse(false)) {
             final VariableDeclarator cachedLibVar = new VariableDeclarator(
-                    parseType("java.nio.file.Path"),
+                    StaticJavaParser.parseType("java.nio.file.Path"),
                     "cachedLib",
                     new MethodCallExpr(
                             "getCachedLibrary", new NameExpr("resourcePath"), new NameExpr("extractionDir")));
@@ -193,7 +192,7 @@ public final class NativeLibraryLoaderGenerator {
         }
 
         final VariableDeclarator extractedLibVar = new VariableDeclarator(
-                parseType("java.nio.file.Path"),
+                StaticJavaParser.parseType("java.nio.file.Path"),
                 "extractedLib",
                 new MethodCallExpr("extractLibrary", new NameExpr("resourcePath"), new NameExpr("extractionDir")));
         final VariableDeclarationExpr extractedLibDecl = new VariableDeclarationExpr(
@@ -219,14 +218,16 @@ public final class NativeLibraryLoaderGenerator {
         expandMethod.getParameter(0).setFinal(true);
         final BlockStmt expandBody = expandMethod.getBody().get();
 
-        expandBody.addStatement(parseStatement("final String osName = detectOsName();"));
-        expandBody.addStatement(parseStatement("final String osArch = detectOsArch();"));
-        expandBody.addStatement(parseStatement("String path = template.replace(\"{os.name}\", osName);"));
-        expandBody.addStatement(parseStatement("path = path.replace(\"{os.arch}\", osArch);"));
+        expandBody.addStatement(StaticJavaParser.parseStatement("final String osName = detectOsName();"));
+        expandBody.addStatement(StaticJavaParser.parseStatement("final String osArch = detectOsArch();"));
+        expandBody.addStatement(
+                StaticJavaParser.parseStatement("String path = template.replace(\"{os.name}\", osName);"));
+        expandBody.addStatement(StaticJavaParser.parseStatement("path = path.replace(\"{os.arch}\", osArch);"));
         expandBody.addOrphanComment(new com.github.javaparser.ast.comments.LineComment(
                 "Add platform-specific library extension and prefix"));
-        expandBody.addStatement(parseStatement("final String libName = getLibraryFileName(path, osName);"));
-        expandBody.addStatement(parseStatement("return libName;"));
+        expandBody.addStatement(
+                StaticJavaParser.parseStatement("final String libName = getLibraryFileName(path, osName);"));
+        expandBody.addStatement(StaticJavaParser.parseStatement("return libName;"));
 
         this.addOsDetectionMethods(loaderClass);
         this.addFileSystemMethods(loaderClass);
@@ -241,20 +242,21 @@ public final class NativeLibraryLoaderGenerator {
                 loaderClass.addMethod("detectOsName", Modifier.Keyword.PRIVATE, Modifier.Keyword.STATIC);
         detectOsName.setType(String.class);
         final BlockStmt osNameBody = detectOsName.getBody().get();
-        osNameBody.addStatement(parseStatement("final String osName = System.getProperty(\"os.name\").toLowerCase();"));
+        osNameBody.addStatement(StaticJavaParser.parseStatement(
+                "final String osName = System.getProperty(\"os.name\").toLowerCase();"));
 
         final IfStmt ifWin = new IfStmt(
-                parseExpression("osName.contains(\"win\")"),
+                StaticJavaParser.parseExpression("osName.contains(\"win\")"),
                 new BlockStmt().addStatement(new ReturnStmt(new StringLiteralExpr("windows"))),
                 null);
 
         final IfStmt ifMac = new IfStmt(
-                parseExpression("osName.contains(\"mac\") || osName.contains(\"darwin\")"),
+                StaticJavaParser.parseExpression("osName.contains(\"mac\") || osName.contains(\"darwin\")"),
                 new BlockStmt().addStatement(new ReturnStmt(new StringLiteralExpr("macos"))),
                 null);
 
         final IfStmt ifLinux = new IfStmt(
-                parseExpression("osName.contains(\"nux\")"),
+                StaticJavaParser.parseExpression("osName.contains(\"nux\")"),
                 new BlockStmt().addStatement(new ReturnStmt(new StringLiteralExpr("linux"))),
                 null);
 
@@ -262,27 +264,28 @@ public final class NativeLibraryLoaderGenerator {
         ifWin.setElseStmt(ifMac);
 
         osNameBody.addStatement(ifWin);
-        osNameBody.addStatement(
-                parseStatement("throw new UnsupportedOperationException(\"Unsupported OS: \" + osName);"));
+        osNameBody.addStatement(StaticJavaParser.parseStatement(
+                "throw new UnsupportedOperationException(\"Unsupported OS: \" + osName);"));
 
         final MethodDeclaration detectOsArch =
                 loaderClass.addMethod("detectOsArch", Modifier.Keyword.PRIVATE, Modifier.Keyword.STATIC);
         detectOsArch.setType(String.class);
         final BlockStmt osArchBody = detectOsArch.getBody().get();
-        osArchBody.addStatement(parseStatement("final String osArch = System.getProperty(\"os.arch\").toLowerCase();"));
+        osArchBody.addStatement(StaticJavaParser.parseStatement(
+                "final String osArch = System.getProperty(\"os.arch\").toLowerCase();"));
 
         final IfStmt ifAmd64 = new IfStmt(
-                parseExpression("osArch.contains(\"amd64\") || osArch.contains(\"x86_64\")"),
+                StaticJavaParser.parseExpression("osArch.contains(\"amd64\") || osArch.contains(\"x86_64\")"),
                 new BlockStmt().addStatement(new ReturnStmt(new StringLiteralExpr("amd64"))),
                 null);
 
         final IfStmt ifArm64 = new IfStmt(
-                parseExpression("osArch.contains(\"aarch64\") || osArch.contains(\"arm64\")"),
+                StaticJavaParser.parseExpression("osArch.contains(\"aarch64\") || osArch.contains(\"arm64\")"),
                 new BlockStmt().addStatement(new ReturnStmt(new StringLiteralExpr("aarch64"))),
                 null);
 
         final IfStmt ifX86 = new IfStmt(
-                parseExpression("osArch.contains(\"x86\")"),
+                StaticJavaParser.parseExpression("osArch.contains(\"x86\")"),
                 new BlockStmt().addStatement(new ReturnStmt(new StringLiteralExpr("x86"))),
                 null);
 
@@ -290,8 +293,8 @@ public final class NativeLibraryLoaderGenerator {
         ifAmd64.setElseStmt(ifArm64);
 
         osArchBody.addStatement(ifAmd64);
-        osArchBody.addStatement(
-                parseStatement("throw new UnsupportedOperationException(\"Unsupported architecture: \" + osArch);"));
+        osArchBody.addStatement(StaticJavaParser.parseStatement(
+                "throw new UnsupportedOperationException(\"Unsupported architecture: \" + osArch);"));
     }
 
     private void addFileSystemMethods(final ClassOrInterfaceDeclaration loaderClass) {
@@ -303,24 +306,28 @@ public final class NativeLibraryLoaderGenerator {
         getLibName.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt libNameBody = getLibName.getBody().get();
-        libNameBody.addStatement(
-                parseStatement("final String fileName = basePath.substring(basePath.lastIndexOf('/') + 1);"));
-        libNameBody.addStatement(
-                parseStatement("final String dirPath = basePath.substring(0, basePath.lastIndexOf('/') + 1);"));
+        libNameBody.addStatement(StaticJavaParser.parseStatement(
+                "final String fileName = basePath.substring(basePath.lastIndexOf('/') + 1);"));
+        libNameBody.addStatement(StaticJavaParser.parseStatement(
+                "final String dirPath = basePath.substring(0, basePath.lastIndexOf('/') + 1);"));
 
         final IfStmt ifWin = new IfStmt(
-                parseExpression("osName.equals(\"windows\")"),
-                new BlockStmt().addStatement(new ReturnStmt(parseExpression("dirPath + fileName + \".dll\""))),
+                StaticJavaParser.parseExpression("osName.equals(\"windows\")"),
+                new BlockStmt()
+                        .addStatement(
+                                new ReturnStmt(StaticJavaParser.parseExpression("dirPath + fileName + \".dll\""))),
                 null);
 
         final IfStmt ifMac = new IfStmt(
-                parseExpression("osName.equals(\"macos\")"),
+                StaticJavaParser.parseExpression("osName.equals(\"macos\")"),
                 new BlockStmt()
-                        .addStatement(new ReturnStmt(parseExpression("dirPath + \"lib\" + fileName + \".dylib\""))),
+                        .addStatement(new ReturnStmt(
+                                StaticJavaParser.parseExpression("dirPath + \"lib\" + fileName + \".dylib\""))),
                 null);
 
-        final BlockStmt elseBlock =
-                new BlockStmt().addStatement(new ReturnStmt(parseExpression("dirPath + \"lib\" + fileName + \".so\"")));
+        final BlockStmt elseBlock = new BlockStmt()
+                .addStatement(
+                        new ReturnStmt(StaticJavaParser.parseExpression("dirPath + \"lib\" + fileName + \".so\"")));
 
         ifMac.setElseStmt(elseBlock);
         ifWin.setElseStmt(ifMac);
@@ -334,21 +341,25 @@ public final class NativeLibraryLoaderGenerator {
         final BlockStmt extractBody = getExtractionDir.getBody().get();
 
         if (this.config.getExtractionDir().isPresent()) {
-            extractBody.addStatement(parseStatement("final java.nio.file.Path configuredDir = java.nio.file.Path.of(\""
-                    + this.config
-                            .getExtractionDir()
-                            .get()
-                            .getAsFile()
-                            .getAbsolutePath()
-                            .replace("\\", "\\\\") + "\");"));
-            extractBody.addStatement(parseStatement("java.nio.file.Files.createDirectories(configuredDir);"));
-            extractBody.addStatement(parseStatement("return configuredDir;"));
+            extractBody.addStatement(
+                    StaticJavaParser.parseStatement("final java.nio.file.Path configuredDir = java.nio.file.Path.of(\""
+                            + this.config
+                                    .getExtractionDir()
+                                    .get()
+                                    .getAsFile()
+                                    .getAbsolutePath()
+                                    .replace("\\", "\\\\") + "\");"));
+            extractBody.addStatement(
+                    StaticJavaParser.parseStatement("java.nio.file.Files.createDirectories(configuredDir);"));
+            extractBody.addStatement(StaticJavaParser.parseStatement("return configuredDir;"));
         } else {
-            extractBody.addStatement(parseStatement("final String tmpDir = System.getProperty(\"java.io.tmpdir\");"));
-            extractBody.addStatement(parseStatement(
+            extractBody.addStatement(
+                    StaticJavaParser.parseStatement("final String tmpDir = System.getProperty(\"java.io.tmpdir\");"));
+            extractBody.addStatement(StaticJavaParser.parseStatement(
                     "final java.nio.file.Path extractDir = java.nio.file.Path.of(tmpDir, \"jextract-natives\");"));
-            extractBody.addStatement(parseStatement("java.nio.file.Files.createDirectories(extractDir);"));
-            extractBody.addStatement(parseStatement("return extractDir;"));
+            extractBody.addStatement(
+                    StaticJavaParser.parseStatement("java.nio.file.Files.createDirectories(extractDir);"));
+            extractBody.addStatement(StaticJavaParser.parseStatement("return extractDir;"));
         }
 
         final MethodDeclaration extractLib =
@@ -360,14 +371,14 @@ public final class NativeLibraryLoaderGenerator {
         extractLib.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt extractLibBody = extractLib.getBody().get();
-        extractLibBody.addStatement(
-                parseStatement("final String fileName = resourcePath.substring(resourcePath.lastIndexOf('/') + 1);"));
-        extractLibBody.addStatement(
-                parseStatement("final java.nio.file.Path targetFile = extractionDir.resolve(fileName);"));
+        extractLibBody.addStatement(StaticJavaParser.parseStatement(
+                "final String fileName = resourcePath.substring(resourcePath.lastIndexOf('/') + 1);"));
+        extractLibBody.addStatement(StaticJavaParser.parseStatement(
+                "final java.nio.file.Path targetFile = extractionDir.resolve(fileName);"));
 
         final TryStmt tryResource = new TryStmt();
         final VariableDeclarator inVar = new VariableDeclarator(
-                parseType("java.io.InputStream"),
+                StaticJavaParser.parseType("java.io.InputStream"),
                 "in",
                 new MethodCallExpr(
                         new FieldAccessExpr(new NameExpr(this.headerClassName + "_NativeLibraryLoader"), "class"),
@@ -377,14 +388,14 @@ public final class NativeLibraryLoaderGenerator {
         tryResource.getResources().add(new VariableDeclarationExpr(inVar));
 
         final BlockStmt tryBody = new BlockStmt();
-        tryBody.addStatement(parseStatement(
+        tryBody.addStatement(StaticJavaParser.parseStatement(
                 "if (in == null) throw new java.io.IOException(\"Resource not found: \" + resourcePath);"));
-        tryBody.addStatement(parseStatement(
+        tryBody.addStatement(StaticJavaParser.parseStatement(
                 "java.nio.file.Files.copy(in, targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);"));
         tryResource.setTryBlock(tryBody);
 
         extractLibBody.addStatement(tryResource);
-        extractLibBody.addStatement(parseStatement("return targetFile;"));
+        extractLibBody.addStatement(StaticJavaParser.parseStatement("return targetFile;"));
     }
 
     private void addCachingMethods(final ClassOrInterfaceDeclaration loaderClass) {
@@ -400,7 +411,7 @@ public final class NativeLibraryLoaderGenerator {
         final TryStmt tryResource = new TryStmt();
         // Create try-with-resources variable declaration
         final VariableDeclarator inVar = new VariableDeclarator(
-                parseType("java.io.InputStream"),
+                StaticJavaParser.parseType("java.io.InputStream"),
                 "in",
                 new MethodCallExpr(
                         new FieldAccessExpr(new NameExpr(this.headerClassName + "_NativeLibraryLoader"), "class"),
@@ -410,13 +421,13 @@ public final class NativeLibraryLoaderGenerator {
         tryResource.getResources().add(new VariableDeclarationExpr(inVar));
 
         final BlockStmt tryBody = new BlockStmt();
-        tryBody.addStatement(parseStatement("if (in == null) return null;"));
-        tryBody.addStatement(parseStatement("final String hash = computeHash(in);"));
-        tryBody.addStatement(
-                parseStatement("final String fileName = resourcePath.substring(resourcePath.lastIndexOf('/') + 1);"));
-        tryBody.addStatement(parseStatement(
+        tryBody.addStatement(StaticJavaParser.parseStatement("if (in == null) return null;"));
+        tryBody.addStatement(StaticJavaParser.parseStatement("final String hash = computeHash(in);"));
+        tryBody.addStatement(StaticJavaParser.parseStatement(
+                "final String fileName = resourcePath.substring(resourcePath.lastIndexOf('/') + 1);"));
+        tryBody.addStatement(StaticJavaParser.parseStatement(
                 "final java.nio.file.Path cachedFile = extractionDir.resolve(fileName + \".\" + hash);"));
-        tryBody.addStatement(parseStatement("return cachedFile;"));
+        tryBody.addStatement(StaticJavaParser.parseStatement("return cachedFile;"));
         tryResource.setTryBlock(tryBody);
         cachedBody.addStatement(tryResource);
 
@@ -430,23 +441,25 @@ public final class NativeLibraryLoaderGenerator {
         final BlockStmt hashBody = computeHash.getBody().get();
         final TryStmt tryHash = new TryStmt();
         final BlockStmt tryHashBody = new BlockStmt();
-        tryHashBody.addStatement(parseStatement(
+        tryHashBody.addStatement(StaticJavaParser.parseStatement(
                 "final java.security.MessageDigest digest = java.security.MessageDigest.getInstance(\"SHA-256\");"));
-        tryHashBody.addStatement(parseStatement("final byte[] buffer = new byte[8192];"));
-        tryHashBody.addStatement(parseStatement("int read;"));
-        tryHashBody.addStatement(
-                parseStatement("while ((read = in.read(buffer)) != -1) { digest.update(buffer, 0, read); }"));
-        tryHashBody.addStatement(parseStatement("final byte[] hashBytes = digest.digest();"));
-        tryHashBody.addStatement(parseStatement("final StringBuilder hex = new StringBuilder();"));
-        tryHashBody.addStatement(
-                parseStatement("for (byte b : hashBytes) { hex.append(String.format(\"%02x\", b)); }"));
-        tryHashBody.addStatement(parseStatement("return hex.toString();"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement("final byte[] buffer = new byte[8192];"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement("int read;"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement(
+                "while ((read = in.read(buffer)) != -1) { digest.update(buffer, 0, read); }"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement("final byte[] hashBytes = digest.digest();"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement("final StringBuilder hex = new StringBuilder();"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement(
+                "for (byte b : hashBytes) { hex.append(String.format(\"%02x\", b)); }"));
+        tryHashBody.addStatement(StaticJavaParser.parseStatement("return hex.toString();"));
         tryHash.setTryBlock(tryHashBody);
 
         final CatchClause catchHash = new CatchClause();
-        catchHash.setParameter(new Parameter(parseType("java.security.NoSuchAlgorithmException"), "e"));
+        catchHash.setParameter(
+                new Parameter(StaticJavaParser.parseType("java.security.NoSuchAlgorithmException"), "e"));
         final BlockStmt catchHashBody = new BlockStmt();
-        catchHashBody.addStatement(parseStatement("throw new java.io.IOException(\"SHA-256 not available\", e);"));
+        catchHashBody.addStatement(
+                StaticJavaParser.parseStatement("throw new java.io.IOException(\"SHA-256 not available\", e);"));
         catchHash.setBody(catchHashBody);
         tryHash.setCatchClauses(new NodeList<>(catchHash));
 

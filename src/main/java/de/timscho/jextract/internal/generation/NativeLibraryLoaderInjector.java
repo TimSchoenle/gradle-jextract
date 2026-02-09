@@ -17,15 +17,17 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import java.io.File;
 import java.io.IOException;
 import lombok.Builder;
+import lombok.Value;
 import org.jetbrains.annotations.Contract;
 
 @Builder
+@Value
 public class NativeLibraryLoaderInjector {
-    private final File target;
-    private final String headerClass;
-    private final String loaderClassName;
-    private final String staticLoaderMethodName;
-    private final org.gradle.api.logging.Logger logger;
+    File target;
+    String headerClass;
+    String loaderClassName;
+    String staticLoaderMethodName;
+    org.gradle.api.logging.Logger logger;
 
     @Contract(pure = true)
     private boolean isAlreadyInjected(final ClassOrInterfaceDeclaration customClass) {
@@ -58,6 +60,11 @@ public class NativeLibraryLoaderInjector {
         return block;
     }
 
+    /**
+     * Inject the NativeLibraryLoader.load() method into the given class.
+     *
+     * @throws IOException For file I/O errors
+     */
     public void inject() throws IOException {
         final CompilationUnit compilationUnit = StaticJavaParser.parse(this.target);
         final ClassOrInterfaceDeclaration customClass =

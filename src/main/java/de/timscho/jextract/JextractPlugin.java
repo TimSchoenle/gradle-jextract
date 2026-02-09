@@ -14,7 +14,7 @@ import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.Contract;
 
-public class JextractPlugin implements Plugin<Project> {
+public final class JextractPlugin implements Plugin<Project> {
     public static final String TASK_GROUP = "jextract";
     public static final Path RELATIVE_TOOL_CACHE = Path.of("caches", "jextract-tool");
 

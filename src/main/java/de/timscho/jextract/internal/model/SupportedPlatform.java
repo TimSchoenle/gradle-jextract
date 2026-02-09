@@ -21,7 +21,7 @@ public enum SupportedPlatform {
     /**
      * Detects and returns the current supported platform based on system properties.
      *
-     * @return The current SupportedPlatform.
+     * @return The current SupportedPlatform
      * @throws GradleException if the OS or architecture is not supported.
      */
     @Contract(pure = true)

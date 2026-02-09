@@ -27,12 +27,6 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
     public static final String FILE_INTEGRITY_NAME = ".gradleJextractDownload";
     private static final int HTTP_OK = 200;
 
-    public interface Params extends BuildServiceParameters {
-        Property<String> getVersion();
-
-        DirectoryProperty getCacheDir();
-    }
-
     @Inject
     protected abstract FileSystemOperations getFs();
 
@@ -47,7 +41,7 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
      * Downloads and caches the tool if not already present.
      *
      * @param logger The Gradle logger to use for logging.
-     * @return The jextract executable file.
+     * @return The jextract executable file
      */
     public File getExecutable(final org.gradle.api.logging.Logger logger) {
         final String version = this.getParameters().getVersion().getOrElse(JextractToolService.DEFAULT_VERSION);
@@ -140,5 +134,11 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
         } finally {
             tempArchive.delete();
         }
+    }
+
+    public interface Params extends BuildServiceParameters {
+        Property<String> getVersion();
+
+        DirectoryProperty getCacheDir();
     }
 }
