@@ -13,8 +13,6 @@ A Gradle plugin that automates the download and execution of [jextract](https://
 - **Build Cache Support**: Fully cacheable tasks for efficient CI/CD pipelines
 - **Configurable**: Flexible configuration options including custom header class names and compiler arguments
 
-
-
 ## Requirements
 
 - Gradle 9.0 or higher
