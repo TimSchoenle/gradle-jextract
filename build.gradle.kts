@@ -119,8 +119,7 @@ mavenPublishing {
         }
     }
 
-    // TODO: MAKE ME TRUE BEFORE MERGE
-    publishToMavenCentral(automaticRelease = false, validateDeployment = DeploymentValidation.PUBLISHED)
+    publishToMavenCentral(automaticRelease = true, validateDeployment = DeploymentValidation.PUBLISHED)
 
     // We only want to sign publications when running on CI
     if (providers.environmentVariable("CI").isPresent) {
