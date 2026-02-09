@@ -56,7 +56,7 @@ jobs:
         uses: ./.github/actions/setup-base-environment
 
       - name: Build without test
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -x functionalTest
 
   test:
     name: Test
