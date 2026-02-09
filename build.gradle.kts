@@ -2,6 +2,7 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
     `jvm-test-suite`
+    checkstyle
     alias(libs.plugins.lombok)
     alias(libs.plugins.spotless)
     alias(libs.plugins.maven.publish)

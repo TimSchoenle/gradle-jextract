@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <!-- Suppress test classes -->
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" checks="Javadoc*"/>
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" checks="VariableDeclarationUsageDistance"/>
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" checks="VisibilityModifier"/>
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" checks="AvoidStaticImport"/>
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" checks="AvoidStarImport"/>
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" id="BanSystemOut"/>
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\](java|groovy)[/\\]" id="BanSystemErr"/>
+
+    <!-- Suppress test resources -->
+    <suppress files="[/\\]src[/\\]test[/\\]resources.*" checks="."/>
+
+    <!-- Suppress functionalTest classes -->
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" checks="Javadoc*"/>
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" checks="VariableDeclarationUsageDistance"/>
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" checks="VisibilityModifier"/>
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" checks="AvoidStaticImport"/>
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" checks="AvoidStarImport"/>
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" id="BanSystemOut"/>
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\](java|groovy)[/\\]" id="BanSystemErr"/>
+
+    <!-- Suppress functionalTest resources -->
+    <suppress files="[/\\]src[/\\]functionalTest[/\\]resources.*" checks="."/>
+
+    <!-- JavadocStyle enforces existence of package-info.java package-level Javadoc; we consider this a bug. -->
+    <suppress files="package-info.java" checks="JavadocStyle"/>
+
+    <!-- Generated code should not be subjected to checkstyle. -->
+    <suppress files="[/\\].*[/\\]generated.*[/\\]" checks="."/>
+</suppressions>
