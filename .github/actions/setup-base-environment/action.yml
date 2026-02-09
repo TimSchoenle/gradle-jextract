@@ -1,0 +1,18 @@
+name: "Setup Java and Gradle Environment"
+description: "Setup Java and Gradle environment for building"
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up JDK
+      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+      with:
+        java-version: "25"
+        distribution: "temurin"
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+
+    - name: Run chmod to make gradlew executable
+      run: chmod +x ./gradlew
+      shell: bash
