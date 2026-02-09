@@ -29,6 +29,8 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * Header file to be processed by jextract.
      * Passed to jextract as: -I headerFile
+     *
+     * @return The path to the header file
      */
     @InputFile
     @PathSensitive(PathSensitivity.NONE)
@@ -37,6 +39,8 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * Target package for generated Java classes.
      * Passed to jextract as: -t targetPackage
+     *
+     * @return The wanted target package path name
      */
     @Input
     public abstract Property<String> getTargetPackage();
@@ -44,12 +48,16 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * Additional compiler arguments to be passed to jextract.
      * Passed to jextract as: -J compilerArgs
+     *
+     * @return The additional compiler arguments
      */
     @Input
     public abstract ListProperty<String> getCompilerArgs();
 
     /**
      * Custom name for the main header class.
+     *
+     * @return The custom header class name
      */
     @Input
     @org.gradle.api.tasks.Optional
@@ -58,6 +66,8 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * Library name for system-installed libraries.
      * Passed to jextract as: -l libraryName
+     *
+     * @return The library name to import
      */
     @Input
     @org.gradle.api.tasks.Optional
@@ -66,6 +76,8 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * Configuration for loading native libraries from JAR resources.
      * When configured, generates runtime library loader code instead of passing to jextract.
+     *
+     * @return The native library loading configuration
      */
     @Nested
     @org.gradle.api.tasks.Optional
@@ -74,12 +86,16 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * Output directory for generated Java classes.
      * Passed to jextract as: -d outputDirectory
+     *
+     * @return The output directory for generated Java classes
      */
     @OutputDirectory
     public abstract DirectoryProperty getOutputDirectory();
 
     /**
      * Connects this task to the shared build service.
+     *
+     * @return The shared build service
      */
     @ServiceReference("jextractTool")
     public abstract Property<JextractToolService> getToolService();

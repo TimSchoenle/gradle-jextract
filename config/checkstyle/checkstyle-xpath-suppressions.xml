@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionXpathFilter Experimental Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2_xpath_experimental.dtd">
+
+<suppressions>
+    <!-- disable checks against lombok annotations -->
+    <suppress-xpath checks="HideUtilityClassConstructor"
+                    query="//CLASS_DEF[.//ANNOTATION/IDENT[@text='UtilityClass']]"/>
+    <suppress-xpath checks="HideUtilityClassConstructor"
+                    query="//CLASS_DEF[.//ANNOTATION/IDENT[@text='NoArgsConstructor']]"/>
+    <suppress-xpath checks="HideUtilityClassConstructor" query="//CLASS_DEF[.//ANNOTATION/IDENT[@text='Getter']]"/>
+    <suppress-xpath checks="HideUtilityClassConstructor" query="//CLASS_DEF[.//ANNOTATION/IDENT[@text='Setter']]"/>
+    <suppress-xpath checks="RequireThis"
+                    query="//CLASS_DEF[.//ANNOTATION/IDENT[@text='UtilityClass']]"/>
+    <suppress-xpath checks="VisibilityModifier"
+                    query="//*[MODIFIERS//*[@text = 'Value']]/descendant-or-self::node()"/>
+    <suppress-xpath checks="MutableException"
+                    query="//*[MODIFIERS//*[@text = 'Value']]/descendant-or-self::node()"/>
+    <suppress-xpath checks="FinalClass"
+                    query="//*[MODIFIERS//*[@text = 'Value']]/descendant-or-self::node()"/>
+</suppressions>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <!-- Suppress all test directories -->
+    <suppress files="[/\\]src[/\\].*[Tt]est[/\\]" checks="."/>
+
+    <!-- Suppress all functionalTest directories -->
+    <suppress files="[/\\]src[/\\].*functionalTest[/\\]" checks="."/>
+
+    <!-- JavadocStyle enforces existence of package-info.java package-level Javadoc; we consider this a bug. -->
+    <suppress files="package-info.java" checks="JavadocStyle"/>
+
+    <!-- Generated code should not be subjected to checkstyle. -->
+    <suppress files="[/\\].*[/\\]generated.*[/\\]" checks="."/>
+</suppressions>

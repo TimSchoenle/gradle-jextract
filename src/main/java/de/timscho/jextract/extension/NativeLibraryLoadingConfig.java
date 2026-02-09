@@ -22,6 +22,8 @@ public abstract class NativeLibraryLoadingConfig {
      * <li>Windows x64: native/windows-amd64/mylib.dll</li>
      * <li>macOS ARM64: native/macos-aarch64/libmylib.dylib</li>
      * </ul>
+     *
+     * @return The resource path template for the native library
      */
     @Input
     @Optional
@@ -30,10 +32,17 @@ public abstract class NativeLibraryLoadingConfig {
     /**
      * Directory where extracted libraries are stored.
      * Default: system temp directory (java.io.tmpdir)
+     *
+     * @return The extraction directory
      */
     @org.gradle.api.tasks.Internal
     public abstract DirectoryProperty getExtractionDir();
 
+    /**
+     * Resolves and returns the path of the directory where native libraries are extracted.
+     *
+     * @return a provider of the extraction directory path as a string
+     */
     @Input
     @Optional
     protected org.gradle.api.provider.Provider<String> getExtractionDirPath() {
@@ -44,6 +53,8 @@ public abstract class NativeLibraryLoadingConfig {
      * Enable caching of extracted libraries across JVM runs.
      * When enabled, libraries are extracted once and reused if the hash matches.
      * Default: false (extract fresh each time)
+     *
+     * @return Whether caching is enabled
      */
     @Input
     @Optional

@@ -18,6 +18,11 @@ public abstract class JextractExtension {
 
     public abstract Property<String> getToolVersion();
 
+    /**
+     * Configures native library loading from JAR resources using a closure/action.
+     *
+     * @param action the closure/action to configure the native library loading
+     */
     public void libraries(final Action<? super NamedDomainObjectContainer<JextractDefinition>> action) {
         action.execute(this.libraries);
     }
