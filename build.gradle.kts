@@ -7,8 +7,11 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-group = "de.timscho"
+// x-release-please-start-version
 version = "0.1.0"
+// x-release-please-end
+
+group = "de.timscho"
 val gradlePluginId =  "de.timscho.jextract"
 
 java {
