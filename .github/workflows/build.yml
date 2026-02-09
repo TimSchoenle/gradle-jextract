@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-      branches: [ main ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -10,48 +10,48 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: {}
+permissions: { }
 
 jobs:
-    test:
-        name: Test
-        strategy:
-          matrix:
-            os: [ ubuntu-latest, windows-latest, macos-latest ]
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
 
-        runs-on: ${{ matrix.os }}
-        permissions:
-          contents: write # to write junit reports
-          checks: write # to write junit reports
-          id-token: write # to write junit reports
-        steps:
-            - name: Harden Runner
-              uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
-              with:
-                egress-policy: audit
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # to write junit reports
+      checks: write # to write junit reports
+      id-token: write # to write junit reports
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+        with:
+          egress-policy: audit
 
-            -   name: Checkout
-                uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-                with:
-                  persist-credentials: false
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
 
-            -   name: Set up JDK
-                uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
-                with:
-                    java-version: "25"
-                    distribution: "temurin"
+      - name: Set up JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        with:
+          java-version: "25"
+          distribution: "temurin"
 
-            -   name: Setup Gradle
-                uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
 
-            -   name: Run chmod to make gradlew executable
-                run: chmod +x ./gradlew
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
 
-            -   name: Test
-                run: ./gradlew test
+      - name: Test
+        run: ./gradlew test
 
-            - name: Publish Test Report
-              uses: mikepenz/action-junit-report@74626db7353a25a20a72816467ebf035f674c5f8 # v6
-              if: success() || failure()
-              with:
-                report_paths: '**/build/test-results/test/TEST-*.xml'
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@74626db7353a25a20a72816467ebf035f674c5f8 # v6
+        if: success() || failure()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
