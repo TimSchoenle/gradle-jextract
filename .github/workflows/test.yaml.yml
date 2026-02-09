@@ -25,7 +25,6 @@ jobs:
         uses: ./.github/actions/setup-base-environment
 
       - name: Publish to Maven Central
-        if: ${{ steps.release.outputs.release_created }}
         run: ./gradlew publishToMavenCentral
         env:
           CI: true
