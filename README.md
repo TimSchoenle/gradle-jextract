@@ -280,4 +280,4 @@ Contributions are welcome! Please submit issues and pull requests on the [GitHub
 
 ## License
 
-This project is licensed under the terms specified in the repository.
+This project is licensed under the [Apache License 2.0](LICENSE).
