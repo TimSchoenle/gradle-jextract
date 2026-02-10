@@ -2,6 +2,7 @@ package de.timscho.jextract.internal.download;
 
 import de.timscho.jextract.internal.model.PlatformType;
 import de.timscho.jextract.internal.model.SupportedPlatform;
+import de.timscho.jextract.internal.util.GeneratedConstant;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -23,7 +24,7 @@ import org.gradle.api.services.BuildServiceParameters;
 import org.jspecify.annotations.Nullable;
 
 public abstract class JextractToolService implements BuildService<JextractToolService.Params> {
-    public static final String DEFAULT_VERSION = "25-jextract+2-4";
+    public static final String DEFAULT_VERSION = GeneratedConstant.JEXTRACT_VERSION;
     public static final String FILE_INTEGRITY_NAME = ".gradleJextractDownload";
     private static final int HTTP_OK = 200;
 
