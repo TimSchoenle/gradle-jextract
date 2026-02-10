@@ -1,6 +1,8 @@
 import com.vanniktech.maven.publish.DeploymentValidation
 import com.vanniktech.maven.publish.GradlePlugin
 import com.vanniktech.maven.publish.JavadocJar
+import java.net.URI
+import java.util.regex.Pattern
 
 plugins {
     `java-gradle-plugin`
@@ -10,6 +12,7 @@ plugins {
     alias(libs.plugins.lombok)
     alias(libs.plugins.spotless)
     alias(libs.plugins.maven.publish)
+    alias(libs.plugins.buildconfig)
 }
 
 // x-release-please-start-version
@@ -66,6 +69,8 @@ testing {
 
 spotless {
     java {
+        targetExclude(layout.buildDirectory.asFileTree.matching { include("generated/**/*.java") })
+
         importOrder()
         removeUnusedImports()
         forbidWildcardImports()
@@ -150,4 +155,88 @@ val generateReadme by tasks.registering {
             )
         }
     }
+}
+
+val findLatestJextractVersion by tasks.registering {
+    group = "help"
+    description = "Checks jdk.java.net for the latest jextract early access version"
+
+    val javaVersion = java.toolchain.languageVersion.get().asInt()
+    val jextractVersionFile = layout.projectDirectory.file("gradle/jextract-version")
+
+    doLast {
+        val currentVersion = if (jextractVersionFile.asFile.exists()) {
+            jextractVersionFile.asFile.readText().trim()
+        } else {
+            ""
+        }
+
+        val text = URI("https://jdk.java.net/jextract/").toURL().openConnection().apply {
+            setRequestProperty("User-Agent", "Mozilla/5.0")
+            connectTimeout = 5000
+            readTimeout = 5000
+        }.getInputStream().bufferedReader().use { it.readText() }
+
+        // Regex to capture major, build, and sub-build numbers
+        // Example: 25-jextract+2-4 -> major=25, build=2, sub=4
+        val versionPatternWithBuild = Pattern.compile("Build ((\\d+)-jextract\\+(\\d+)(?:-(\\d+))?)")
+        val versionPattern = Pattern.compile("^\\d+-jextract\\+(\\d+)(?:-(\\d+))?$")
+        
+        val bestVersion = versionPatternWithBuild.matcher(text).results()
+            .map { match ->
+                val fullVersion = match.group(1)
+                val major = match.group(2).toInt()
+                val build = match.group(3).toInt()
+                val sub = match.group(4)?.toInt() ?: 0
+                Triple(fullVersion, major, build to sub)
+            }
+            .filter { (_, major, _) -> major == javaVersion }
+            .findFirst()
+            .orElse(null)
+
+        if (bestVersion == null) {
+            logger.error("Could not find any jextract version for Java $javaVersion.")
+        } else {
+            val (newVersion, _, newBuild) = bestVersion
+            logger.lifecycle("Latest applicable jextract version found: $newVersion")
+
+            var shouldUpdate = currentVersion.isEmpty()
+            if (!shouldUpdate) {
+                val currentBuildMatcher = versionPattern.matcher(currentVersion)
+                if (!currentBuildMatcher.find() && newVersion != currentVersion) {
+                    shouldUpdate = true
+                } else {
+                    val currentMainBuild = currentBuildMatcher.group(1).toInt()
+                    val currentSubBuild = currentBuildMatcher.group(2)?.toInt() ?: 0
+
+                    val (newMainBuild, newSubBuild) = newBuild
+
+                    if (newMainBuild > currentMainBuild || (newMainBuild == currentMainBuild && newSubBuild > currentSubBuild)) {
+                        shouldUpdate = true
+                    } else if (newMainBuild == currentMainBuild && newSubBuild == currentSubBuild) {
+                        logger.lifecycle("Version is already up to date.")
+                    } else {
+                        logger.warn("Found version ($newVersion) seems older than current ($currentVersion). Skipping.")
+                    }
+                }
+            }
+
+            if (shouldUpdate) {
+                jextractVersionFile.asFile.writeText(newVersion)
+                logger.lifecycle("Updated version file at: ${jextractVersionFile.asFile.absolutePath} to $newVersion")
+            }
+        }
+    }
+}
+
+buildConfig {
+    className("GeneratedConstant")
+    packageName("de.timscho.jextract.internal.util")
+
+    useJavaOutput()
+
+    val jextractVersionFile = layout.projectDirectory.file("gradle/jextract-version")
+    val jextractVersion = jextractVersionFile.asFile.readText().trim()
+
+    buildConfigField("JEXTRACT_VERSION", provider { jextractVersion })
 }
