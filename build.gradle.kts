@@ -12,7 +12,7 @@ plugins {
     alias(libs.plugins.lombok)
     alias(libs.plugins.spotless)
     alias(libs.plugins.maven.publish)
-    id("com.github.gmazzo.buildconfig") version "6.0.7"
+    alias(libs.plugins.buildconfig)
 }
 
 // x-release-please-start-version
