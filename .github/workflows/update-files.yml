@@ -50,7 +50,7 @@ jobs:
 
       - name: Commit and Push if changed
         id: auto-commit
-        uses: TimSchoenle/actions/actions/common/commit-changes@060f67bee8f5c0ab135a029ecf777a96b2a4b1a4 # actions-common-commit-changes-v1.1.3
+        uses: TimSchoenle/actions/actions/common/commit-changes@8f15b94f827ea2005c0e32cadc86bb50969633dd # actions-common-commit-changes-v1.1.4
         with:
           commit_message: 'docs: auto-update documentation'
           file_pattern: 'README.md'
@@ -107,7 +107,7 @@ jobs:
 
       - name: Commit and Push if changed
         id: auto-commit
-        uses: TimSchoenle/actions/actions/common/commit-changes@060f67bee8f5c0ab135a029ecf777a96b2a4b1a4 # actions-common-commit-changes-v1.1.3
+        uses: TimSchoenle/actions/actions/common/commit-changes@8f15b94f827ea2005c0e32cadc86bb50969633dd # actions-common-commit-changes-v1.1.4
         with:
           commit_message: 'style: apply spotless formatting'
           token: ${{ steps.generate_token.outputs.token }}
