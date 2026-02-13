@@ -5,14 +5,7 @@ runs:
   using: 'composite'
   steps:
     - name: Set up JDK
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+      uses: TimSchoenle/actions/actions/java-gradle/setup-base-environment@c0830a12e031ca8bcaed36631b47a5fe986ac0b9 # actions-java-gradle-setup-base-environment-v1.1.1
       with:
-        java-version: "25"
-        distribution: "temurin"
+        java_version: "25"
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5
-
-    - name: Run chmod to make gradlew executable
-      run: chmod +x ./gradlew
-      shell: bash
