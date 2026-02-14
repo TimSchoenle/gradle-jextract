@@ -25,7 +25,7 @@ public abstract class NativeLibraryLoadingConfig {
      *
      * @return The resource path template for the native library
      */
-     @Input
+    @Input
     @Optional
     public abstract Property<String> getResourcePath();
 
