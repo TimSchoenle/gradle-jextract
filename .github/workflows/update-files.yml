@@ -4,16 +4,15 @@ on:
   pull_request:
     branches: [ main ]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 permissions: {}
 
 jobs:
   update-readme:
     name: Update README
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     outputs:
       changes_detected: ${{ steps.auto-commit.outputs.changes_detected }}
     permissions:
@@ -71,56 +70,11 @@ jobs:
 
   auto-format:
     name: Auto-Format
-    runs-on: ubuntu-latest
     needs: update-readme
     if: needs.update-readme.outputs.changes_detected == 'false'
-    permissions:
-      contents: read # to read files from repo
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
-        with:
-          egress-policy: audit
-
-      - name: Generate Bot Token
-        id: generate_token
-        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
-        with:
-          app-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
-          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
-          permission-contents: write
-          permission-pull-requests: write
-
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-          ref: ${{ github.head_ref }}
-          token: ${{ steps.generate_token.outputs.token }}
-
-      - name: Setup Base Environment
-        uses: ./.github/actions/setup-base-environment
-
-      - name: Run spotless
-        run: ./gradlew spotlessApply
-
-      - name: Commit and Push if changed
-        id: auto-commit
-        uses: TimSchoenle/actions/actions/common/commit-changes@8f15b94f827ea2005c0e32cadc86bb50969633dd # actions-common-commit-changes-v1.1.4
-        with:
-          commit_message: 'style: apply spotless formatting'
-          token: ${{ steps.generate_token.outputs.token }}
-
-      - name: Comment on PR
-        if: steps.auto-commit.outputs.changes_detected == 'true' && github.event_name == 'pull_request'
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
-        with:
-          github-token: ${{ steps.generate_token.outputs.token }}
-          script: |
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'Applied spotless formation.'
-            })
+    uses: TimSchoenle/actions/.github/workflows/java-gradle-auto-spotless.yaml@835082b64a62a2d59683b7a8ae42c8f43d564ae0 # workflows-java-gradle-auto-spotless-v1.0.1
+    with:
+      java_version: '25'
+    secrets:
+      bot_app_id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+      bot_private_key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
