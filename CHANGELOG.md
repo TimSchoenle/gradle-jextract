@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/TimSchoenle/gradle-jextract/compare/v0.2.0...v0.2.1) (2026-02-15)
+
+
+### Code Refactoring
+
+* simplify jextract version management ([#18](https://github.com/TimSchoenle/gradle-jextract/issues/18)) ([12e6dc9](https://github.com/TimSchoenle/gradle-jextract/commit/12e6dc906dabab23243a821093560e174c652d2d))
+
 ## [0.2.0](https://github.com/TimSchoenle/gradle-jextract/compare/v0.1.0...v0.2.0) (2026-02-09)
 
 
