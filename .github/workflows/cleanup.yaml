@@ -1,43 +1,23 @@
-name: Cleanup Caches
+name: Cleanup Branch Caches After Deletion
 on:
   delete:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions: {}
 
 jobs:
   cleanup-caches:
     name: Cleanup Caches
-    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'branch'
+    uses: TimSchoenle/actions/.github/workflows/maintenance-wipe-cache.yaml@7ca80ccb04ac6964f6ab8fe1895b36d9a2a8587d # workflows-maintenance-wipe-cache-v1.1.1
     permissions:
       actions: write # to delete caches
       contents: read # to list cache keys
-    if: github.event.ref_type == 'branch'
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
-        with:
-          egress-policy: audit
-
-      - name: Cleanup Caches
-        run: |
-          gh extension install actions/gh-actions-cache
-
-          echo "Fetching list of cache keys"
-          cacheKeysForPR=$(gh actions-cache list -R $REPO -B $BRANCH -L 100 | cut -f 1 )
-
-          ## Setting this to not fail the workflow while deleting cache keys. 
-          set +e
-          echo "Deleting caches..."
-          for cacheKey in $cacheKeysForPR
-          do
-              gh actions-cache delete $cacheKey -R $REPO -B $BRANCH --confirm
-          done
-          echo "Done"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          BRANCH: ${{ github.event.ref }}
+    with:
+      branch: '${{ github.event.ref }}'
+      repository: '${{ github.repository }}'
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
