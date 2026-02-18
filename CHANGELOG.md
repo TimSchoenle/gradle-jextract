@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/TimSchoenle/gradle-jextract/compare/v0.2.1...v0.2.2) (2026-02-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.jetbrains:annotations to v26.1.0 ([#29](https://github.com/TimSchoenle/gradle-jextract/issues/29)) ([cf8b465](https://github.com/TimSchoenle/gradle-jextract/commit/cf8b4655385d52849d350662b84f12923da8ad30))
+
 ## [0.2.1](https://github.com/TimSchoenle/gradle-jextract/compare/v0.2.0...v0.2.1) (2026-02-15)
 
 
