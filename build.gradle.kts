@@ -36,7 +36,10 @@ dependencies {
     implementation(libs.jspecify)
     implementation(libs.jetbrains.annotations)
     implementation(libs.javaparser)
+
     testImplementation(libs.assertj)
+    testImplementation(gradleApi())
+    testImplementation(gradleTestKit())
 }
 
 testing {
