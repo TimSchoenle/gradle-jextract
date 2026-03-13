@@ -78,3 +78,4 @@ jobs:
     secrets:
       bot_app_id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
       bot_private_key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
+      gradle_spotless_command: 'rewriteAndFormat'

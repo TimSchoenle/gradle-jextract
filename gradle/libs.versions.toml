@@ -14,6 +14,10 @@ lombok = "9.2.0"
 spotless = "8.3.0"
 maven-publish = "0.36.0"
 buildconfig = "6.0.9"
+rewrite = "7.28.1"
+
+# Rewrite catalogs
+rewrite-catalog = "0.1.2"
 
 [libraries]
 
@@ -27,8 +31,12 @@ javaparser = { module = "com.github.javaparser:javaparser-core", version.ref = "
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 
+# Rewrite Catalog
+rewrite-catalog = { module = "de.timscho.rewrite:catalog", version.ref = "rewrite-catalog" }
+
 [plugins]
 lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+rewrite = { id = "org.openrewrite.rewrite", version.ref = "rewrite" }
