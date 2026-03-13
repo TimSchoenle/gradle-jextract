@@ -32,8 +32,8 @@ public class NativeLibraryLoaderInjector {
     @Contract(pure = true)
     private boolean isAlreadyInjected(final ClassOrInterfaceDeclaration customClass) {
         return customClass.getMembers().stream()
-                .filter(member -> member instanceof com.github.javaparser.ast.body.InitializerDeclaration)
-                .map(member -> (com.github.javaparser.ast.body.InitializerDeclaration) member)
+                .filter(InitializerDeclaration.class::isInstance)
+                .map(InitializerDeclaration.class::cast)
                 .filter(com.github.javaparser.ast.body.InitializerDeclaration::isStatic)
                 .anyMatch(init -> init.getBody()
                         .toString()

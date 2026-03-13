@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,9 +62,9 @@ class NativeLibraryLoaderInjectorTest {
 
         // Verify static initializer exists and contains the loader call
         boolean hasLoaderCall = classDecl.get().getMembers().stream()
-                .filter(member -> member instanceof com.github.javaparser.ast.body.InitializerDeclaration)
-                .map(member -> (com.github.javaparser.ast.body.InitializerDeclaration) member)
-                .filter(com.github.javaparser.ast.body.InitializerDeclaration::isStatic)
+                .filter(InitializerDeclaration.class::isInstance)
+                .map(InitializerDeclaration.class::cast)
+                .filter(InitializerDeclaration::isStatic)
                 .anyMatch(init -> init.getBody().toString().contains(loaderClassName + "." + staticMethodName));
 
         assertThat(hasLoaderCall)

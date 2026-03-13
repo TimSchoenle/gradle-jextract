@@ -36,12 +36,11 @@ class JextractPluginTest {
         final JextractExtension extension = project.getExtensions().getByType(JextractExtension.class);
 
         // Act
-        extension.libraries(libs -> {
+        extension.libraries(libs ->
             libs.register("opengl", lib -> {
                 lib.getHeaderFile().set(project.file("gl.h"));
                 lib.getTargetPackage().set("com.gl");
-            });
-        });
+            }));
 
         // Assert
         assertThat(project.getTasks().findByName("generateOpenglBindings"))
