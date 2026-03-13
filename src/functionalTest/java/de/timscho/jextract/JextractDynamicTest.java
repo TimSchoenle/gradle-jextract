@@ -32,9 +32,7 @@ class JextractDynamicTest extends AbstractJextractFunctionalTest {
 
     private DynamicTest createDynamicTest(final Path headerPath) {
         final String testName = headerPath.getFileName().toString();
-        return DynamicTest.dynamicTest(testName, () -> {
-            this.runDynamicTest(headerPath);
-        });
+        return DynamicTest.dynamicTest(testName, () -> this.runDynamicTest(headerPath));
     }
 
     private void runDynamicTest(final Path headerPath) throws IOException {

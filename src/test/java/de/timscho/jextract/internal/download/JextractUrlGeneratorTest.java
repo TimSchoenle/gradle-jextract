@@ -16,7 +16,7 @@ class JextractUrlGeneratorTest {
         "25-jextract+2-4, MACOS_ARM64, https://download.java.net/java/early_access/jextract/25/2/openjdk-25-jextract+2-4_macos-aarch64_bin.tar.gz",
         "26-jextract+5-1, WINDOWS_X64, https://download.java.net/java/early_access/jextract/26/5/openjdk-26-jextract+5-1_windows-x64_bin.tar.gz"
     })
-    void generatesUrlCorrectly(String version, SupportedPlatform platform, String expectedUrl) {
+    void generatesUrlCorrectly(final String version, final SupportedPlatform platform, final String expectedUrl) {
         // Act
         final String url = JextractUrlGenerator.generateUrl(version, platform);
 

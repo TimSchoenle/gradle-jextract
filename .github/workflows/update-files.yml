@@ -75,6 +75,7 @@ jobs:
     uses: TimSchoenle/actions/.github/workflows/java-gradle-auto-spotless.yaml@0eb4ac4f921e5096640176c7c1ad4cf29a6d8acb # workflows-java-gradle-auto-spotless-v1.1.0
     with:
       java_version: '25'
+      gradle_spotless_command: 'rewriteAndFormat'
     secrets:
       bot_app_id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
       bot_private_key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}

@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.buildconfig)
+    alias(libs.plugins.rewrite)
 }
 
 // x-release-please-start-version
@@ -29,10 +30,13 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
+    rewrite(libs.rewrite.catalog)
+
     implementation(libs.jspecify)
     implementation(libs.jetbrains.annotations)
     implementation(libs.javaparser)
@@ -40,6 +44,10 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(gradleApi())
     testImplementation(gradleTestKit())
+}
+
+rewrite {
+    activeRecipe("de.timscho.rewrite.Style")
 }
 
 testing {
@@ -138,6 +146,17 @@ mavenPublishing {
 
 tasks.named("check") {
     dependsOn(testing.suites.named("functionalTest"))
+}
+
+tasks.named("spotlessApply") {
+    mustRunAfter("rewriteRun")
+}
+
+val rewriteAndFormat by tasks.registering {
+    group = "formatting"
+    description = "Runs rewriteRun first and spotlessApply afterwards"
+
+    dependsOn("rewriteRun", "spotlessApply")
 }
 
 val generateReadme by tasks.registering {
