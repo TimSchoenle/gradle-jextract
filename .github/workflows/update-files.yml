@@ -72,7 +72,7 @@ jobs:
     name: Auto-Format
     needs: update-readme
     if: needs.update-readme.outputs.changes_detected == 'false'
-    uses: TimSchoenle/actions/.github/workflows/java-gradle-auto-spotless.yaml@dda3ef054bb1cad2ea0109a865b0e7cf7005997f # workflows-java-gradle-auto-spotless-v1.0.4
+    uses: TimSchoenle/actions/.github/workflows/java-gradle-auto-spotless.yaml@bd15c42d75e29ba2d9d44ce31463f820f8241462 # workflows-java-gradle-auto-spotless-v1.0.5
     with:
       java_version: '25'
     secrets:
