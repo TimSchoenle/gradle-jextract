@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/TimSchoenle/gradle-jextract/compare/v0.2.2...v0.3.0) (2026-03-14)
+
+
+### Features
+
+* enhance auto formation with rewrite recipes ([#47](https://github.com/TimSchoenle/gradle-jextract/issues/47)) ([6001a9e](https://github.com/TimSchoenle/gradle-jextract/commit/6001a9ea25d29dcee3ede9e2fabfab4ac54ed73b))
+
 ## [0.2.2](https://github.com/TimSchoenle/gradle-jextract/compare/v0.2.1...v0.2.2) (2026-02-25)
 
 
