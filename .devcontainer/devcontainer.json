@@ -1,0 +1,27 @@
+{
+  "name": "Java 25 Development",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "25",
+      "jdkDistro": "tem",
+    },
+  },
+  "containerEnv": {
+    "JAVA_HOME": "/usr/local/sdkman/candidates/java/current"
+  },
+  "postCreateCommand": "if [ ! -f gradlew ]; then gradle wrapper; fi && chmod +x gradlew",
+  "customizations": {
+    "jetbrains": {
+      "settings": {
+        "com.intellij:app:BaseRefactoringSettings.safe_delete_when_delete": false,
+        "com.intellij:app:BaseRefactoringSettings.rename_search_in_comments_for_file": false,
+        "com.intellij:app:BaseRefactoringSettings.rename_search_for_references_for_file": false,
+        "com.intellij:app:BaseRefactoringSettings.rename_search_for_references_for_directory": false,
+        "com.intellij:app:BaseRefactoringSettings.move_search_for_references_for_file": false,
+        "com.intellij:app:HttpConfigurable.use_proxy_pac": true,
+      },
+      "backend": "IntelliJ"
+    }
+  }
+}
