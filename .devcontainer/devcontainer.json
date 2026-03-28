@@ -1,7 +1,8 @@
 {
   "name": "Java 25 Development",
-  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
   "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/java:1": {
       "version": "25",
       "jdkDistro": "tem",
