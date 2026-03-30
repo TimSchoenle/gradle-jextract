@@ -29,7 +29,7 @@ public final class JextractPlugin implements Plugin<Project> {
                 .registerIfAbsent("jextractTool", JextractToolService.class, spec -> {
                     spec.getParameters().getVersion().set(extension.getToolVersion());
 
-                        final File cacheDir = project.getGradle()
+                    final File cacheDir = project.getGradle()
                             .getGradleUserHomeDir()
                             .toPath()
                             .resolve(JextractPlugin.RELATIVE_TOOL_CACHE)
