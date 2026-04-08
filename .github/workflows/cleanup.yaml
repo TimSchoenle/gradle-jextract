@@ -12,7 +12,7 @@ jobs:
   cleanup-caches:
     name: Cleanup Caches
     if: github.event.ref_type == 'branch'
-    uses: TimSchoenle/actions/.github/workflows/maintenance-wipe-cache.yaml@117e7c0cca216fa25efbb4a045250aaaf0382f53 # workflows-maintenance-wipe-cache-v1.1.4
+    uses: TimSchoenle/actions/.github/workflows/maintenance-wipe-cache.yaml@bf7dbb8002a4a3c7765063de0f106ae4df7e8a18 # workflows-maintenance-wipe-cache-v1.1.5
     permissions:
       actions: write # to delete caches
       contents: read # to list cache keys
