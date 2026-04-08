@@ -14,7 +14,7 @@ lombok = "9.2.0"
 spotless = "8.4.0"
 maven-publish = "0.36.0"
 buildconfig = "6.0.9"
-rewrite = "7.29.1"
+rewrite = "7.30.0"
 
 # Rewrite catalogs
 rewrite-catalog = "0.1.2"
