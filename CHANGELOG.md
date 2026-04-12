@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.3.1](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.0...v0.3.1) (2026-04-12)
+
+
+### Documentation
+
+* add simple security policy ([ddb3d2a](https://github.com/TimSchoenle/gradle-jextract/commit/ddb3d2a3c529ec3cfd4ee40f86aa1e5d30eb2d4c))
+
+
+### Miscellaneous
+
+* **deps:** update actions/create-github-app-token action to v3.1.0 ([#71](https://github.com/TimSchoenle/gradle-jextract/issues/71)) ([a361bfe](https://github.com/TimSchoenle/gradle-jextract/commit/a361bfeb7d54a7f436c4c195fd08bc4e88f04c4a))
+* **deps:** update actions/create-github-app-token action to v3.1.1 ([#72](https://github.com/TimSchoenle/gradle-jextract/issues/72)) ([0c44900](https://github.com/TimSchoenle/gradle-jextract/commit/0c449003adc8eebf1ab8815098efd3a1f8798bc4))
+* **deps:** update actions/github-script action to v9 ([#69](https://github.com/TimSchoenle/gradle-jextract/issues/69)) ([7424dbf](https://github.com/TimSchoenle/gradle-jextract/commit/7424dbf162143e7490c5b685dd7e623b681618e9))
+* **deps:** update all non-major action updates ([#58](https://github.com/TimSchoenle/gradle-jextract/issues/58)) ([9191790](https://github.com/TimSchoenle/gradle-jextract/commit/919179061386f0ace7cceb4c8c82416e14653531))
+* **deps:** update all non-major action updates ([#64](https://github.com/TimSchoenle/gradle-jextract/issues/64)) ([9f56193](https://github.com/TimSchoenle/gradle-jextract/commit/9f5619302b92bc5c60824b7cf58e0051830a94f9))
+* **deps:** update all non-major action updates ([#66](https://github.com/TimSchoenle/gradle-jextract/issues/66)) ([31b9e38](https://github.com/TimSchoenle/gradle-jextract/commit/31b9e38079b89d649b0bba9b08dbdbd1752373d9))
+* **deps:** update dependency com.diffplug.spotless to v8.4.0 ([#53](https://github.com/TimSchoenle/gradle-jextract/issues/53)) ([2e8615d](https://github.com/TimSchoenle/gradle-jextract/commit/2e8615d99b36044a75a4cd3b28f57a525baebef9))
+* **deps:** update dependency org.openrewrite.rewrite to v7.28.2 ([#54](https://github.com/TimSchoenle/gradle-jextract/issues/54)) ([cbd4d38](https://github.com/TimSchoenle/gradle-jextract/commit/cbd4d38a21f5b582e56b3d89294122541cc459d3))
+* **deps:** update dependency org.openrewrite.rewrite to v7.29.0 ([#59](https://github.com/TimSchoenle/gradle-jextract/issues/59)) ([77f6345](https://github.com/TimSchoenle/gradle-jextract/commit/77f63453375911bbff1d87e5a24761cc31f17d40))
+* **deps:** update dependency org.openrewrite.rewrite to v7.29.1 ([#65](https://github.com/TimSchoenle/gradle-jextract/issues/65)) ([062bb74](https://github.com/TimSchoenle/gradle-jextract/commit/062bb7434a3b8163513c38a4831d934650a2fe3f))
+* **deps:** update dependency org.openrewrite.rewrite to v7.30.0 ([#67](https://github.com/TimSchoenle/gradle-jextract/issues/67)) ([70b4000](https://github.com/TimSchoenle/gradle-jextract/commit/70b4000e84b48f557b48de4b4e908b171a5346b6))
+* **deps:** update gradle to v9.4.1 ([#55](https://github.com/TimSchoenle/gradle-jextract/issues/55)) ([b032518](https://github.com/TimSchoenle/gradle-jextract/commit/b032518a5c13b7224015d7c38068348d66902500))
+* **deps:** update mikepenz/action-junit-report digest to bccf2e3 ([#60](https://github.com/TimSchoenle/gradle-jextract/issues/60)) ([395e37a](https://github.com/TimSchoenle/gradle-jextract/commit/395e37ab48cb978688914ea3824b398bb2bbdc40))
+* **deps:** update step-security/harden-runner action to v2.16.0 ([#52](https://github.com/TimSchoenle/gradle-jextract/issues/52)) ([9bf78ab](https://github.com/TimSchoenle/gradle-jextract/commit/9bf78ab4c1f2149fef79bb63c40449053bf7b0eb))
+* **deps:** update step-security/harden-runner action to v2.16.1 ([#63](https://github.com/TimSchoenle/gradle-jextract/issues/63)) ([1773c56](https://github.com/TimSchoenle/gradle-jextract/commit/1773c56c0d5295481cb7568ace558f06209d28e4))
+* **deps:** update step-security/harden-runner action to v2.17.0 ([#68](https://github.com/TimSchoenle/gradle-jextract/issues/68)) ([27b2d57](https://github.com/TimSchoenle/gradle-jextract/commit/27b2d5790830a0aa376734e6a47086610198ae66))
+* **deps:** update to vactions-java-gradle-setup-base-environment-v1.2.2 ([#62](https://github.com/TimSchoenle/gradle-jextract/issues/62)) ([bea68d7](https://github.com/TimSchoenle/gradle-jextract/commit/bea68d766f687250689a72eba5e941a344216347))
+* **deps:** update to vactions-java-gradle-setup-base-environment-v1.2.3 ([#70](https://github.com/TimSchoenle/gradle-jextract/issues/70)) ([6c0d571](https://github.com/TimSchoenle/gradle-jextract/commit/6c0d5710c173500e0d3153a05a2b1545d76d8e89))
+* **deps:** update to vworkflows-maintenance-auto-approve-renovate-v1.4.1 ([#56](https://github.com/TimSchoenle/gradle-jextract/issues/56)) ([7aaecb1](https://github.com/TimSchoenle/gradle-jextract/commit/7aaecb1c685a394830dfa5e6ca685ed051085548))
+* **deps:** update to vworkflows-maintenance-timed-auto-pr-approve-v1.2.12 ([#57](https://github.com/TimSchoenle/gradle-jextract/issues/57)) ([f650173](https://github.com/TimSchoenle/gradle-jextract/commit/f650173f47dfd273089263527b537aead8ad81b6))
+
 ## [0.3.0](https://github.com/TimSchoenle/gradle-jextract/compare/v0.2.2...v0.3.0) (2026-03-14)
 
 
