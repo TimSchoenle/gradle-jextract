@@ -17,9 +17,6 @@ jobs:
       deployment: false
     name: Update README
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
     outputs:
       changes_detected: ${{ steps.auto-commit.outputs.changes_detected }}
     permissions:
