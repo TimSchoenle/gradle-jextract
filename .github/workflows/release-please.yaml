@@ -13,6 +13,9 @@ permissions: {}
 
 jobs:
   release-please:
+    environment:
+      name: publish
+      deployment: false
     name: Release Please
     runs-on: ubuntu-latest
     outputs:
@@ -42,6 +45,9 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
 
   publish-to-maven-central:
+    environment:
+      name: publish
+      deployment: false
     name: Publish to Maven Central
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
