@@ -12,6 +12,9 @@ concurrency:
 
 jobs:
   update-readme:
+    environment:
+      name: ci
+      deployment: false
     name: Update README
     runs-on: ubuntu-latest
     concurrency:
@@ -73,6 +76,9 @@ jobs:
             })
 
   auto-format:
+    environment:
+      name: ci
+      deployment: false
     name: Auto-Format
     needs: update-readme
     if: needs.update-readme.outputs.changes_detected == 'false'
