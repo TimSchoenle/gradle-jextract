@@ -67,7 +67,7 @@
         {
             "type": "chore",
             "section": "Miscellaneous",
-            "hidden": true
+            "hidden": false
         },
         {
             "type": "deps",
