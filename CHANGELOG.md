@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.2](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.1...v0.3.2) (2026-04-17)
+
+
+### Miscellaneous
+
+* **deps:** update googleapis/release-please-action digest to 5c625bf ([#75](https://github.com/TimSchoenle/gradle-jextract/issues/75)) ([a785fea](https://github.com/TimSchoenle/gradle-jextract/commit/a785fea173dca426092f099d164ca074fcc1e9f8))
+* **deps:** update step-security/harden-runner action to v2.18.0 ([#79](https://github.com/TimSchoenle/gradle-jextract/issues/79)) ([e76bec0](https://github.com/TimSchoenle/gradle-jextract/commit/e76bec00857dfd8ac8bf6304501ceea71b4d47e8))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.4 ([#80](https://github.com/TimSchoenle/gradle-jextract/issues/80)) ([eba8415](https://github.com/TimSchoenle/gradle-jextract/commit/eba8415434c709a42ce53534e98eb9f333e6ad75))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.14 ([#81](https://github.com/TimSchoenle/gradle-jextract/issues/81)) ([f8f2ad3](https://github.com/TimSchoenle/gradle-jextract/commit/f8f2ad3df7acb15296d65ffe853ee59e7eb0bd81))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-wipe-cache.yaml to vworkflows-maintenance-wipe-cache-v1.1.6 ([#82](https://github.com/TimSchoenle/gradle-jextract/issues/82)) ([be6fe24](https://github.com/TimSchoenle/gradle-jextract/commit/be6fe24a7f5b1e1d60b6444568f781fb2b9ac3c8))
+* **deps:** update to vactions-java-gradle-auto-spotless-v1.1.4 ([#78](https://github.com/TimSchoenle/gradle-jextract/issues/78)) ([05d370a](https://github.com/TimSchoenle/gradle-jextract/commit/05d370a8a77b055e56dce820ccd5dac21e218efb))
+* **deps:** update zizmorcore/zizmor-action action to v0.5.3 ([#77](https://github.com/TimSchoenle/gradle-jextract/issues/77)) ([35c66cb](https://github.com/TimSchoenle/gradle-jextract/commit/35c66cbdba2c4bfcbaf71cc656beec73eaa6d5dc))
+
 ## [0.3.1](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.0...v0.3.1) (2026-04-12)
 
 
