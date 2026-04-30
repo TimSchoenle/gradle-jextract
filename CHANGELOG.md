@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.3](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.2...v0.3.3) (2026-04-30)
+
+
+### Miscellaneous
+
+* **deps:** update dependency io.freefair.lombok to v9.4.0 ([#85](https://github.com/TimSchoenle/gradle-jextract/issues/85)) ([3c13849](https://github.com/TimSchoenle/gradle-jextract/commit/3c13849c7eb4b8bf2c222615af367016096f9ade))
+* **deps:** update dependency org.openrewrite.rewrite to v7.31.0 ([#86](https://github.com/TimSchoenle/gradle-jextract/issues/86)) ([5046783](https://github.com/TimSchoenle/gradle-jextract/commit/5046783612246662adff8cd598f07bbe5551dac2))
+* **deps:** update dependency org.openrewrite.rewrite to v7.32.0 ([#92](https://github.com/TimSchoenle/gradle-jextract/issues/92)) ([7fbe898](https://github.com/TimSchoenle/gradle-jextract/commit/7fbe89803d813361ca717dd9a54988965680e703))
+* **deps:** update step-security/harden-runner action to v2.19.0 ([#83](https://github.com/TimSchoenle/gradle-jextract/issues/83)) ([62208ad](https://github.com/TimSchoenle/gradle-jextract/commit/62208ad2b345a74218e76d7b60c623f696c0ad94))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.5 ([#89](https://github.com/TimSchoenle/gradle-jextract/issues/89)) ([8dccebe](https://github.com/TimSchoenle/gradle-jextract/commit/8dccebecece79eacc0e4f09117f06f913002529c))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.15 ([#87](https://github.com/TimSchoenle/gradle-jextract/issues/87)) ([beba6e4](https://github.com/TimSchoenle/gradle-jextract/commit/beba6e481d6085600b64b2af69fc686b4bbfec45))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.16 ([#91](https://github.com/TimSchoenle/gradle-jextract/issues/91)) ([85c1f1d](https://github.com/TimSchoenle/gradle-jextract/commit/85c1f1d82b36bd06ae9808083f3fda8359087885))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-wipe-cache.yaml to vworkflows-maintenance-wipe-cache-v1.1.7 ([#90](https://github.com/TimSchoenle/gradle-jextract/issues/90)) ([eb6a9e1](https://github.com/TimSchoenle/gradle-jextract/commit/eb6a9e146b89bf83cd98512e78a9ff37448be2a9))
+
 ## [0.3.2](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.1...v0.3.2) (2026-04-17)
 
 
