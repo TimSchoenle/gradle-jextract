@@ -20,7 +20,7 @@ jobs:
     permissions:
       contents: write # Required to merge PRs
       pull-requests: write # Required to merge PRs
-    uses: TimSchoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml@cedea750a97594dbc5d45f216b6fca9a4d231b1a # tag=workflows-maintenance-timed-auto-pr-approve-v1.2.16
+    uses: TimSchoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml@029e06312c442f45d128b9bb790761544d54ea1e # tag=workflows-maintenance-timed-auto-pr-approve-v1.2.17
     with:
       time_elapsed: ${{ inputs.time_elapsed || '7d' }}
       branch_pattern: 'release-please--branches--%'
