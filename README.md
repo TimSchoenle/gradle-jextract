@@ -24,7 +24,7 @@ Add the plugin to your `build.gradle.kts`:
 
 ```kotlin
 plugins {
-    id("de.timscho.jextract") version "0.3.4"
+    id("de.timscho.jextract") version "0.3.5"
 }
 ```
 
@@ -36,7 +36,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("de.timscho.jextract:0.3.4")
+        classpath("de.timscho.jextract:0.3.5")
     }
 }
 
