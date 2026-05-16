@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.5](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.4...v0.3.5) (2026-05-16)
+
+
+### Miscellaneous
+
+* **deps:** update actions/create-github-app-token action to v3.2.0 ([#107](https://github.com/TimSchoenle/gradle-jextract/issues/107)) ([8bfd3dc](https://github.com/TimSchoenle/gradle-jextract/commit/8bfd3dcee6ec8075e0afa962c2daba8bba78fb20))
+* **deps:** update dependency org.openrewrite.rewrite to v7.32.2 ([#104](https://github.com/TimSchoenle/gradle-jextract/issues/104)) ([5f84ee5](https://github.com/TimSchoenle/gradle-jextract/commit/5f84ee5dacc8a785a52ff2f4a5e59dfdd1373ecf))
+* **deps:** update googleapis/release-please-action action to v5 ([#88](https://github.com/TimSchoenle/gradle-jextract/issues/88)) ([0e864e7](https://github.com/TimSchoenle/gradle-jextract/commit/0e864e7eb3ae006c167b3db47191c48c7bbce00c))
+* **deps:** update gradle to v9.5.1 ([#106](https://github.com/TimSchoenle/gradle-jextract/issues/106)) ([bb296a1](https://github.com/TimSchoenle/gradle-jextract/commit/bb296a1a666ebae64cf89c5df3a454bcbd60237b))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.18 ([#105](https://github.com/TimSchoenle/gradle-jextract/issues/105)) ([c8e874e](https://github.com/TimSchoenle/gradle-jextract/commit/c8e874e6e5347c2f876fee3a03c6a043d2c79211))
+
 ## [0.3.4](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.3...v0.3.4) (2026-05-07)
 
 
