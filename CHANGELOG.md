@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.6](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.5...v0.3.6) (2026-05-19)
+
+
+### Miscellaneous
+
+* **deps:** update dependency com.diffplug.spotless to v8.5.0 ([#112](https://github.com/TimSchoenle/gradle-jextract/issues/112)) ([c83346c](https://github.com/TimSchoenle/gradle-jextract/commit/c83346c7fa9c277550894896d76db476a8c32c4e))
+* **deps:** update dependency com.diffplug.spotless to v8.5.1 ([#114](https://github.com/TimSchoenle/gradle-jextract/issues/114)) ([1aab9b9](https://github.com/TimSchoenle/gradle-jextract/commit/1aab9b95679fe9129361d266c205ac4f5febbf27))
+* **deps:** update mikepenz/action-junit-report digest to 3a81627 ([#110](https://github.com/TimSchoenle/gradle-jextract/issues/110)) ([6025e2a](https://github.com/TimSchoenle/gradle-jextract/commit/6025e2a0919a6bfd9e42cae4241e4e41c0d49001))
+* **deps:** update step-security/harden-runner action to v2.19.2 ([#108](https://github.com/TimSchoenle/gradle-jextract/issues/108)) ([df0efc6](https://github.com/TimSchoenle/gradle-jextract/commit/df0efc679f46bb9d9098fcec20d671373acfd630))
+* **deps:** update step-security/harden-runner action to v2.19.3 ([#111](https://github.com/TimSchoenle/gradle-jextract/issues/111)) ([3bd6148](https://github.com/TimSchoenle/gradle-jextract/commit/3bd61489760288611e9f376ab3a76e5f5042b95d))
+* **deps:** update zizmorcore/zizmor-action action to v0.5.5 ([#113](https://github.com/TimSchoenle/gradle-jextract/issues/113)) ([1fbe294](https://github.com/TimSchoenle/gradle-jextract/commit/1fbe29484e51b126789a9c399e2454aadaaf4840))
+* **deps:** update zizmorcore/zizmor-action action to v0.5.6 ([#115](https://github.com/TimSchoenle/gradle-jextract/issues/115)) ([86196a3](https://github.com/TimSchoenle/gradle-jextract/commit/86196a38bc16564ad54bf2823bd45d86afab0a2d))
+
 ## [0.3.5](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.4...v0.3.5) (2026-05-16)
 
 
