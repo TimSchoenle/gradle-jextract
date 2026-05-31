@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.7](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.6...v0.3.7) (2026-05-30)
+
+
+### Miscellaneous
+
+* **deps:** update dependency com.diffplug.spotless to v8.6.0 ([#124](https://github.com/TimSchoenle/gradle-jextract/issues/124)) ([4a05077](https://github.com/TimSchoenle/gradle-jextract/commit/4a05077b8cfc51aed1aa4aaad05bbf048434ff38))
+* **deps:** update dependency org.openrewrite.rewrite to v7.33.0 ([#117](https://github.com/TimSchoenle/gradle-jextract/issues/117)) ([e141d62](https://github.com/TimSchoenle/gradle-jextract/commit/e141d62e7c0c6d4cf722251dcf9e825da082e38b))
+* **deps:** update step-security/harden-runner action to v2.19.4 ([#119](https://github.com/TimSchoenle/gradle-jextract/issues/119)) ([29d4864](https://github.com/TimSchoenle/gradle-jextract/commit/29d4864e8d68ab64f431b2d7f59e0bc2b93d8616))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.8 ([#120](https://github.com/TimSchoenle/gradle-jextract/issues/120)) ([3114042](https://github.com/TimSchoenle/gradle-jextract/commit/31140420bdc2ced93e63ebdf5fb9626e1daaae9e))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.19 ([#121](https://github.com/TimSchoenle/gradle-jextract/issues/121)) ([537209a](https://github.com/TimSchoenle/gradle-jextract/commit/537209a9eb7cf12c00c8c41ae21d4dde099bf862))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-wipe-cache.yaml to vworkflows-maintenance-wipe-cache-v1.1.9 ([#122](https://github.com/TimSchoenle/gradle-jextract/issues/122)) ([9aa3d4d](https://github.com/TimSchoenle/gradle-jextract/commit/9aa3d4d91eea68a3539eb16c62d29be804c3f863))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.5 ([#123](https://github.com/TimSchoenle/gradle-jextract/issues/123)) ([d893e7a](https://github.com/TimSchoenle/gradle-jextract/commit/d893e7a42c650218edf76c2eb5ae109424edcd55))
+
 ## [0.3.6](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.5...v0.3.6) (2026-05-19)
 
 
