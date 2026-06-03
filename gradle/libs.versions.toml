@@ -1,6 +1,6 @@
 [versions]
 # Code Generation
-javaparser = "3.28.1"
+javaparser = "3.28.2"
 
 # Testing
 assertj = "3.27.7"
