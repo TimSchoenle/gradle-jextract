@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.9](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.8...v0.3.9) (2026-06-12)
+
+
+### Miscellaneous
+
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.11 ([#136](https://github.com/TimSchoenle/gradle-jextract/issues/136)) ([e8c9256](https://github.com/TimSchoenle/gradle-jextract/commit/e8c9256253d02d13a0999295b880f6f4f2806ba4))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.21 ([#134](https://github.com/TimSchoenle/gradle-jextract/issues/134)) ([a68bd63](https://github.com/TimSchoenle/gradle-jextract/commit/a68bd631b3ac3bbd3ce7987555684373898fff94))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.4 ([#137](https://github.com/TimSchoenle/gradle-jextract/issues/137)) ([10c89a0](https://github.com/TimSchoenle/gradle-jextract/commit/10c89a0461251357b81d5a1a3129a8f9e507e34b))
+
 ## [0.3.8](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.7...v0.3.8) (2026-06-07)
 
 
