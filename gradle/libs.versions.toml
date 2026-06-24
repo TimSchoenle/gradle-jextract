@@ -12,7 +12,7 @@ jetbrains-annotations = "26.1.0"
 # Plugins
 lombok = "9.5.0"
 spotless = "8.7.0"
-maven-publish = "0.36.0"
+maven-publish = "0.37.0"
 buildconfig = "6.0.10"
 rewrite = "7.35.0"
 
