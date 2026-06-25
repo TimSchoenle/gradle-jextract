@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.10](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.9...v0.3.10) (2026-06-25)
+
+
+### Miscellaneous
+
+* **deps:** update actions/checkout action to v7 ([#142](https://github.com/TimSchoenle/gradle-jextract/issues/142)) ([be619dc](https://github.com/TimSchoenle/gradle-jextract/commit/be619dcf8c720dcdd76100b57b3c7583e1d91e97))
+* **deps:** update all non-major action updates ([#148](https://github.com/TimSchoenle/gradle-jextract/issues/148)) ([d1d4851](https://github.com/TimSchoenle/gradle-jextract/commit/d1d48514cc8a5e48db668c78f71c06abc50b8ae1))
+* **deps:** update gradle to v9.6.0 ([#144](https://github.com/TimSchoenle/gradle-jextract/issues/144)) ([0d23cf2](https://github.com/TimSchoenle/gradle-jextract/commit/0d23cf286a96decaeecda5b6e7ac4969d2ba8bbb))
+* **deps:** update maven.publish ([#147](https://github.com/TimSchoenle/gradle-jextract/issues/147)) ([b597821](https://github.com/TimSchoenle/gradle-jextract/commit/b59782138abd9849cce41acc4be4129cee8a0e65))
+* **deps:** update mikepenz/action-junit-report digest to d9f48fc ([#140](https://github.com/TimSchoenle/gradle-jextract/issues/140)) ([d91026b](https://github.com/TimSchoenle/gradle-jextract/commit/d91026b3fc22c7b53221b1dd54afb89fe3e80cbc))
+* **deps:** update rewrite to v7.35.0 ([#141](https://github.com/TimSchoenle/gradle-jextract/issues/141)) ([0e9ae13](https://github.com/TimSchoenle/gradle-jextract/commit/0e9ae130cc36d7bda270cf1b064496e61ef5c791))
+* **deps:** update spotless to v8.7.0 ([#138](https://github.com/TimSchoenle/gradle-jextract/issues/138)) ([01cd63b](https://github.com/TimSchoenle/gradle-jextract/commit/01cd63b269ca23f026d5e681ef5a627c2ee9f502))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.22 ([#145](https://github.com/TimSchoenle/gradle-jextract/issues/145)) ([87202da](https://github.com/TimSchoenle/gradle-jextract/commit/87202da7b089c571436b3e29b0291b4383600671))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.7 ([#146](https://github.com/TimSchoenle/gradle-jextract/issues/146)) ([91c0eaa](https://github.com/TimSchoenle/gradle-jextract/commit/91c0eaa9677c75fc6030c44af1ee286ce3a41a7c))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.5 ([#143](https://github.com/TimSchoenle/gradle-jextract/issues/143)) ([79f96f1](https://github.com/TimSchoenle/gradle-jextract/commit/79f96f1c5184237fd15f2091fc2519f56ee45e52))
+
 ## [0.3.9](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.8...v0.3.9) (2026-06-12)
 
 
