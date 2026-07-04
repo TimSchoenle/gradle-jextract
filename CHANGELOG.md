@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.11](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.10...v0.3.11) (2026-07-04)
+
+
+### Miscellaneous
+
+* **deps:** update dependency com.diffplug.spotless to v8.8.0 ([#154](https://github.com/TimSchoenle/gradle-jextract/issues/154)) ([1fb5642](https://github.com/TimSchoenle/gradle-jextract/commit/1fb56420755ea7f68b8a5bd058b7850b0300842a))
+* **deps:** update dependency org.openrewrite.rewrite to v7.36.0 ([#155](https://github.com/TimSchoenle/gradle-jextract/issues/155)) ([3ca39fc](https://github.com/TimSchoenle/gradle-jextract/commit/3ca39fcd438619604950c8dd4bb2caa7ff4888d1))
+* **deps:** update gradle to v9.6.1 ([#152](https://github.com/TimSchoenle/gradle-jextract/issues/152)) ([61920cf](https://github.com/TimSchoenle/gradle-jextract/commit/61920cfbdd3dd5c0ac049b26a42de0afa6630ddb))
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.1.5 ([#149](https://github.com/TimSchoenle/gradle-jextract/issues/149)) ([9db7037](https://github.com/TimSchoenle/gradle-jextract/commit/9db7037dfa5101204a5e1f1f5a2d164f80b29323))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.8 ([#153](https://github.com/TimSchoenle/gradle-jextract/issues/153)) ([59a79ca](https://github.com/TimSchoenle/gradle-jextract/commit/59a79ca9add8f4917bc1bf85e907bad5c6125a48))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.6 ([#151](https://github.com/TimSchoenle/gradle-jextract/issues/151)) ([2b8ecd6](https://github.com/TimSchoenle/gradle-jextract/commit/2b8ecd68a2a9813f9d1c0822f59cc81b80ef1c91))
+
 ## [0.3.10](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.9...v0.3.10) (2026-06-25)
 
 
