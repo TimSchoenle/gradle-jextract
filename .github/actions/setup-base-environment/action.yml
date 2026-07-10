@@ -5,7 +5,7 @@ runs:
   using: 'composite'
   steps:
     - name: Set up JDK
-      uses: TimSchoenle/actions/actions/java-gradle/setup-base-environment@a6a97ef1f7dc2e5af7264e90366c7a0b48d4e0d5 # tag=actions-java-gradle-setup-base-environment-v1.2.6
+      uses: TimSchoenle/actions/actions/java-gradle/setup-base-environment@dd88df40bf3d468464176cc5a7630fcfd04908a1 # tag=actions-java-gradle-setup-base-environment-v1.2.7
       with:
         java_version: "25"
 
