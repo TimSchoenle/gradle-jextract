@@ -17,7 +17,7 @@ plugins {
 }
 
 // x-release-please-start-version
-version = "0.3.12"
+version = "0.3.13"
 // x-release-please-end
 
 group = "de.timscho"
