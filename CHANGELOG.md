@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.13](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.12...v0.3.13) (2026-07-19)
+
+
+### Miscellaneous
+
+* **deps:** update dependency org.openrewrite.rewrite to v7.37.0 ([#171](https://github.com/TimSchoenle/gradle-jextract/issues/171)) ([7d0966b](https://github.com/TimSchoenle/gradle-jextract/commit/7d0966b75b01c2f24ff4b7369450d0abeef186fd))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.15 ([#168](https://github.com/TimSchoenle/gradle-jextract/issues/168)) ([06d36bc](https://github.com/TimSchoenle/gradle-jextract/commit/06d36bc92a041b01244a08a5fd39f5dece2535ed))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.16 ([#174](https://github.com/TimSchoenle/gradle-jextract/issues/174)) ([fb35ad2](https://github.com/TimSchoenle/gradle-jextract/commit/fb35ad2a52b1a5b314c8dc0607c6d5007cb1d17a))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.26 ([#170](https://github.com/TimSchoenle/gradle-jextract/issues/170)) ([4ffa98d](https://github.com/TimSchoenle/gradle-jextract/commit/4ffa98de97e8213db84f46059e890f9bad98de8d))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.27 ([#176](https://github.com/TimSchoenle/gradle-jextract/issues/176)) ([aa8b115](https://github.com/TimSchoenle/gradle-jextract/commit/aa8b1153f89cafb036bacfa66cc3e4b8ea78530d))
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.2.0 ([#172](https://github.com/TimSchoenle/gradle-jextract/issues/172)) ([135a502](https://github.com/TimSchoenle/gradle-jextract/commit/135a50246fc88287e12540c0c52d5df5b1760b37))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.8 ([#175](https://github.com/TimSchoenle/gradle-jextract/issues/175)) ([9fdb318](https://github.com/TimSchoenle/gradle-jextract/commit/9fdb31826faede4d9d7a6cf921f6667a2b11e013))
+* **deps:** update zizmorcore/zizmor-action action to v0.6.0 ([#173](https://github.com/TimSchoenle/gradle-jextract/issues/173)) ([18dceef](https://github.com/TimSchoenle/gradle-jextract/commit/18dceefd406d86a26daeeee2f38d0ac1aa45f32a))
+
 ## [0.3.12](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.11...v0.3.12) (2026-07-13)
 
 
