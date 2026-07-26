@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.14](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.13...v0.3.14) (2026-07-26)
+
+
+### Miscellaneous
+
+* **deps:** update actions/checkout digest to 3d3c42e ([#177](https://github.com/TimSchoenle/gradle-jextract/issues/177)) ([0c3b866](https://github.com/TimSchoenle/gradle-jextract/commit/0c3b8664c9d4fb788132ce56cf67c5640d46e710))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.11 ([#178](https://github.com/TimSchoenle/gradle-jextract/issues/178)) ([0e187f7](https://github.com/TimSchoenle/gradle-jextract/commit/0e187f7d85628fd2b8778feccc3b1d82ede0d5aa))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.12 ([#180](https://github.com/TimSchoenle/gradle-jextract/issues/180)) ([bcf6181](https://github.com/TimSchoenle/gradle-jextract/commit/bcf6181d0fa98c7ed263ead1290dabf079896fde))
+* **deps:** update zizmorcore/zizmor-action action to v0.6.1 ([#181](https://github.com/TimSchoenle/gradle-jextract/issues/181)) ([a18c7d5](https://github.com/TimSchoenle/gradle-jextract/commit/a18c7d5f2472f8cfb84a21748b7323f37489e983))
+
 ## [0.3.13](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.12...v0.3.13) (2026-07-19)
 
 
