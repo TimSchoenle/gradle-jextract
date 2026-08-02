@@ -6,7 +6,7 @@ javaparser = "3.28.2"
 assertj = "3.27.7"
 
 # Annotations
-jspecify = "1.0.0"
+jspecify = "1.0.1"
 jetbrains-annotations = "26.1.0"
 
 # Plugins
