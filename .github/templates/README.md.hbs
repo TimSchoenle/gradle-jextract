@@ -13,14 +13,14 @@ the plugin id and the default jextract build come from one command:
 Nothing in this comment may contain a mustache that is not a real reference.
 -->
 
-# gradle-jextract
+# {{ repo.name }}
 
-Gradle plugin that downloads jextract and generates Java FFM bindings, with optional bundled library loading.
+{{ repo.description }}
 
-[![Release](https://img.shields.io/github/v/release/TimSchoenle/gradle-jextract?sort=semver)](https://github.com/TimSchoenle/gradle-jextract/releases)
-[![Build](https://img.shields.io/github/actions/workflow/status/TimSchoenle/gradle-jextract/build.yml?branch=main)](https://github.com/TimSchoenle/gradle-jextract/actions/workflows/build.yml)
-[![License](https://img.shields.io/github/license/TimSchoenle/gradle-jextract)](LICENSE)
-[![JDK](https://img.shields.io/badge/JDK-25-orange)](https://openjdk.org/projects/jdk/25/)
+[![Release](https://img.shields.io/github/v/release/{{ repo.slug }}?sort=semver)]({{ repo.url }}/releases)
+[![Build](https://img.shields.io/github/actions/workflow/status/{{ repo.slug }}/build.yml?branch={{ repo.branch }})]({{ repo.url }}/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/{{ repo.slug }})](LICENSE)
+[![JDK](https://img.shields.io/badge/JDK-{{ toolchain.jdk }}-orange)](https://openjdk.org/projects/jdk/{{ toolchain.jdk }}/)
 
 ## What this is
 
@@ -54,7 +54,7 @@ pluginManagement {
 // build.gradle.kts
 plugins {
     java
-    id("de.timscho.jextract") version "0.3.17"
+    id("{{ plugin.id }}") version "{{ release.version }}"
 }
 
 jextract {
@@ -104,12 +104,12 @@ The bindings land in `build/generated/sources/jextract/mylib` and compile with e
 
 ## Installation
 
-Coordinates `de.timscho:gradle-jextract`, version `0.3.17`, plugin id `de.timscho.jextract`. Add
+Coordinates `{{ repo.package }}`, version `{{ release.version }}`, plugin id `{{ plugin.id }}`. Add
 `mavenCentral()` to `pluginManagement.repositories` in `settings.gradle.kts`, then:
 
 ```kotlin
 plugins {
-    id("de.timscho.jextract") version "0.3.17"
+    id("{{ plugin.id }}") version "{{ release.version }}"
 }
 ```
 
@@ -121,11 +121,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("de.timscho:gradle-jextract:0.3.17")
+        classpath("{{ repo.package }}:{{ release.version }}")
     }
 }
 
-apply(plugin = "de.timscho.jextract")
+apply(plugin = "{{ plugin.id }}")
 ```
 
 ## Usage
@@ -164,11 +164,11 @@ first. Invoke a task directly when only one library changed.
 ## Configuration
 
 `toolVersion` picks the jextract build, for the whole project rather than per library. It defaults
-to `25-jextract+2-4`, the build this release was compiled against:
+to `{{ plugin.tool_version }}`, the build this release was compiled against:
 
 ```kotlin
 jextract {
-    toolVersion.set("25-jextract+2-4")
+    toolVersion.set("{{ plugin.tool_version }}")
 }
 ```
 
@@ -186,9 +186,9 @@ jextract command line.
 
 | | Supported |
 | --- | --- |
-| JDK | 25 |
-| Gradle | 9.0 and later |
-| jextract | `25-jextract+2-4` by default, any published early-access build |
+| JDK | {{ toolchain.jdk }} |
+| Gradle | {{ toolchain.gradle }} and later |
+| jextract | `{{ plugin.tool_version }}` by default, any published early-access build |
 | Platforms | `linux-x64`, `linux-aarch64`, `macos-x64`, `macos-aarch64`, `windows-x64` |
 
 The JDK floor is the FFM API's. Bindings jextract writes do not compile below it.
@@ -197,13 +197,12 @@ The JDK floor is the FFM API's. Bindings jextract writes do not compile below it
 
 | Document | Purpose |
 | --- | --- |
-| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Every property of the jextract extension, the task each library declaration creates, and how the jextract tool itself is fetched and cached. |
-| [docs/NATIVE_LIBRARY_LOADING.md](docs/NATIVE_LIBRARY_LOADING.md) | The three ways to load the native library behind the bindings, and what the plugin generates for each. |
-| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | The failures this plugin produces, what each one means, and what to change. |
+{{#each docs}}| [{{ path }}]({{ path }}) | {{ default (mdCell summary) "—" }} |
+{{/each}}
 
 ## Contributing
 
-Issues and pull requests are welcome at [TimSchoenle/gradle-jextract](https://github.com/TimSchoenle/gradle-jextract). Commits follow
+Issues and pull requests are welcome at [{{ repo.slug }}]({{ repo.url }}). Commits follow
 Conventional Commits, because release-please reads them to decide the next version and to write the
 changelog.
 
@@ -223,4 +222,4 @@ instructions and the supported versions.
 
 ## License
 
-`Apache-2.0`. [LICENSE](LICENSE) has the terms.
+`{{ repo.license }}`. [LICENSE](LICENSE) has the terms.

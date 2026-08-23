@@ -1,7 +1,9 @@
-﻿name: Update Files
+name: Update Files
 
 on:
   pull_request:
+    branches: [ main ]
+  push:
     branches: [ main ]
 
 permissions: {}
@@ -11,11 +13,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Renders README.md from its template and commits the result back to the pull request. An
+  # unchanged render produces no commit. A fork's pull request gets no bot token, so it is verified
+  # by the job below instead.
   update-readme:
     environment:
       name: ci
       deployment: false
     name: Update README
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     outputs:
       changes_detected: ${{ steps.auto-commit.outputs.changes_detected }}
@@ -48,19 +54,34 @@ jobs:
       - name: Setup Base Environment
         uses: ./.github/actions/setup-base-environment
 
-      - name: Generate Readme
-        run: ./gradlew generateReadme
+      # The half of the payload readme-variables cannot derive: the plugin id this build registers
+      # and the jextract build it defaults to. `tail -n 1` because a daemon or toolchain notice can
+      # reach stdout ahead of the payload, which is always one line.
+      - name: Generate the configuration payload
+        id: config
+        run: |
+          set -euo pipefail
+          echo "json=$(./gradlew -q --console=plain readmeVariables | tail -n 1)" >> "$GITHUB_OUTPUT"
 
-      - name: Commit and Push if changed
-        id: auto-commit
-        uses: TimSchoenle/actions/actions/common/commit-changes@76719ba61e9b9cf1ffafdc3cb895308055a7f3bd # tag=actions-common-commit-changes-v1.3.2
+      - name: Collect the README payload
+        id: variables
+        uses: TimSchoenle/actions/actions/common/readme-variables@b5b5c9e047f00ffa00b7772536c8bdb4f158f706 # tag=actions-common-readme-variables-v1.1.0
         with:
-          commit_message: 'docs: auto-update documentation'
-          file_pattern: 'README.md'
+          branch: ${{ github.event.repository.default_branch }}
+          extra: ${{ steps.config.outputs.json }}
+
+      - name: Render and commit the README
+        id: auto-commit
+        uses: TimSchoenle/actions/actions/common/render-template-and-commit@15d83f02081c9dc8a844646199c63792dcccdfa8 # tag=actions-common-render-template-and-commit-v1.1.3
+        with:
+          template: .github/templates/README.md.hbs
+          output: README.md
+          variables: ${{ steps.variables.outputs.variables }}
           token: ${{ steps.generate_token.outputs.token }}
+          commit_message: 'docs: render README from its template'
 
       - name: Comment on PR
-        if: steps.auto-commit.outputs.changes_detected == 'true' && github.event_name == 'pull_request'
+        if: steps.auto-commit.outputs.changes_detected == 'true'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
@@ -69,8 +90,51 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: '📝 `README.md` have been auto-updated with the latest details.'
+              body: '`README.md` has been re-rendered from `.github/templates/README.md.hbs`.'
             })
+
+  # The drift gate. Renders without writing and fails when the committed README.md differs, which is
+  # what makes the template the source rather than a suggestion.
+  verify:
+    name: readme
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # to read code
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Base Environment
+        uses: ./.github/actions/setup-base-environment
+
+      - name: Generate the configuration payload
+        id: config
+        run: |
+          set -euo pipefail
+          echo "json=$(./gradlew -q --console=plain readmeVariables | tail -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Collect the README payload
+        id: variables
+        uses: TimSchoenle/actions/actions/common/readme-variables@b5b5c9e047f00ffa00b7772536c8bdb4f158f706 # tag=actions-common-readme-variables-v1.1.0
+        with:
+          branch: ${{ github.event.repository.default_branch }}
+          extra: ${{ steps.config.outputs.json }}
+
+      - name: Verify README.md is current
+        uses: TimSchoenle/actions/actions/common/render-template@3b7d152374ee63e720e7c16bed8b088b40554911 # tag=actions-common-render-template-v1.1.1
+        with:
+          template: .github/templates/README.md.hbs
+          output: README.md
+          variables: ${{ steps.variables.outputs.variables }}
+          check: 'true'
 
   auto-format:
     environment:
@@ -78,7 +142,7 @@ jobs:
       deployment: false
     name: Auto-Format
     needs: update-readme
-    if: needs.update-readme.outputs.changes_detected == 'false'
+    if: github.event_name == 'pull_request' && needs.update-readme.outputs.changes_detected == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner

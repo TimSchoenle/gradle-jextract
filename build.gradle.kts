@@ -16,16 +16,15 @@ plugins {
     alias(libs.plugins.rewrite)
 }
 
-// x-release-please-start-version
-version = "0.3.17"
-// x-release-please-end
-
-group = "de.timscho"
-val gradlePluginId =  "de.timscho.jextract"
+// `group`, `version` and `description` arrive from gradle.properties, which Gradle applies to the
+// project before this script runs. That file is also the manifest the README payload is read from,
+// so the two cannot disagree.
+val gradlePluginId = "de.timscho.jextract"
+val artifactId = providers.gradleProperty("artifactId").get()
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(providers.gradleProperty("javaVersion").get().toInt())
     }
 }
 
@@ -106,7 +105,7 @@ gradlePlugin {
 }
 
 mavenPublishing {
-    coordinates(group.toString(), "gradle-jextract", version.toString())
+    coordinates(group.toString(), artifactId, version.toString())
 
     configure(GradlePlugin(javadocJar = JavadocJar.Javadoc()))
 
@@ -159,23 +158,38 @@ val rewriteAndFormat by tasks.registering {
     dependsOn("rewriteRun", "spotlessApply")
 }
 
-val generateReadme by tasks.registering {
-    description = "Generates the README.md from the template with current version and snippets"
+/**
+ * Prints the half of the README payload that lives in this build rather than in gradle.properties.
+ *
+ * The readme-variables action reads the manifest and walks `docs/`; it cannot know which plugin id
+ * this script registers or which jextract build the plugin falls back to. Those two are read here
+ * from the same files the build itself reads them from, so a plugin rename or a bumped
+ * `gradle/jextract-version` corrects every snippet in the README in the commit that makes it.
+ *
+ * Strict JSON on one line, on stdout, consumed as that action's `extra` input.
+ */
+val readmeVariables by tasks.registering {
+    description = "Prints the README render payload this build contributes, as strict JSON"
     group = "documentation"
 
-    val template = layout.projectDirectory.file("README.tpl.md")
+    val pluginId = gradlePluginId
+    val licenseId = providers.gradleProperty("license").get()
+    val toolVersion = layout.projectDirectory
+        .file("gradle/jextract-version")
+        .asFile
+        .readText()
+        .trim()
 
     doLast {
-        copy {
-            from(template)
-            into(layout.projectDirectory)
-            rename { "README.md" }
-            expand(
-                "version" to project.version,
-                "group" to project.group,
-                "gradlePluginId" to gradlePluginId
-            )
-        }
+        fun quote(value: String): String =
+            "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+
+        logger.quiet(
+            "{" +
+                "\"repo\":{\"license\":${quote(licenseId)}}," +
+                "\"plugin\":{\"id\":${quote(pluginId)},\"tool_version\":${quote(toolVersion)}}" +
+                "}"
+        )
     }
 }
 
