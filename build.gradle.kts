@@ -181,7 +181,7 @@ val readmeVariables by tasks.registering {
         .trim()
 
     doLast {
-        fun quote(value: String): String =
+        fun quote(valvalue: String): String =
             "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
         logger.quiet(
