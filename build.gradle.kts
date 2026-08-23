@@ -16,16 +16,15 @@ plugins {
     alias(libs.plugins.rewrite)
 }
 
-// x-release-please-start-version
-version = "0.3.17"
-// x-release-please-end
-
-group = "de.timscho"
-val gradlePluginId =  "de.timscho.jextract"
+// `group`, `version` and `description` arrive from gradle.properties, which Gradle applies to the
+// project before this script runs. That file is also the manifest the README payload is read from,
+// so the two cannot disagree.
+val gradlePluginId: String = providers.gradleProperty("pluginId").get()
+val artifactId = providers.gradleProperty("artifactId").get()
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(providers.gradleProperty("javaVersion").get().toInt())
     }
 }
 
@@ -106,7 +105,7 @@ gradlePlugin {
 }
 
 mavenPublishing {
-    coordinates(group.toString(), "gradle-jextract", version.toString())
+    coordinates(group.toString(), artifactId, version.toString())
 
     configure(GradlePlugin(javadocJar = JavadocJar.Javadoc()))
 
@@ -159,25 +158,6 @@ val rewriteAndFormat by tasks.registering {
     dependsOn("rewriteRun", "spotlessApply")
 }
 
-val generateReadme by tasks.registering {
-    description = "Generates the README.md from the template with current version and snippets"
-    group = "documentation"
-
-    val template = layout.projectDirectory.file("README.tpl.md")
-
-    doLast {
-        copy {
-            from(template)
-            into(layout.projectDirectory)
-            rename { "README.md" }
-            expand(
-                "version" to project.version,
-                "group" to project.group,
-                "gradlePluginId" to gradlePluginId
-            )
-        }
-    }
-}
 
 val findLatestJextractVersion by tasks.registering {
     group = "help"

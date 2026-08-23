@@ -12,7 +12,7 @@
             "component": "gradle-jextract",
             "pull-request-title-pattern": "chore: release gradle-jextract v${version}",
             "extra-files": [
-                "build.gradle.kts"
+                "gradle.properties"
             ]
         }
     },
