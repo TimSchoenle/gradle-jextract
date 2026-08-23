@@ -51,17 +51,22 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ steps.generate_token.outputs.token }}
 
-      - name: Setup Base Environment
-        uses: ./.github/actions/setup-base-environment
-
       # The half of the payload readme-variables cannot derive: the plugin id this build registers
-      # and the jextract build it defaults to. `tail -n 1` because a daemon or toolchain notice can
-      # reach stdout ahead of the payload, which is always one line.
+      # and the jextract build it defaults to. Both are read straight out of the files that hold
+      # them rather than through Gradle, because a build that cannot configure would otherwise
+      # leave this step green with an empty payload and surface as a strict-mode error in the
+      # render, three steps away from the cause. Each value is its own assignment so `set -e`
+      # sees a failure; a `$(...)` inside `echo` would not fail the step.
       - name: Generate the configuration payload
         id: config
         run: |
           set -euo pipefail
-          echo "json=$(./gradlew -q --console=plain readmeVariables | tail -n 1)" >> "$GITHUB_OUTPUT"
+          property() { sed -n "s/^$1=//p" gradle.properties | head -n 1; }
+          license="$(property license)"
+          plugin_id="$(property pluginId)"
+          tool_version="$(tr -d "[:space:]" < gradle/jextract-version)"
+          json="$(jq -nc --arg license "$license" --arg pluginId "$plugin_id" --arg toolVersion "$tool_version" '{repo:{license:$license},plugin:{id:$pluginId,tool_version:$toolVersion}}')"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
 
       - name: Collect the README payload
         id: variables
@@ -112,14 +117,22 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup Base Environment
-        uses: ./.github/actions/setup-base-environment
-
+      # The half of the payload readme-variables cannot derive: the plugin id this build registers
+      # and the jextract build it defaults to. Both are read straight out of the files that hold
+      # them rather than through Gradle, because a build that cannot configure would otherwise
+      # leave this step green with an empty payload and surface as a strict-mode error in the
+      # render, three steps away from the cause. Each value is its own assignment so `set -e`
+      # sees a failure; a `$(...)` inside `echo` would not fail the step.
       - name: Generate the configuration payload
         id: config
         run: |
           set -euo pipefail
-          echo "json=$(./gradlew -q --console=plain readmeVariables | tail -n 1)" >> "$GITHUB_OUTPUT"
+          property() { sed -n "s/^$1=//p" gradle.properties | head -n 1; }
+          license="$(property license)"
+          plugin_id="$(property pluginId)"
+          tool_version="$(tr -d "[:space:]" < gradle/jextract-version)"
+          json="$(jq -nc --arg license "$license" --arg pluginId "$plugin_id" --arg toolVersion "$tool_version" '{repo:{license:$license},plugin:{id:$pluginId,tool_version:$toolVersion}}')"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
 
       - name: Collect the README payload
         id: variables

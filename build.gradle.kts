@@ -19,7 +19,7 @@ plugins {
 // `group`, `version` and `description` arrive from gradle.properties, which Gradle applies to the
 // project before this script runs. That file is also the manifest the README payload is read from,
 // so the two cannot disagree.
-val gradlePluginId = "de.timscho.jextract"
+val gradlePluginId: String = providers.gradleProperty("pluginId").get()
 val artifactId = providers.gradleProperty("artifactId").get()
 
 java {
@@ -158,40 +158,6 @@ val rewriteAndFormat by tasks.registering {
     dependsOn("rewriteRun", "spotlessApply")
 }
 
-/**
- * Prints the half of the README payload that lives in this build rather than in gradle.properties.
- *
- * The readme-variables action reads the manifest and walks `docs/`; it cannot know which plugin id
- * this script registers or which jextract build the plugin falls back to. Those two are read here
- * from the same files the build itself reads them from, so a plugin rename or a bumped
- * `gradle/jextract-version` corrects every snippet in the README in the commit that makes it.
- *
- * Strict JSON on one line, on stdout, consumed as that action's `extra` input.
- */
-val readmeVariables by tasks.registering {
-    description = "Prints the README render payload this build contributes, as strict JSON"
-    group = "documentation"
-
-    val pluginId = gradlePluginId
-    val licenseId = providers.gradleProperty("license").get()
-    val toolVersion = layout.projectDirectory
-        .file("gradle/jextract-version")
-        .asFile
-        .readText()
-        .trim()
-
-    doLast {
-        fun quote(valvalue: String): String =
-            "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
-
-        logger.quiet(
-            "{" +
-                "\"repo\":{\"license\":${quote(licenseId)}}," +
-                "\"plugin\":{\"id\":${quote(pluginId)},\"tool_version\":${quote(toolVersion)}}" +
-                "}"
-        )
-    }
-}
 
 val findLatestJextractVersion by tasks.registering {
     group = "help"
