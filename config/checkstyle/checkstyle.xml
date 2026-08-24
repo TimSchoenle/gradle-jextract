@@ -390,6 +390,14 @@
         <module name="JavadocMethod"> <!-- Java Style Guide: Where Javadoc is used -->
             <property name="accessModifiers" value="public"/>
             <property name="allowedAnnotations" value="Override, Test"/>
+            <!--
+              Checkstyle does not read the inline {@return ...} tag, so it asks for a trailing
+              @return next to comments that already have one. Doclint does read it, and doclint
+              runs with -Werror on both javac and the javadoc task, so a return value documented
+              nowhere still fails the build. Writing the sentence twice to satisfy this check
+              would put a second, unverified copy of the summary at the bottom of every getter.
+            -->
+            <property name="allowMissingReturnTag" value="true"/>
         </module>
         <module name="JavadocStyle"/> <!-- Java Style Guide: Javadoc -->
         <module name="JavadocTagContinuationIndentation"> <!-- Java Style Guide: At-clauses -->
