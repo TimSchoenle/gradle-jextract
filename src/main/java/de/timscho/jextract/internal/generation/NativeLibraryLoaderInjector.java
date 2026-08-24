@@ -76,7 +76,7 @@ public class NativeLibraryLoaderInjector {
      * untouched. The build then succeeds with bindings that never load their library, so the
      * warning is the only sign of it.
      *
-     * @throws IOException if the file cannot be parsed or written back
+     * @throws IOException if the target file cannot be read or written back
      */
     public void inject() throws IOException {
         final CompilationUnit compilationUnit = StaticJavaParser.parse(this.target);

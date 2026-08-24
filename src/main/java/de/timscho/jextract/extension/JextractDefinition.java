@@ -36,23 +36,13 @@ public abstract class JextractDefinition {
         this.nativeLibraryLoading = objectFactory.newInstance(NativeLibraryLoadingConfig.class);
     }
 
-    /**
-     * {@return the {@code .h} file jextract parses}
-     *
-     * <p>Tracked by content and not by path, so moving the header between directories leaves the
-     * task up to date.
-     */
+    /** {@return the {@code .h} file jextract parses} */
     public abstract RegularFileProperty getHeaderFile();
 
     /** {@return the package the generated classes are written into} */
     public abstract Property<String> getTargetPackage();
 
-    /**
-     * {@return arguments handed to jextract unchanged}
-     *
-     * <p>Placed after the arguments the plugin generates and before the header path, so an
-     * {@code --include-function} filter here applies and an {@code --output} here is a duplicate.
-     */
+    /** {@return arguments handed to jextract unchanged} */
     public abstract ListProperty<String> getCompilerArgs();
 
     /**
@@ -66,10 +56,8 @@ public abstract class JextractDefinition {
      * {@return a library the machine running the bindings already has, named without prefix or
      * extension}
      *
-     * <p>Reaches jextract as {@code -l}, which spells it for the platform, so {@code GL} resolves
-     * {@code libGL.so}, {@code libGL.dylib} or {@code GL.dll} through that platform's library
-     * search path. Mutually exclusive with {@link #getNativeLibraryLoading()}: a declaration
-     * setting both fails when the task runs.
+     * <p>Reaches jextract as {@code -l}, which spells it for the platform. Mutually exclusive with
+     * {@link #getNativeLibraryLoading()}: a declaration setting both fails when the task runs.
      */
     @Optional
     public abstract Property<String> getLibraryName();
@@ -88,7 +76,7 @@ public abstract class JextractDefinition {
     /**
      * Configures loading the library out of a JAR resource.
      *
-     * @param action applied to the nested block
+     * @param action runs against the nested block immediately, not at execution time
      */
     public void nativeLibraryLoading(final Action<? super NativeLibraryLoadingConfig> action) {
         action.execute(this.nativeLibraryLoading);

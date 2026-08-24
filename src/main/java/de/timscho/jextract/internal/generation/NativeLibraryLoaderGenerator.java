@@ -87,8 +87,7 @@ public final class NativeLibraryLoaderGenerator {
      * Writes {@code <headerClassName>_NativeLibraryLoader.java} into the target package.
      *
      * <p>Creates the package directories underneath the output directory, and overwrites the file
-     * if it is already there. The caching branch is present in the emitted source only when caching
-     * was enabled, so turning it off later requires this to run again.
+     * if it is already there.
      *
      * @throws IOException if the directories or the file cannot be written
      */

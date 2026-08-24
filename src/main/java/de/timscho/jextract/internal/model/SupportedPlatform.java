@@ -9,8 +9,8 @@ import org.jetbrains.annotations.Contract;
 /**
  * A platform jextract publishes an archive for, paired with the id naming that archive.
  *
- * <p>These five are the whole set. A machine outside them fails the build rather than falling back
- * to a neighbour, because the nearest archive downloads happily and then cannot execute.
+ * <p>No fallback to a neighbouring platform: the nearest archive downloads happily and then cannot
+ * execute.
  */
 @RequiredArgsConstructor
 @Getter

@@ -13,8 +13,7 @@ public abstract class JextractExtension {
     /**
      * {@return the libraries declared in this project, keyed by the name each was created under}
      *
-     * <p>The container is empty until a build script adds to it, and the plugin reacts to every
-     * addition, so an entry registered late still gets its task.
+     * <p>The plugin reacts to every addition, so an entry registered late still gets its task.
      */
     private final NamedDomainObjectContainer<JextractDefinition> libraries;
 
@@ -33,9 +32,8 @@ public abstract class JextractExtension {
      *
      * <p>Matched against {@code <major>-jextract+<build>}, optionally followed by a hyphen and a
      * refinement, because the download URL is assembled out of the major and the build; a string
-     * that does not match fails before anything is fetched. One value covers the whole project, so
-     * declaring six libraries costs one download. Defaults to the build this release was compiled
-     * against.
+     * that does not match fails before anything is fetched. One value covers the whole project.
+     * Defaults to the build this release was compiled against.
      */
     public abstract Property<String> getToolVersion();
 
@@ -45,7 +43,7 @@ public abstract class JextractExtension {
      * <p>Each name added to the container becomes a {@code generate<Name>Bindings} task and the
      * directory under {@code build/generated/sources/jextract} that its output lands in.
      *
-     * @param action applied to the container of declarations
+     * @param action runs against the container immediately, not at execution time
      */
     public void libraries(final Action<? super NamedDomainObjectContainer<JextractDefinition>> action) {
         action.execute(this.libraries);

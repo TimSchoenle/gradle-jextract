@@ -19,14 +19,11 @@ public abstract class NativeLibraryLoadingConfig {
      * {@return the resource holding the library, as a template carrying neither the platform's
      * library prefix nor its extension}
      *
-     * <p>{@code {os.name}} expands to {@code windows}, {@code macos} or {@code linux} and
-     * {@code {os.arch}} to {@code amd64}, {@code aarch64} or {@code x86}, both read from the JVM
-     * running the bindings rather than the one that built them. The last segment is then spelled
-     * the way that platform spells a library, which is why the template carries neither:
-     * {@code native/{os.name}-{os.arch}/mylib} reads {@code /native/linux-amd64/libmylib.so}.
-     *
-     * <p>Setting this is what makes the task generate a loader at all. An architecture outside the
-     * three throws {@code UnsupportedOperationException} naming what it found.
+     * <p>{@code {os.name}} and {@code {os.arch}} are substituted from the JVM running the bindings
+     * rather than the one that built them, and the last segment is then spelled the way that
+     * platform spells a library, so {@code native/{os.name}-{os.arch}/mylib} reads
+     * {@code /native/linux-amd64/libmylib.so}. Setting this is what makes the task generate a
+     * loader at all.
      */
     @Input
     @Optional
@@ -43,13 +40,10 @@ public abstract class NativeLibraryLoadingConfig {
     @org.gradle.api.tasks.Internal
     public abstract DirectoryProperty getExtractionDir();
 
-    /**
-     * {@return the extraction directory as plain text}
-     *
-     * <p>The directory itself is {@code @Internal} because it is a runtime location the build never
-     * reads or writes. Its path is still an input, since it ends up inside the generated source,
-     * and this is the property that puts it there.
-     */
+    /** {@return the extraction directory as plain text} */
+    // Not Javadoc: the directory itself is @Internal because it is a runtime location the build
+    // never reads or writes. Its path is still an input, since it ends up inside the generated
+    // source, and this is the property that puts it there. A caller does nothing with either fact.
     @Input
     @Optional
     protected org.gradle.api.provider.Provider<String> getExtractionDirPath() {
@@ -57,11 +51,11 @@ public abstract class NativeLibraryLoadingConfig {
     }
 
     /**
-     * {@return whether the loader looks for an already-extracted copy before writing one}
+     * {@return whether the generated loader hashes the resource before extracting it}
      *
-     * <p>Adds a SHA-256 pass over the resource to the generated loader, which then loads
-     * {@code <file>.<hash>} from the extraction directory when that file is present. False by
-     * default, which extracts once per JVM start.
+     * <p>False by default, which extracts once per JVM start. True adds a SHA-256 pass over the
+     * resource and a lookup for {@code <file>.<hash>} in the extraction directory, a name the
+     * extraction does not write, so the lookup misses and the file is extracted anyway.
      */
     @Input
     @Optional

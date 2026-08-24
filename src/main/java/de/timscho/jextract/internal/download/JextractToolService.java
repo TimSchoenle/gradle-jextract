@@ -26,18 +26,15 @@ import org.jspecify.annotations.Nullable;
 /**
  * Supplies the jextract executable, downloading and unpacking it the first time one is asked for.
  *
- * <p>One instance is shared by every task in the build, and resolution runs under a lock, so a
- * project declaring six libraries makes one request to {@code download.java.net}.
+ * <p>One instance is shared by every task in the build, and resolution runs under a lock.
  */
 public abstract class JextractToolService implements BuildService<JextractToolService.Params> {
     /** The jextract build this release was compiled against, read from {@code gradle/jextract-version}. */
     public static final String DEFAULT_VERSION = GeneratedConstant.JEXTRACT_VERSION;
 
     /**
-     * Marker written into a version directory once extraction has finished.
-     *
-     * <p>A directory without it is deleted and downloaded again, so a download killed halfway
-     * cannot be mistaken for a cached tool by the next build.
+     * Marker written into a version directory once extraction has finished, and the only thing that
+     * makes that directory count as cached.
      */
     public static final String FILE_INTEGRITY_NAME = ".gradleJextractDownload";
 
@@ -59,16 +56,11 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
     // so `Failed to create service 'jextractTool'` is what a declared constructor here buys.
 
     /**
-     * {@return the jextract binary for this machine, downloading and unpacking it unless the cache
-     * already holds a complete copy}
-     *
-     * <p>Looked for at {@code bin/jextract}, or {@code bin/jextract.bat} on Windows, both directly
-     * under the version directory and one level below it, because some archives put everything
-     * inside a {@code jextract-<major>} folder and others do not.
+     * {@return the jextract binary for this machine, fetched and unpacked on a cache miss}
      *
      * @param logger receives the download line at lifecycle level and the resolved path at debug
-     * @throws org.gradle.api.GradleException if the download or extraction fails, or if neither
-     *     location holds the binary afterwards
+     * @throws GradleException if the download or extraction fails, or if the extracted tree holds
+     *     no {@code bin/jextract} at either depth searched
      */
     public File getExecutable(final org.gradle.api.logging.Logger logger) {
         final String version = this.getParameters().getVersion().getOrElse(JextractToolService.DEFAULT_VERSION);

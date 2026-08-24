@@ -155,7 +155,15 @@ mavenPublishing {
 // whose field it cannot comment, and `JextractToolService` cannot declare the constructor doclint
 // wants because Gradle's build service instantiation rejects one. The classes still carry
 // hand-written comments; what they do not have is the machine check.
-val doclintOptOut = listOf("de.timscho.jextract.internal.*")
+//
+// Both spellings of the package are needed. `-a.b.*` matches the subpackages and not `a.b` itself,
+// so with only the wildcard the first class placed directly in `de.timscho.jextract.internal` would
+// fail `compileJava` while still being absent from the javadoc jar.
+//
+// What is given up is `reference`: `-Xdoclint/package` turns off all five groups for the packages
+// it names, and the javadoc task excludes them as well, so a `{@link}` in an internal
+// `package-info.java` is resolved by nothing and renders as plain text if its target is renamed.
+val doclintOptOut = listOf("de.timscho.jextract.internal", "de.timscho.jextract.internal.*")
 
 // compileJava only. The test source sets are read by whoever changes them and by nobody else, and
 // doclint has one question, which is whether a comment exists. Asking it of a `@TempDir` field
@@ -182,6 +190,18 @@ tasks.withType<Javadoc>().configureEach {
         addStringOption("Xdoclint:all", "-quiet")
         addBooleanOption("Werror", true)
     }
+}
+
+// The javadoc task reads `delombok`'s output, and freefair 9.5.0 tracks only one of the source
+// set's directories as an input to it: Delombok.getFilteredInput() calls ConfigurableFileTree.from
+// once per directory, and that call moves the tree's base directory instead of adding to it. The
+// buildConfig plugin's generated directory is the one that survives, and it never changes, so the
+// task reports up to date after every edit under src/main/java and the javadoc half of the gate
+// reads a stale tree. Declaring the directory a second time is what makes the task run.
+tasks.named("delombok") {
+    inputs.dir(layout.projectDirectory.dir("src/main/java"))
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName("mainJavaSource")
 }
 
 tasks.named("check") {

@@ -49,8 +49,8 @@ public final class JextractPlugin implements Plugin<Project> {
                     spec.getParameters().getCacheDir().set(cacheDir);
                 });
 
-        // all(), not configureEach(): the task has to be registered as soon as the declaration
-        // exists, because the source set below reads its output directory during configuration.
+        // all(), not configureEach(): the task must be registered when the declaration is added,
+        // not when someone realizes it, or a library declared with register() never gets a task.
         extension.getLibraries().all(library -> {
             final String taskName = "generate" + this.capitalize(library.getName()) + "Bindings";
 
@@ -81,10 +81,10 @@ public final class JextractPlugin implements Plugin<Project> {
 
                         taskInnit.getCompilerArgs().set(library.getCompilerArgs());
 
+                        // No usesService call: a @ServiceReference property is collected into the
+                        // task's consumed services by Gradle itself, so the two would say the same
+                        // thing twice.
                         taskInnit.getToolService().set(serviceProvider);
-                        // Declares the dependency Gradle needs to hold the service open for the
-                        // whole of the task's execution, which setting the property alone does not.
-                        taskInnit.usesService(serviceProvider);
 
                         final Provider<Directory> outputDir = project.getLayout()
                                 .getBuildDirectory()

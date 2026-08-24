@@ -27,10 +27,9 @@ import org.jetbrains.annotations.Contract;
 /**
  * Runs jextract over one header, and generates the native library loader when one was asked for.
  *
- * <p>The properties below repeat the library declaration they were wired from and are described
- * here by the jextract argument each becomes. The tool version is not among them: it arrives
- * through the shared service, and a build service is not a task input, so raising it does not by
- * itself make a task that already ran out of date.
+ * <p>The tool version is not among the inputs: it arrives through the shared service, and a build
+ * service is not a task input, so raising it does not by itself make a task that already ran out
+ * of date.
  */
 @CacheableTask
 public abstract class JextractTask extends DefaultTask {
@@ -40,8 +39,7 @@ public abstract class JextractTask extends DefaultTask {
     /**
      * {@return the header file jextract parses}
      *
-     * <p>Passed last on the command line, after the compiler arguments, which is where jextract
-     * expects it. Tracked by content, so moving the file leaves the task up to date.
+     * <p>Tracked by content, so moving the file leaves the task up to date.
      */
     @InputFile
     @PathSensitive(PathSensitivity.NONE)
@@ -104,17 +102,22 @@ public abstract class JextractTask extends DefaultTask {
     @ServiceReference("jextractTool")
     public abstract Property<JextractToolService> getToolService();
 
-    /** {@return the launcher jextract is run through} */
+    /**
+     * {@return the launcher jextract is run through}
+     *
+     * <p>jextract is launched with the project directory as its working directory, so a relative
+     * include path in {@link #getCompilerArgs()} resolves against that.
+     */
     @Inject
     protected abstract ExecOperations getExecOps();
 
     /**
      * Runs jextract, then generates the loader if a resource path was configured.
      *
-     * <p>The first task to ask for the executable blocks while the service downloads and unpacks
-     * it; tasks that ask during that window wait instead of starting a second download.
-     *
-     * @throws Exception if jextract's output cannot be parsed, or the loader cannot be written
+     * @throws GradleException if jextract exits with a nonzero status, or if the declaration set
+     *     both a library name and a resource path
+     * @throws java.io.IOException if the generated loader or the header class it is injected into
+     *     cannot be written
      */
     @TaskAction
     public void run() throws Exception {
@@ -160,8 +163,6 @@ public abstract class JextractTask extends DefaultTask {
         return args;
     }
 
-    // The two loading options mean different things on the machine that runs the bindings: one
-    // resolves through the system's library search path, the other unpacks a file the JAR carries.
     // Picking one would make the build succeed and the wrong library load, so it refuses instead.
     private void addLibraryArgs(final List<String> args) {
         int configuredCount = 0;
