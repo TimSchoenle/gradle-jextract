@@ -34,8 +34,16 @@ import java.nio.file.Path;
 import lombok.Builder;
 import org.jetbrains.annotations.Contract;
 
+/**
+ * Writes the loader class for one library and points the header class at it.
+ *
+ * <p>{@link #generate()} then {@link #injectLoader()}, in that order: the injection reads the file
+ * jextract wrote and the generation has to have produced the class it will call.
+ */
 @Builder
 public final class NativeLibraryLoaderGenerator {
+    // Named once and handed to the injector, so the emitted method and the emitted call to it
+    // cannot drift apart.
     private static final String LOADER_METHOD_NAME = "load";
 
     private final String targetPackage;
@@ -49,6 +57,16 @@ public final class NativeLibraryLoaderGenerator {
         return this.headerClassName + "_NativeLibraryLoader";
     }
 
+    /**
+     * Adds the call to the generated loader into the class jextract wrote.
+     *
+     * <p>A second run over the same tree changes nothing, so the task is safe to repeat without
+     * clearing its output directory first.
+     *
+     * @throws IOException if the header class cannot be read or written back
+     * @throws IllegalStateException if no class of the configured name exists under the target
+     *     package, which means jextract did not run or ran with a different header class name
+     */
     public void injectLoader() throws IOException {
         final Path targetFile = this.createPackageDirectory().resolve(this.headerClassName + ".java");
         if (!Files.exists(targetFile)) {
@@ -66,7 +84,12 @@ public final class NativeLibraryLoaderGenerator {
     }
 
     /**
-     * Generates the NativeLibraryLoader.java file in the output directory.
+     * Writes {@code <headerClassName>_NativeLibraryLoader.java} into the target package.
+     *
+     * <p>Creates the package directories underneath the output directory, and overwrites the file
+     * if it is already there.
+     *
+     * @throws IOException if the directories or the file cannot be written
      */
     public void generate() throws IOException {
         final String className = this.getFinalClassName();
@@ -76,16 +99,19 @@ public final class NativeLibraryLoaderGenerator {
 
         final ClassOrInterfaceDeclaration loaderClass = cu.addClass(className)
                 .setModifiers(Modifier.Keyword.PUBLIC, Modifier.Keyword.FINAL)
+                // Read by whoever opens the generated tree, not by anyone reading this file.
                 .setJavadocComment("""
-                        Auto-generated loader for platform-specific native libraries."
-                        "This class extracts and loads native libraries from JAR resources.
+                        Loads the native library the bindings in this package call into.
+
+                        <p>Extracted from a JAR resource on first use and handed to System.load.
+                        Written by the gradle-jextract plugin from one library declaration, so an
+                        edit here is lost the next time that task runs.
                         """);
 
         final FieldDeclaration loadedField = loaderClass.addField(
                 PrimitiveType.booleanType(), "loaded", Modifier.Keyword.PRIVATE, Modifier.Keyword.STATIC);
         loadedField.getVariable(0).setInitializer(new BooleanLiteralExpr(false));
 
-        // Private constructor
         final ConstructorDeclaration constructor = loaderClass.addConstructor(Modifier.Keyword.PRIVATE);
         constructor
                 .getBody()
@@ -96,10 +122,8 @@ public final class NativeLibraryLoaderGenerator {
 
         this.addMethods(loaderClass);
 
-        // Create package directory structure
         final Path packagePath = this.createPackageDirectory();
 
-        // Write the Java file
         final Path outputFile = packagePath.resolve(className + ".java");
         Files.writeString(outputFile, cu.toString());
 
@@ -107,7 +131,6 @@ public final class NativeLibraryLoaderGenerator {
     }
 
     private void addMethods(final ClassOrInterfaceDeclaration loaderClass) {
-        // Main load method
         final MethodDeclaration loadMethod = loaderClass.addMethod(
                 NativeLibraryLoaderGenerator.LOADER_METHOD_NAME,
                 Modifier.Keyword.PUBLIC,
@@ -189,7 +212,6 @@ public final class NativeLibraryLoaderGenerator {
                 new BooleanLiteralExpr(true),
                 com.github.javaparser.ast.expr.AssignExpr.Operator.ASSIGN));
 
-        // expandResourcePath method
         final MethodDeclaration expandMethod =
                 loaderClass.addMethod("expandResourcePath", Modifier.Keyword.PRIVATE, Modifier.Keyword.STATIC);
         expandMethod.setType(String.class);
@@ -388,7 +410,6 @@ public final class NativeLibraryLoaderGenerator {
 
         final BlockStmt cachedBody = getCached.getBody().get();
         final TryStmt tryResource = new TryStmt();
-        // Create try-with-resources variable declaration
         final VariableDeclarator inVar = new VariableDeclarator(
                 StaticJavaParser.parseType("java.io.InputStream"),
                 "in",

@@ -23,45 +23,62 @@ import org.gradle.api.services.BuildService;
 import org.gradle.api.services.BuildServiceParameters;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * Supplies the jextract executable, downloading and unpacking it the first time one is asked for.
+ *
+ * <p>One instance is shared by every task in the build, and resolution runs under a lock.
+ */
 public abstract class JextractToolService implements BuildService<JextractToolService.Params> {
+    /** The jextract build this release was compiled against, read from {@code gradle/jextract-version}. */
     public static final String DEFAULT_VERSION = GeneratedConstant.JEXTRACT_VERSION;
+
+    /**
+     * Marker written into a version directory once extraction has finished, and the only thing that
+     * makes that directory count as cached.
+     */
     public static final String FILE_INTEGRITY_NAME = ".gradleJextractDownload";
+
     private static final int HTTP_OK = 200;
 
+    /** {@return the file operations used to unpack the archive and to clear a partial download} */
     @Inject
     protected abstract FileSystemOperations getFs();
 
+    /** {@return the archive operations the downloaded {@code .tar.gz} is read through} */
     @Inject
     protected abstract ArchiveOperations getArchives();
 
     private final HttpClient httpClient =
             HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
 
+    // No constructor is declared, deliberately. Gradle generates the concrete subclass of a build
+    // service and its constructor selector then demands an @Inject constructor it cannot find,
+    // so `Failed to create service 'jextractTool'` is what a declared constructor here buys.
+
     /**
-     * Resolves and returns the jextract tool executable.
-     * Downloads and caches the tool if not already present.
+     * {@return the jextract binary for this machine, fetched and unpacked on a cache miss}
      *
-     * @param logger The Gradle logger to use for logging.
-     * @return The jextract executable file
+     * @param logger receives the download line at lifecycle level and the resolved path at debug
+     * @throws GradleException if the download or extraction fails, or if the extracted tree holds
+     *     no {@code bin/jextract} at either depth searched
      */
     public File getExecutable(final org.gradle.api.logging.Logger logger) {
         final String version = this.getParameters().getVersion().getOrElse(JextractToolService.DEFAULT_VERSION);
+        // A version string carries a '+', which the download URL accepts and Windows paths do not.
         final String folderName = version.replaceAll("[^a-zA-Z0-9.-]", "_");
         final Path toolDir = this.resolveToolDir(folderName, logger);
 
-        // Determine the correct binary name for the OS
         final boolean isWindows = SupportedPlatform.getCurrentSupported().getPlatformType() == PlatformType.WINDOWS;
         final String binaryName = isWindows ? "jextract.bat" : "jextract";
         final Path relativePathWithBin = Path.of("bin", binaryName);
 
-        // Check direct path: toolDir/bin/<binary>
         final File bin = toolDir.resolve(relativePathWithBin).toFile();
         if (bin.exists()) {
             logger.debug("Found jextract binary at: {}", bin);
             return bin;
         }
 
-        // Deep search (handle nested extraction like 'jextract-25/bin/...')
+        // One level only: the nesting seen so far is a single 'jextract-<major>' directory.
         final @Nullable File[] subDirs = toolDir.toFile().listFiles(File::isDirectory);
         if (subDirs != null) {
             for (final File sub : subDirs) {
@@ -80,6 +97,8 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
         throw new GradleException("Jextract binary '" + binaryName + "' not found in " + toolDir);
     }
 
+    // Synchronized on the service, which Gradle shares across the build, so parallel tasks reaching
+    // a cold cache queue behind one download instead of racing to write the same directory.
     private Path resolveToolDir(final String folderName, final org.gradle.api.logging.Logger logger) {
         synchronized (this) {
             final Directory cacheBase = this.getParameters().getCacheDir().get();
@@ -98,7 +117,7 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
             logger.lifecycle("Downloading jextract ({}) from: {}", folderName, url);
 
             try {
-                // Clean partial downloads
+                // Anything already there failed to finish, or the marker would have been found.
                 if (versionDir.getAsFile().exists()) {
                     this.getFs().delete(s -> s.delete(versionDir));
                 }
@@ -106,7 +125,6 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
 
                 this.downloadAndExtract(url, versionDir.getAsFile());
 
-                // Mark success
                 marker.getAsFile().createNewFile();
             } catch (final Exception exception) {
                 throw new GradleException("Failed to download jextract from " + url, exception);
@@ -137,9 +155,17 @@ public abstract class JextractToolService implements BuildService<JextractToolSe
         }
     }
 
+    /** What the service is registered with, fixed for the life of the build. */
     public interface Params extends BuildServiceParameters {
+        /** {@return the jextract version to fetch, taken from the extension at registration time} */
         Property<String> getVersion();
 
+        /**
+         * {@return the directory holding one subdirectory per version}
+         *
+         * <p>Under the Gradle user home rather than the build directory, so the tool survives a
+         * {@code clean} and is shared between projects on the machine.
+         */
         DirectoryProperty getCacheDir();
     }
 }

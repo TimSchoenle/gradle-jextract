@@ -24,94 +24,103 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecOperations;
 import org.jetbrains.annotations.Contract;
 
+/**
+ * Runs jextract over one header, and generates the native library loader when one was asked for.
+ *
+ * <p>The tool version is not among the inputs: it arrives through the shared service, and a build
+ * service is not a task input, so raising it does not by itself make a task that already ran out
+ * of date.
+ */
 @CacheableTask
 public abstract class JextractTask extends DefaultTask {
+    /** Constructs the task, which Gradle does once per library declaration. */
+    public JextractTask() {}
+
     /**
-     * Header file to be processed by jextract.
-     * Passed to jextract as: -I headerFile
+     * {@return the header file jextract parses}
      *
-     * @return The path to the header file
+     * <p>Tracked by content, so moving the file leaves the task up to date.
      */
     @InputFile
     @PathSensitive(PathSensitivity.NONE)
     public abstract RegularFileProperty getHeaderFile();
 
-    /**
-     * Target package for generated Java classes.
-     * Passed to jextract as: -t targetPackage
-     *
-     * @return The wanted target package path name
-     */
+    /** {@return the package the generated classes are written into, passed as {@code --target-package}} */
     @Input
     public abstract Property<String> getTargetPackage();
 
-    /**
-     * Additional compiler arguments to be passed to jextract.
-     * Passed to jextract as: -J compilerArgs
-     *
-     * @return The additional compiler arguments
-     */
+    /** {@return arguments inserted verbatim between the generated arguments and the header path} */
     @Input
     public abstract ListProperty<String> getCompilerArgs();
 
     /**
-     * Custom name for the main header class.
+     * {@return the class jextract puts the top-level declarations on, passed as
+     * {@code --header-class-name}}
      *
-     * @return The custom header class name
+     * <p>Unset, the header file name with {@code .h} replaced by {@code _h} is sent instead, so
+     * jextract always receives the argument.
      */
     @Input
     @org.gradle.api.tasks.Optional
     public abstract Property<String> getHeaderClassName();
 
     /**
-     * Library name for system-installed libraries.
-     * Passed to jextract as: -l libraryName
+     * {@return the system library to bind against, passed as {@code -l}}
      *
-     * @return The library name to import
+     * <p>Set together with a resource path under {@link #getNativeLibraryLoading()}, the task fails
+     * before jextract is invoked instead of choosing between them.
      */
     @Input
     @org.gradle.api.tasks.Optional
     public abstract Property<String> getLibraryName();
 
     /**
-     * Configuration for loading native libraries from JAR resources.
-     * When configured, generates runtime library loader code instead of passing to jextract.
+     * {@return the settings for extracting the library out of a JAR resource}
      *
-     * @return The native library loading configuration
+     * <p>None of it reaches jextract. A resource path here makes the task write a loader class and
+     * edit jextract's output once jextract has finished.
      */
     @Nested
     @org.gradle.api.tasks.Optional
     public abstract NativeLibraryLoadingConfig getNativeLibraryLoading();
 
     /**
-     * Output directory for generated Java classes.
-     * Passed to jextract as: -d outputDirectory
+     * {@return the directory jextract writes into, passed as {@code --output}}
      *
-     * @return The output directory for generated Java classes
+     * <p>Joined to the {@code main} source set by the plugin, so what lands here is compiled
+     * without being declared anywhere else.
      */
     @OutputDirectory
     public abstract DirectoryProperty getOutputDirectory();
 
     /**
-     * Connects this task to the shared build service.
+     * {@return the build service that supplies the jextract executable}
      *
-     * @return The shared build service
+     * <p>Bound by the name {@code jextractTool}, so it resolves whether or not the plugin was the
+     * thing that registered it.
      */
     @ServiceReference("jextractTool")
     public abstract Property<JextractToolService> getToolService();
 
+    /**
+     * {@return the launcher jextract is run through}
+     *
+     * <p>jextract is launched with the project directory as its working directory, so a relative
+     * include path in {@link #getCompilerArgs()} resolves against that.
+     */
     @Inject
     protected abstract ExecOperations getExecOps();
 
     /**
-     * Executes the jextract tool and generates the bindings.
+     * Runs jextract, then generates the loader if a resource path was configured.
      *
-     * @throws Exception If the execution fails.
+     * @throws GradleException if jextract exits with a nonzero status, or if the declaration set
+     *     both a library name and a resource path
+     * @throws java.io.IOException if the generated loader or the header class it is injected into
+     *     cannot be written
      */
     @TaskAction
     public void run() throws Exception {
-        // Get the tool executable from the service
-        // This blocks if the service is currently downloading in another thread
         final String executablePath =
                 this.getToolService().get().getExecutable(this.getLogger()).getAbsolutePath();
 
@@ -120,10 +129,10 @@ public abstract class JextractTask extends DefaultTask {
 
         this.getExecOps().exec(spec -> {
             spec.commandLine(args);
-            spec.setWorkingDir(this.getProject().getProjectDir()); // Good practice
+            // Relative include paths in compilerArgs resolve against this directory.
+            spec.setWorkingDir(this.getProject().getProjectDir());
         });
 
-        // Generate native library loader if configured
         if (this.getNativeLibraryLoading().getResourcePath().isPresent()) {
             this.generateNativeLibraryLoader();
         }
@@ -148,15 +157,14 @@ public abstract class JextractTask extends DefaultTask {
         args.add(this.getFinalHeaderClassName());
         args.addAll(this.getCompilerArgs().get());
 
-        // Add library loading arguments
         this.addLibraryArgs(args);
 
         args.add(this.getHeaderFile().get().getAsFile().getAbsolutePath());
         return args;
     }
 
+    // Picking one would make the build succeed and the wrong library load, so it refuses instead.
     private void addLibraryArgs(final List<String> args) {
-        // Validate mutual exclusivity
         int configuredCount = 0;
         if (this.getLibraryName().isPresent()) {
             configuredCount++;
@@ -170,7 +178,6 @@ public abstract class JextractTask extends DefaultTask {
                     + "libraryName, libraryPath, or nativeLibraryLoading.resourcePath");
         }
 
-        // Add library name argument
         if (this.getLibraryName().isPresent()) {
             args.add("-l");
             args.add(this.getLibraryName().get());

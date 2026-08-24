@@ -143,8 +143,74 @@ mavenPublishing {
 }
 
 
+// The doc comment gate. Both halves are needed: javac and the javadoc tool run doclint over
+// different file sets, and only -Werror turns either of them from a printout into a failure.
+//
+// `/protected` is the access level a consumer of this plugin can reach. Package-private and private
+// members are left to review.
+//
+// `internal` is held out, and it is the same set the javadoc jar below leaves out, so the gate
+// covers exactly what is published. Every member doclint would ask about in there is one nobody can
+// answer: Lombok writes the `@Builder` and `@Value` members, the buildConfig plugin writes a class
+// whose field it cannot comment, and `JextractToolService` cannot declare the constructor doclint
+// wants because Gradle's build service instantiation rejects one. The classes still carry
+// hand-written comments; what they do not have is the machine check.
+//
+// Both spellings of the package are needed. `-a.b.*` matches the subpackages and not `a.b` itself,
+// so with only the wildcard the first class placed directly in `de.timscho.jextract.internal` would
+// fail `compileJava` while still being absent from the javadoc jar.
+//
+// What is given up is `reference`: `-Xdoclint/package` turns off all five groups for the packages
+// it names, and the javadoc task excludes them as well, so a `{@link}` in an internal
+// `package-info.java` is resolved by nothing and renders as plain text if its target is renamed.
+val doclintOptOut = listOf("de.timscho.jextract.internal", "de.timscho.jextract.internal.*")
+
+// compileJava only. The test source sets are read by whoever changes them and by nobody else, and
+// doclint has one question, which is whether a comment exists. Asking it of a `@TempDir` field
+// produces a line naming the field, which is the shape of comment this repository is trying not to
+// have.
+tasks.named<JavaCompile>("compileJava") {
+    options.compilerArgs.addAll(
+        listOf(
+            "-Xdoclint:all/protected",
+            "-Xdoclint/package:" + doclintOptOut.joinToString(",") { "-$it" },
+            "-Werror",
+        ))
+}
+
+// The javadoc jar consumers download documents the extension, the task and the plugin. Nothing
+// under `internal` carries a compatibility promise, so publishing it would be publishing a contract
+// this project does not intend to keep.
+tasks.withType<Javadoc>().configureEach {
+    exclude("de/timscho/jextract/internal/**")
+
+    (options as StandardJavadocDocletOptions).apply {
+        // No access qualifier here: the javadoc tool rejects `-Xdoclint:all/protected` and takes
+        // the level from its own `-protected`, which is the default and the level javac is given.
+        addStringOption("Xdoclint:all", "-quiet")
+        addBooleanOption("Werror", true)
+    }
+}
+
+// The javadoc task reads `delombok`'s output, and freefair 9.5.0 tracks only one of the source
+// set's directories as an input to it: Delombok.getFilteredInput() calls ConfigurableFileTree.from
+// once per directory, and that call moves the tree's base directory instead of adding to it. The
+// buildConfig plugin's generated directory is the one that survives, and it never changes, so the
+// task reports up to date after every edit under src/main/java and the javadoc half of the gate
+// reads a stale tree. Declaring the directory a second time is what makes the task run.
+tasks.named("delombok") {
+    inputs.dir(layout.projectDirectory.dir("src/main/java"))
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName("mainJavaSource")
+}
+
 tasks.named("check") {
     dependsOn(testing.suites.named("functionalTest"))
+
+    // `build` does not reach the javadoc task; only publishing does, and CI runs
+    // `build -x test -x functionalTest`. Without this the doclint half that resolves `{@link}`
+    // targets would first run during a release, which is the one place a broken link is expensive.
+    dependsOn(tasks.named("javadoc"))
 }
 
 tasks.named("spotlessApply") {

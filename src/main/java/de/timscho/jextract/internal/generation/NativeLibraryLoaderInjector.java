@@ -20,6 +20,13 @@ import lombok.Builder;
 import lombok.Value;
 import org.jetbrains.annotations.Contract;
 
+/**
+ * Adds one static initializer to a class jextract has already written.
+ *
+ * <p>The file is parsed and printed back rather than appended to, which is what makes a repeat run
+ * a no-op: the existing initializer is recognised as a member of the class, not as a string
+ * somewhere in the file.
+ */
 @Builder
 @Value
 public class NativeLibraryLoaderInjector {
@@ -40,6 +47,8 @@ public class NativeLibraryLoaderInjector {
                         .contains(this.loaderClassName + "." + this.staticLoaderMethodName + "()"));
     }
 
+    // The try/catch is in the emitted code because a static initializer cannot declare a checked
+    // exception, and load() throws IOException.
     @Contract(pure = true)
     private BlockStmt createLoaderInnitBlock() {
         final BlockStmt block = new BlockStmt();
@@ -61,9 +70,13 @@ public class NativeLibraryLoaderInjector {
     }
 
     /**
-     * Inject the NativeLibraryLoader.load() method into the given class.
+     * Writes the static initializer into the target file unless one is already there.
      *
-     * @throws IOException For file I/O errors
+     * <p>A target holding no class of the configured name is logged at warning level and left
+     * untouched. The build then succeeds with bindings that never load their library, so the
+     * warning is the only sign of it.
+     *
+     * @throws IOException if the target file cannot be read or written back
      */
     public void inject() throws IOException {
         final CompilationUnit compilationUnit = StaticJavaParser.parse(this.target);

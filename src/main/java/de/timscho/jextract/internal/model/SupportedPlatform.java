@@ -6,23 +6,40 @@ import lombok.RequiredArgsConstructor;
 import org.gradle.api.GradleException;
 import org.jetbrains.annotations.Contract;
 
+/**
+ * A platform jextract publishes an archive for, paired with the id naming that archive.
+ *
+ * <p>No fallback to a neighbouring platform: the nearest archive downloads happily and then cannot
+ * execute.
+ */
 @RequiredArgsConstructor
 @Getter
 public enum SupportedPlatform {
+    /** Windows, whatever the architecture reports, since jextract publishes no ARM64 Windows build. */
     WINDOWS_X64(PlatformType.WINDOWS, "windows-x64"),
+
+    /** Linux on x86-64. */
     LINUX_X64(PlatformType.LINUX, "linux-x64"),
+
+    /** Linux where {@code os.arch} reports {@code aarch64} or {@code arm64}. */
     LINUX_ARM64(PlatformType.LINUX, "linux-aarch64"),
+
+    /** macOS on Intel. */
     MACOS_X64(PlatformType.MACOS, "macos-x64"),
+
+    /** macOS on Apple silicon. */
     MACOS_ARM64(PlatformType.MACOS, "macos-aarch64");
 
+    /** {@return the family deciding which binary name to look for inside the archive} */
     private final PlatformType platformType;
+
+    /** {@return the archive id the download URL is built from, for example {@code linux-aarch64}} */
     private final String id;
 
     /**
-     * Detects and returns the current supported platform based on system properties.
+     * {@return the platform matching this JVM's {@code os.name} and {@code os.arch}}
      *
-     * @return The current SupportedPlatform
-     * @throws GradleException if the OS or architecture is not supported.
+     * @throws GradleException if the pair matches none of the five
      */
     @Contract(pure = true)
     public static SupportedPlatform getCurrentSupported() {

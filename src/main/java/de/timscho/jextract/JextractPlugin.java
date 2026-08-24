@@ -14,9 +14,21 @@ import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.Contract;
 
+/**
+ * Registers the {@code jextract} extension and turns every library declared in it into a task.
+ *
+ * <p>The generated sources reach the {@code main} source set only if the {@code java} plugin is
+ * applied, and the two may be applied in either order.
+ */
 public final class JextractPlugin implements Plugin<Project> {
+    /** Name of the extension a build script configures, and of the group its tasks appear under. */
     public static final String TASK_GROUP = "jextract";
+
+    /** Where extracted tool versions live, resolved against the Gradle user home. */
     public static final Path RELATIVE_TOOL_CACHE = Path.of("caches", "jextract-tool");
+
+    /** Constructs the plugin, which Gradle does once per project applying the id. */
+    public JextractPlugin() {}
 
     @Override
     public void apply(final Project project) {
@@ -37,7 +49,8 @@ public final class JextractPlugin implements Plugin<Project> {
                     spec.getParameters().getCacheDir().set(cacheDir);
                 });
 
-        // Process Container
+        // all(), not configureEach(): the task must be registered when the declaration is added,
+        // not when someone realizes it, or a library declared with register() never gets a task.
         extension.getLibraries().all(library -> {
             final String taskName = "generate" + this.capitalize(library.getName()) + "Bindings";
 
@@ -46,13 +59,13 @@ public final class JextractPlugin implements Plugin<Project> {
                         taskInnit.setGroup(JextractPlugin.TASK_GROUP);
                         taskInnit.setDescription("Generates bindings for " + library.getName());
 
-                        // Link inputs
                         taskInnit.getHeaderFile().set(library.getHeaderFile());
                         taskInnit.getTargetPackage().set(library.getTargetPackage());
                         taskInnit.getHeaderClassName().set(library.getHeaderClassName());
                         taskInnit.getLibraryName().set(library.getLibraryName());
 
-                        // Wire nested configuration properties individually
+                        // Property by property: the nested block is created by the object factory
+                        // on both sides, so the two instances cannot be assigned to one another.
                         taskInnit
                                 .getNativeLibraryLoading()
                                 .getResourcePath()
@@ -68,19 +81,18 @@ public final class JextractPlugin implements Plugin<Project> {
 
                         taskInnit.getCompilerArgs().set(library.getCompilerArgs());
 
-                        // Link Service
+                        // No usesService call: a @ServiceReference property is collected into the
+                        // task's consumed services by Gradle itself, so the two would say the same
+                        // thing twice.
                         taskInnit.getToolService().set(serviceProvider);
-                        // Ensure service is ready before task runs (implicit dependency)
-                        taskInnit.usesService(serviceProvider);
 
-                        // Output
                         final Provider<Directory> outputDir = project.getLayout()
                                 .getBuildDirectory()
                                 .dir("generated/sources/jextract/" + library.getName());
                         taskInnit.getOutputDirectory().set(outputDir);
                     });
 
-            // Register with Java SourceSets
+            // withType, so the wiring happens whichever of the two plugins is applied second.
             project.getPlugins().withType(org.gradle.api.plugins.JavaPlugin.class, _ -> {
                 final SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
                 final SourceSet main = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
