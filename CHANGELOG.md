@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.18](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.17...v0.3.18) (2026-08-24)
+
+
+### Documentation
+
+* render the README from a template with a drift gate ([#217](https://github.com/TimSchoenle/gradle-jextract/issues/217)) ([b2337e5](https://github.com/TimSchoenle/gradle-jextract/commit/b2337e5dc2a36434eba47b8a04c753ec8f1fb7cf))
+* write the Javadoc to the estate doc comment standard ([#218](https://github.com/TimSchoenle/gradle-jextract/issues/218)) ([b855fc6](https://github.com/TimSchoenle/gradle-jextract/commit/b855fc66a3857add66b1c5897e98fb6f421b24a4))
+
+
+### Miscellaneous
+
+* **deps:** update gradle to v9.7.1 ([#215](https://github.com/TimSchoenle/gradle-jextract/issues/215)) ([7024980](https://github.com/TimSchoenle/gradle-jextract/commit/702498065252ef867822c7f8254354d41f6eca44))
+
 ## [0.3.17](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.16...v0.3.17) (2026-08-20)
 
 

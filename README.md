@@ -54,7 +54,7 @@ pluginManagement {
 // build.gradle.kts
 plugins {
     java
-    id("de.timscho.jextract") version "0.3.17"
+    id("de.timscho.jextract") version "0.3.18"
 }
 
 jextract {
@@ -104,12 +104,12 @@ The bindings land in `build/generated/sources/jextract/mylib` and compile with e
 
 ## Installation
 
-Coordinates `de.timscho:gradle-jextract`, version `0.3.17`, plugin id `de.timscho.jextract`. Add
+Coordinates `de.timscho:gradle-jextract`, version `0.3.18`, plugin id `de.timscho.jextract`. Add
 `mavenCentral()` to `pluginManagement.repositories` in `settings.gradle.kts`, then:
 
 ```kotlin
 plugins {
-    id("de.timscho.jextract") version "0.3.17"
+    id("de.timscho.jextract") version "0.3.18"
 }
 ```
 
@@ -121,7 +121,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("de.timscho:gradle-jextract:0.3.17")
+        classpath("de.timscho:gradle-jextract:0.3.18")
     }
 }
 
