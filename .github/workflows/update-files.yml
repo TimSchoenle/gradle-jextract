@@ -157,6 +157,11 @@ jobs:
     needs: update-readme
     if: github.event_name == 'pull_request' && needs.update-readme.outputs.changes_detected == 'false'
     runs-on: ubuntu-latest
+    # `rewriteAndFormat` runs OpenRewrite, whose artifacts come from the credentialed Code Genome
+    # Project repository. The composite action below inherits this env, so no input is needed.
+    env:
+      ORG_GRADLE_PROJECT_codegenomeUsername: ${{ secrets.CODEGENOME_USERNAME }}
+      ORG_GRADLE_PROJECT_codegenomePassword: ${{ secrets.CODEGENOME_TOKEN }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
