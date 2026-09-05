@@ -164,7 +164,7 @@ jobs:
           egress-policy: audit
 
       - name: Auto-Format Code
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@0406974974a3aaf884e7c65866b091d266614b46 # tag=actions-java-gradle-auto-spotless-v1.1.18
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@c7e430537b061a61687ed9308048fc319c97a59c # tag=actions-java-gradle-auto-spotless-v1.1.19
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
