@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.3.19](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.18...v0.3.19) (2026-09-05)
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#233](https://github.com/TimSchoenle/gradle-jextract/issues/233)) ([f8e653b](https://github.com/TimSchoenle/gradle-jextract/commit/f8e653b09fbd3df42f519ff2b34d4ea5af4e4cfb))
+* **deps:** update dependency com.diffplug.spotless to v8.10.1 ([#220](https://github.com/TimSchoenle/gradle-jextract/issues/220)) ([4a08bbd](https://github.com/TimSchoenle/gradle-jextract/commit/4a08bbd4856946b99156ce3bb0477df8c72b9a16))
+* **deps:** update mikepenz/action-junit-report digest to a9170d5 ([#229](https://github.com/TimSchoenle/gradle-jextract/issues/229)) ([47790eb](https://github.com/TimSchoenle/gradle-jextract/commit/47790eb35088c325e66a6419bcfb34abc8f61e78))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.22 ([#234](https://github.com/TimSchoenle/gradle-jextract/issues/234)) ([67c9497](https://github.com/TimSchoenle/gradle-jextract/commit/67c9497612bbab939468357e62c7a4964f66c482))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.33 ([#223](https://github.com/TimSchoenle/gradle-jextract/issues/223)) ([a711244](https://github.com/TimSchoenle/gradle-jextract/commit/a71124487a6608d75f6a15ad75b24f3b334bea8a))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.34 ([#235](https://github.com/TimSchoenle/gradle-jextract/issues/235)) ([81b8206](https://github.com/TimSchoenle/gradle-jextract/commit/81b8206d2d35ac2cf36c146e75f53a0eb6b836ae))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-wipe-cache.yaml to vworkflows-maintenance-wipe-cache-v1.1.12 ([#221](https://github.com/TimSchoenle/gradle-jextract/issues/221)) ([7c75bb9](https://github.com/TimSchoenle/gradle-jextract/commit/7c75bb9f5ec299cd636952dd09e79820eafcb67b))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-wipe-cache.yaml to vworkflows-maintenance-wipe-cache-v1.1.13 ([#236](https://github.com/TimSchoenle/gradle-jextract/issues/236)) ([3150278](https://github.com/TimSchoenle/gradle-jextract/commit/31502786071fa750870029a7525da2dcff381980))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.1.1 ([#224](https://github.com/TimSchoenle/gradle-jextract/issues/224)) ([2f35dd1](https://github.com/TimSchoenle/gradle-jextract/commit/2f35dd17a9ab60f784f59001a17edf3811ccf37e))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.1.2 ([#237](https://github.com/TimSchoenle/gradle-jextract/issues/237)) ([54af64e](https://github.com/TimSchoenle/gradle-jextract/commit/54af64e940f033e93f27b1fa6e36b678e59cac70))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.1.2 ([#225](https://github.com/TimSchoenle/gradle-jextract/issues/225)) ([95384f8](https://github.com/TimSchoenle/gradle-jextract/commit/95384f8d246e10f67fb633423680bdd4cd8e299d))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.1.3 ([#238](https://github.com/TimSchoenle/gradle-jextract/issues/238)) ([ebfb42e](https://github.com/TimSchoenle/gradle-jextract/commit/ebfb42eddb35f257a29ad984d47094c08908d434))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.4 ([#226](https://github.com/TimSchoenle/gradle-jextract/issues/226)) ([61eae13](https://github.com/TimSchoenle/gradle-jextract/commit/61eae137216d1e147e7b7bbbbf865abdbc1a5157))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.5 ([#230](https://github.com/TimSchoenle/gradle-jextract/issues/230)) ([aac6cc1](https://github.com/TimSchoenle/gradle-jextract/commit/aac6cc1fe7def4a6babf8a8f4cd3459bf962b36b))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.17 ([#227](https://github.com/TimSchoenle/gradle-jextract/issues/227)) ([e141238](https://github.com/TimSchoenle/gradle-jextract/commit/e141238116b0f75e14612bf23cb0606e1ee31898))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.18 ([#231](https://github.com/TimSchoenle/gradle-jextract/issues/231)) ([6c4014e](https://github.com/TimSchoenle/gradle-jextract/commit/6c4014ee81c77e0f4ac178e324e64335369680b3))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.19 ([#239](https://github.com/TimSchoenle/gradle-jextract/issues/239)) ([129daf5](https://github.com/TimSchoenle/gradle-jextract/commit/129daf56321f3a3086c22d5afaebb02206d5c459))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.10 ([#228](https://github.com/TimSchoenle/gradle-jextract/issues/228)) ([9a728bb](https://github.com/TimSchoenle/gradle-jextract/commit/9a728bbea2773274d4153573820de7835df14563))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.11 ([#232](https://github.com/TimSchoenle/gradle-jextract/issues/232)) ([fdefe82](https://github.com/TimSchoenle/gradle-jextract/commit/fdefe8228181627823e181a4fd6304f40be1a442))
+
 ## [0.3.18](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.17...v0.3.18) (2026-08-24)
 
 
