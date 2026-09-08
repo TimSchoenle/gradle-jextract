@@ -216,6 +216,16 @@ The first applies OpenRewrite and Spotless, the second runs Checkstyle, the unit
 functional tests. `README.md` is generated from `.github/templates/README.md.hbs`; a pull request
 that edits the output has the edit overwritten by CI.
 
+Both need a Code Genome Project download token, because OpenRewrite publishes there instead of Maven
+Central and the build cannot configure without one. [Sign in for a
+token](https://codegenomeproject.org/token), then put it in `~/.gradle/gradle.properties` — never in
+a file under source control:
+
+```properties
+codegenomeUsername=you@example.com
+codegenomePassword=cgp_...
+```
+
 ## Security
 
 Do not open a public issue for a vulnerability. [SECURITY.md](SECURITY.md) has the reporting
