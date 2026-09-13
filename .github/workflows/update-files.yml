@@ -142,7 +142,7 @@ jobs:
           extra: ${{ steps.config.outputs.json }}
 
       - name: Verify README.md is current
-        uses: TimSchoenle/actions/actions/common/render-template@c7e430537b061a61687ed9308048fc319c97a59c # tag=actions-common-render-template-v1.1.3
+        uses: TimSchoenle/actions/actions/common/render-template@cf936b448984595778c82c079af93d0bb5d49297 # tag=actions-common-render-template-v1.2.1
         with:
           template: .github/templates/README.md.hbs
           output: README.md
