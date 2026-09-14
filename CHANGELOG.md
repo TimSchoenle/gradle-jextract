@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.20](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.19...v0.3.20) (2026-09-13)
+
+
+### Miscellaneous
+
+* **deps:** update dependency com.diffplug.spotless to v8.10.2 ([#245](https://github.com/TimSchoenle/gradle-jextract/issues/245)) ([ca40010](https://github.com/TimSchoenle/gradle-jextract/commit/ca400102d15fdec1d8326d9a3bbdba809368411d))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.23 ([#240](https://github.com/TimSchoenle/gradle-jextract/issues/240)) ([6f7059c](https://github.com/TimSchoenle/gradle-jextract/commit/6f7059cea43045c14f4a1a7986b92f0404f2e5c9))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.35 ([#241](https://github.com/TimSchoenle/gradle-jextract/issues/241)) ([c32609a](https://github.com/TimSchoenle/gradle-jextract/commit/c32609a430eec69e8c44ab0c96e68116f60b04e3))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.36 ([#251](https://github.com/TimSchoenle/gradle-jextract/issues/251)) ([f4d6eb7](https://github.com/TimSchoenle/gradle-jextract/commit/f4d6eb75f0270a4f951d690a353c965942f874ce))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.1 ([#249](https://github.com/TimSchoenle/gradle-jextract/issues/249)) ([a8639b3](https://github.com/TimSchoenle/gradle-jextract/commit/a8639b375848c5198da3fbad9448fa63f28feab0))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.1 ([#250](https://github.com/TimSchoenle/gradle-jextract/issues/250)) ([f612030](https://github.com/TimSchoenle/gradle-jextract/commit/f6120304ff1273bdc66c6c42b2bec81b933869a6))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.6 ([#243](https://github.com/TimSchoenle/gradle-jextract/issues/243)) ([ccae302](https://github.com/TimSchoenle/gradle-jextract/commit/ccae3026a2c2b137e4bc4fb71a84f3f6dc61ce13))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.8 ([#246](https://github.com/TimSchoenle/gradle-jextract/issues/246)) ([5eab565](https://github.com/TimSchoenle/gradle-jextract/commit/5eab5659a42fa674b06ef3d383bc7ca1a9355cc1))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.9 ([#252](https://github.com/TimSchoenle/gradle-jextract/issues/252)) ([bea29a9](https://github.com/TimSchoenle/gradle-jextract/commit/bea29a9a933b584b20b9d6af1a7c674f382606a8))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.20 ([#244](https://github.com/TimSchoenle/gradle-jextract/issues/244)) ([4b8d2cb](https://github.com/TimSchoenle/gradle-jextract/commit/4b8d2cbf480b8975584528a9535553873964e8ab))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.22 ([#247](https://github.com/TimSchoenle/gradle-jextract/issues/247)) ([3edc67b](https://github.com/TimSchoenle/gradle-jextract/commit/3edc67bbbff61984c3d14d0f3405e8e863b1632b))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.23 ([#253](https://github.com/TimSchoenle/gradle-jextract/issues/253)) ([f30aba7](https://github.com/TimSchoenle/gradle-jextract/commit/f30aba762141e8025e059da80e8064e70e4979f8))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.12 ([#254](https://github.com/TimSchoenle/gradle-jextract/issues/254)) ([78b3750](https://github.com/TimSchoenle/gradle-jextract/commit/78b37502092d52f703678b067573d54e8e661246))
+* **deps:** update zizmorcore/zizmor-action action to v0.6.4 ([#248](https://github.com/TimSchoenle/gradle-jextract/issues/248)) ([b041d6c](https://github.com/TimSchoenle/gradle-jextract/commit/b041d6cc9216f59af40b3042d52229485e139a57))
+
 ## [0.3.19](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.18...v0.3.19) (2026-09-05)
 
 
