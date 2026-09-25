@@ -10,7 +10,7 @@ jspecify = "1.0.1"
 jetbrains-annotations = "26.1.0"
 
 # Plugins
-lombok = "9.5.0"
+lombok = "9.7.0"
 spotless = "8.10.2"
 maven-publish = "0.37.0"
 buildconfig = "6.1.1"
