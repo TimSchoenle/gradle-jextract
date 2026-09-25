@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.22](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.21...v0.3.22) (2026-09-25)
+
+
+### Miscellaneous
+
+* **deps:** update dependency io.freefair.lombok to v9.7.0 ([#267](https://github.com/TimSchoenle/gradle-jextract/issues/267)) ([91da6ec](https://github.com/TimSchoenle/gradle-jextract/commit/91da6ecba11253620848d3e3266ef84dc4bcee37))
+
 ## [0.3.21](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.20...v0.3.21) (2026-09-21)
 
 
