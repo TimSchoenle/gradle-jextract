@@ -96,8 +96,9 @@ class NativeLibraryLoaderGeneratorTest {
         final String content = Files.readString(this.tempDir.resolve("com/custom/CustomLib_NativeLibraryLoader.java"));
         assertThat(content)
                 .as("Should reference extraction directory")
-                .satisfiesAnyOf(c -> assertThat(c).contains("custom-extract"), c -> assertThat(c)
-                        .contains("getExtractionDirectory"));
+                .satisfiesAnyOf(
+                        c -> assertThat(c).contains("custom-extract"),
+                        c -> assertThat(c).contains("getExtractionDirectory"));
     }
 
     @Test
