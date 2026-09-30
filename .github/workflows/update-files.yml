@@ -30,7 +30,7 @@ jobs:
       pull-requests: write # to comment on PRs
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
 
@@ -70,14 +70,14 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@e16a1e466faf8ec751b26289c1898143a253269f # tag=actions-common-readme-variables-v1.1.1
+        uses: TimSchoenle/actions/actions/common/readme-variables@5edf216e14f1ba5cb4b5444c1bd67b87139a12ac # tag=actions-common-readme-variables-v1.2.2
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Render and commit the README
         id: auto-commit
-        uses: TimSchoenle/actions/actions/common/render-template-and-commit@b9ac2dec974f92e901cd85426d05c1c57c3cd20b # tag=actions-common-render-template-and-commit-v1.1.4
+        uses: TimSchoenle/actions/actions/common/render-template-and-commit@f4fea19c7d53dee672f082bd62406b3e1e29ee3a # tag=actions-common-render-template-and-commit-v1.1.10
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -108,7 +108,7 @@ jobs:
       contents: read # to read code
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
 
@@ -136,13 +136,13 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@e16a1e466faf8ec751b26289c1898143a253269f # tag=actions-common-readme-variables-v1.1.1
+        uses: TimSchoenle/actions/actions/common/readme-variables@5edf216e14f1ba5cb4b5444c1bd67b87139a12ac # tag=actions-common-readme-variables-v1.2.2
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Verify README.md is current
-        uses: TimSchoenle/actions/actions/common/render-template@e16a1e466faf8ec751b26289c1898143a253269f # tag=actions-common-render-template-v1.1.2
+        uses: TimSchoenle/actions/actions/common/render-template@5edf216e14f1ba5cb4b5444c1bd67b87139a12ac # tag=actions-common-render-template-v1.2.2
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -164,12 +164,12 @@ jobs:
       ORG_GRADLE_PROJECT_codegenomePassword: ${{ secrets.CODEGENOME_TOKEN }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
 
       - name: Auto-Format Code
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@e16a1e466faf8ec751b26289c1898143a253269f # tag=actions-java-gradle-auto-spotless-v1.1.17
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@f4fea19c7d53dee672f082bd62406b3e1e29ee3a # tag=actions-java-gradle-auto-spotless-v1.1.25
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
