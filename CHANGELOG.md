@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.22](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.21...v0.3.22) (2026-09-30)
+
+
+### Miscellaneous
+
+* **deps:** update dependency com.diffplug.spotless to v8.10.3 ([#270](https://github.com/TimSchoenle/gradle-jextract/issues/270)) ([aee2d1c](https://github.com/TimSchoenle/gradle-jextract/commit/aee2d1c28343680ee638a5b934282acd88cd75cc))
+* **deps:** update dependency com.github.gmazzo.buildconfig to v6.1.2 ([#271](https://github.com/TimSchoenle/gradle-jextract/issues/271)) ([a3cfe6a](https://github.com/TimSchoenle/gradle-jextract/commit/a3cfe6ac069269d629aa5e6c9193c1c70ae3dbd5))
+* **deps:** update dependency io.freefair.lombok to v9.7.0 ([#267](https://github.com/TimSchoenle/gradle-jextract/issues/267)) ([91da6ec](https://github.com/TimSchoenle/gradle-jextract/commit/91da6ecba11253620848d3e3266ef84dc4bcee37))
+* **deps:** update gradle to v9.8.0 ([#269](https://github.com/TimSchoenle/gradle-jextract/issues/269)) ([106bd56](https://github.com/TimSchoenle/gradle-jextract/commit/106bd563d485d82588497997794f33669e5ccb45))
+
 ## [0.3.21](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.20...v0.3.21) (2026-09-21)
 
 
