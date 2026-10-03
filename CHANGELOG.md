@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.23](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.22...v0.3.23) (2026-10-03)
+
+
+### Miscellaneous
+
+* **deps:** update dependency io.freefair.lombok to v9.8.0 ([#276](https://github.com/TimSchoenle/gradle-jextract/issues/276)) ([09434d7](https://github.com/TimSchoenle/gradle-jextract/commit/09434d743944538df43f1b2631496a811487a911))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.3 ([#272](https://github.com/TimSchoenle/gradle-jextract/issues/272)) ([e8586b6](https://github.com/TimSchoenle/gradle-jextract/commit/e8586b6898a92a07c45977e44af1c66855ffa071))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.3 ([#273](https://github.com/TimSchoenle/gradle-jextract/issues/273)) ([57cfc34](https://github.com/TimSchoenle/gradle-jextract/commit/57cfc3463d375f4fd9d690895e55c27f3783e6c0))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.13 ([#275](https://github.com/TimSchoenle/gradle-jextract/issues/275)) ([daea8e1](https://github.com/TimSchoenle/gradle-jextract/commit/daea8e1b3000e58e6ff1329a1fceb8ded3109df3))
+
 ## [0.3.22](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.21...v0.3.22) (2026-09-30)
 
 
