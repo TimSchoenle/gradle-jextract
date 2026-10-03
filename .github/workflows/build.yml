@@ -12,6 +12,13 @@ concurrency:
 
 permissions: { }
 
+# Every job here configures the build, and configuring it resolves the rewrite plugin from the Code
+# Genome Project, which requires a download token. Declared once at the workflow level because all
+# three jobs need it; see `settings.gradle.kts` for what consumes the pair.
+env:
+  ORG_GRADLE_PROJECT_codegenomeUsername: ${{ secrets.CODEGENOME_USERNAME }}
+  ORG_GRADLE_PROJECT_codegenomePassword: ${{ secrets.CODEGENOME_TOKEN }}
+
 jobs:
   checkstyle:
     name: CheckStyle
