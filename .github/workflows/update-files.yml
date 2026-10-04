@@ -89,7 +89,7 @@ jobs:
       # pushes carries one comment rather than one per push.
       - name: Comment on PR
         if: steps.auto-commit.outputs.changes_detected == 'true'
-        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@7e8fd61045447d321c5139eea8f2e2b766333f8b # tag=actions-common-upsert-pr-comment-v1.1.3
+        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@7568f9a485ca91c369095414ce4d9f1a8237df21 # tag=actions-common-upsert-pr-comment-v1.2.0
         with:
           token: ${{ steps.generate_token.outputs.token }}
           identifier: readme-render
