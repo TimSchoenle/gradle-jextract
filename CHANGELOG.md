@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.3.23](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.22...v0.3.23) (2026-10-09)
+
+
+### Miscellaneous
+
+* **deps:** update dependency io.freefair.lombok to v9.8.0 ([#276](https://github.com/TimSchoenle/gradle-jextract/issues/276)) ([09434d7](https://github.com/TimSchoenle/gradle-jextract/commit/09434d743944538df43f1b2631496a811487a911))
+* **deps:** update mikepenz/action-junit-report digest to b7b80d7 ([#292](https://github.com/TimSchoenle/gradle-jextract/issues/292)) ([81413bc](https://github.com/TimSchoenle/gradle-jextract/commit/81413bcdd4a1253d8498ba5a6c2e9793fe35ae41))
+* **deps:** update step-security/harden-runner action to v2.22.0 ([#293](https://github.com/TimSchoenle/gradle-jextract/issues/293)) ([760e62c](https://github.com/TimSchoenle/gradle-jextract/commit/760e62ce687c5486552f940e476196f9018ef772))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.26 ([#279](https://github.com/TimSchoenle/gradle-jextract/issues/279)) ([feecb42](https://github.com/TimSchoenle/gradle-jextract/commit/feecb4246ac714226132d485222681cd1e83f902))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.27 ([#285](https://github.com/TimSchoenle/gradle-jextract/issues/285)) ([16ddc64](https://github.com/TimSchoenle/gradle-jextract/commit/16ddc646cdfc3ec031556d295115603721ff276c))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.38 ([#280](https://github.com/TimSchoenle/gradle-jextract/issues/280)) ([4b87d90](https://github.com/TimSchoenle/gradle-jextract/commit/4b87d90ea4ae69e80681f96ca208add6463c8f2a))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.39 ([#286](https://github.com/TimSchoenle/gradle-jextract/issues/286)) ([aadfd38](https://github.com/TimSchoenle/gradle-jextract/commit/aadfd38b62302f9393b492eb65717edcbd14e6b7))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.3 ([#272](https://github.com/TimSchoenle/gradle-jextract/issues/272)) ([e8586b6](https://github.com/TimSchoenle/gradle-jextract/commit/e8586b6898a92a07c45977e44af1c66855ffa071))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.4 ([#281](https://github.com/TimSchoenle/gradle-jextract/issues/281)) ([f63c34d](https://github.com/TimSchoenle/gradle-jextract/commit/f63c34d21184a84d89a8f6e3fe7fdcff064be35b))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.5 ([#287](https://github.com/TimSchoenle/gradle-jextract/issues/287)) ([cf24147](https://github.com/TimSchoenle/gradle-jextract/commit/cf241472b28a2bdbc542e5bf40807e618f7a573b))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.6 ([#294](https://github.com/TimSchoenle/gradle-jextract/issues/294)) ([d832f80](https://github.com/TimSchoenle/gradle-jextract/commit/d832f802eb24f0989258fd0e8ccc46da900198e7))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.3 ([#273](https://github.com/TimSchoenle/gradle-jextract/issues/273)) ([57cfc34](https://github.com/TimSchoenle/gradle-jextract/commit/57cfc3463d375f4fd9d690895e55c27f3783e6c0))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.4 ([#282](https://github.com/TimSchoenle/gradle-jextract/issues/282)) ([9036432](https://github.com/TimSchoenle/gradle-jextract/commit/9036432bac91f834142edf66b98f08584f6837bb))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.5 ([#288](https://github.com/TimSchoenle/gradle-jextract/issues/288)) ([18bd01a](https://github.com/TimSchoenle/gradle-jextract/commit/18bd01af452f03c8ae79f8a63ad47465113d2cd2))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.6 ([#295](https://github.com/TimSchoenle/gradle-jextract/issues/295)) ([4d84e26](https://github.com/TimSchoenle/gradle-jextract/commit/4d84e26aa0ea781ab83f682d2216c7da4de45d96))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.11 ([#283](https://github.com/TimSchoenle/gradle-jextract/issues/283)) ([e39dad9](https://github.com/TimSchoenle/gradle-jextract/commit/e39dad9f0862d71f143db23c8da083e9245f3dd5))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.12 ([#289](https://github.com/TimSchoenle/gradle-jextract/issues/289)) ([fdad958](https://github.com/TimSchoenle/gradle-jextract/commit/fdad95813d71421a141f0865d704b814a1f20430))
+* **deps:** update timschoenle/actions/actions/common/upsert-pr-comment to vactions-common-upsert-pr-comment-v1.2.1 ([#290](https://github.com/TimSchoenle/gradle-jextract/issues/290)) ([c64bfe2](https://github.com/TimSchoenle/gradle-jextract/commit/c64bfe2c8348861a18a425ab3f83bb6aa6674536))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.26 ([#284](https://github.com/TimSchoenle/gradle-jextract/issues/284)) ([f66569b](https://github.com/TimSchoenle/gradle-jextract/commit/f66569b9573af672cbfb0115c2fdcc8f1d9cb962))
+* **deps:** update timschoenle/actions/actions/java-gradle/auto-spotless to vactions-java-gradle-auto-spotless-v1.1.27 ([#291](https://github.com/TimSchoenle/gradle-jextract/issues/291)) ([fb233be](https://github.com/TimSchoenle/gradle-jextract/commit/fb233be830035edc3d1a51a17726166748b0c34e))
+* **deps:** update timschoenle/actions/actions/java-gradle/setup-base-environment to vactions-java-gradle-setup-base-environment-v1.2.13 ([#275](https://github.com/TimSchoenle/gradle-jextract/issues/275)) ([daea8e1](https://github.com/TimSchoenle/gradle-jextract/commit/daea8e1b3000e58e6ff1329a1fceb8ded3109df3))
+
 ## [0.3.22](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.21...v0.3.22) (2026-09-30)
 
 
