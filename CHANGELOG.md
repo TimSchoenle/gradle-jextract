@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.24](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.23...v0.3.24) (2026-10-09)
+
+
+### Miscellaneous
+
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.13 ([#296](https://github.com/TimSchoenle/gradle-jextract/issues/296)) ([13d4e4d](https://github.com/TimSchoenle/gradle-jextract/commit/13d4e4d9cd756fe5245fac6d7e48d0d729aa8656))
+* **deps:** update timschoenle/actions/actions/common/upsert-pr-comment to vactions-common-upsert-pr-comment-v1.2.2 ([#297](https://github.com/TimSchoenle/gradle-jextract/issues/297)) ([f7b085b](https://github.com/TimSchoenle/gradle-jextract/commit/f7b085bfa848dd38cf7da7c569012da3328d174a))
+
 ## [0.3.23](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.22...v0.3.23) (2026-10-09)
 
 
