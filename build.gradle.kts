@@ -35,6 +35,9 @@ repositories {
 
 dependencies {
     rewrite(libs.rewrite.catalog)
+    // Declared rather than left to Gradle's default, which is the Checkstyle release Gradle shipped
+    // with and brings commons-beanutils, httpclient5 and plexus-utils versions with open advisories.
+    checkstyle(libs.checkstyle)
 
     implementation(libs.jspecify)
     implementation(libs.jetbrains.annotations)
@@ -47,6 +50,12 @@ dependencies {
 
 rewrite {
     activeRecipe("de.timscho.rewrite.Style")
+}
+
+// The plugin decides which report formats and options it hands Checkstyle from this version, so it
+// is read from the same catalog entry as the dependency above.
+checkstyle {
+    toolVersion = libs.versions.checkstyle.get()
 }
 
 testing {
