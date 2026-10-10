@@ -5,10 +5,10 @@ CI renders it on every pull request and commits the result back to the branch. A
 whose README.md does not match its template fails the `readme` job in
 .github/workflows/update-files.yml, which is a required check.
 
-The payload has two halves. The readme-variables action reads gradle.properties and walks docs/;
-the plugin id and the default jextract build come from one command:
-
-    ./gradlew -q readmeVariables
+The payload has two halves. The readme-variables action reads gradle.properties and walks docs/.
+The plugin id and the default jextract build reach it through `extra`: the workflow's "Generate the
+configuration payload" step reads `pluginId` out of gradle.properties and the build out of
+gradle/jextract-version, without invoking Gradle.
 
 Nothing in this comment may contain a mustache that is not a real reference.
 -->
@@ -17,7 +17,7 @@ Nothing in this comment may contain a mustache that is not a real reference.
 
 Gradle plugin that downloads jextract and generates Java FFM bindings, with optional bundled library loading.
 
-[![Release](https://img.shields.io/github/v/release/TimSchoenle/gradle-jextract?sort=semver)](https://github.com/TimSchoenle/gradle-jextract/releases)
+[![Maven Central](https://img.shields.io/maven-central/v/de.timscho/gradle-jextract)](https://central.sonatype.com/artifact/de.timscho/gradle-jextract)
 [![Build](https://img.shields.io/github/actions/workflow/status/TimSchoenle/gradle-jextract/build.yml?branch=main)](https://github.com/TimSchoenle/gradle-jextract/actions/workflows/build.yml)
 [![License](https://img.shields.io/github/license/TimSchoenle/gradle-jextract)](LICENSE)
 [![JDK](https://img.shields.io/badge/JDK-25-orange)](https://openjdk.org/projects/jdk/25/)
@@ -197,9 +197,9 @@ The JDK floor is the FFM API's. Bindings jextract writes do not compile below it
 
 | Document | Purpose |
 | --- | --- |
-| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Every property of the jextract extension, the task each library declaration creates, and how the jextract tool itself is fetched and cached. |
-| [docs/NATIVE_LIBRARY_LOADING.md](docs/NATIVE_LIBRARY_LOADING.md) | The three ways to load the native library behind the bindings, and what the plugin generates for each. |
-| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | The failures this plugin produces, what each one means, and what to change. |
+| [Configuration](docs/CONFIGURATION.md) | Every property of the jextract extension, the task each library declaration creates, and how the jextract tool itself is fetched and cached. |
+| [Native library loading](docs/NATIVE_LIBRARY_LOADING.md) | The three ways to load the native library behind the bindings, and what the plugin generates for each. |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | The failures this plugin produces, what each one means, and what to change. |
 
 ## Contributing
 
