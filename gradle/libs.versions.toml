@@ -23,7 +23,7 @@ rewrite-catalog = "0.1.2"
 checkstyle = "14.3.0"
 
 # Security floors for tool classpaths
-jackson = "2.21.7"
+jackson = "2.22.3"
 
 [libraries]
 
