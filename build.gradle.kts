@@ -35,6 +35,15 @@ repositories {
 
 dependencies {
     rewrite(libs.rewrite.catalog)
+    // A floor, not a choice. The catalog's recipe BOM resolves rewrite-core with Jackson 2.17.2, and
+    // no rewrite-core release ships a Jackson that is free of the open databind and core advisories:
+    // the newest one still carries 2.21.6. The platform lifts every Jackson module on the rewrite
+    // classpath to one patched release, and can go once rewrite-core moves past it.
+    rewrite(platform(libs.jackson.bom))
+
+    // Declared rather than left to Gradle's default, which is the Checkstyle release Gradle shipped
+    // with and brings commons-beanutils, httpclient5 and plexus-utils versions with open advisories.
+    checkstyle(libs.checkstyle)
 
     implementation(libs.jspecify)
     implementation(libs.jetbrains.annotations)
@@ -47,6 +56,12 @@ dependencies {
 
 rewrite {
     activeRecipe("de.timscho.rewrite.Style")
+}
+
+// The plugin decides which report formats and options it hands Checkstyle from this version, so it
+// is read from the same catalog entry as the dependency above.
+checkstyle {
+    toolVersion = libs.versions.checkstyle.get()
 }
 
 testing {

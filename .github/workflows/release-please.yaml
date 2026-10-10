@@ -37,6 +37,10 @@ jobs:
         with:
           app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+          # release-please pushes the release commit and tag, opens the release PR and labels it.
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
 
       - name: Run release-please
         id: release
