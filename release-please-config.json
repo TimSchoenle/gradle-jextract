@@ -9,6 +9,7 @@
 
     "packages": {
         ".": {
+            "exclude-paths": [".github"],
             "component": "gradle-jextract",
             "pull-request-title-pattern": "chore: release gradle-jextract v${version}",
             "extra-files": [
@@ -37,12 +38,11 @@
         {
             "type": "docs",
             "section": "Documentation",
-            "hidden": false
+            "hidden": true
         },
         {
             "type": "refactor",
-            "section": "Code Refactoring",
-            "hidden": false
+            "section": "Code Refactoring"
         },
         {
             "type": "test",
@@ -61,18 +61,16 @@
         },
         {
             "type": "build",
-            "section": "Build System",
-            "hidden": true
+            "section": "Build System"
         },
         {
             "type": "chore",
             "section": "Miscellaneous",
-            "hidden": false
+            "hidden": true
         },
         {
             "type": "deps",
-            "section": "Dependencies",
-            "hidden": false
+            "section": "Dependencies"
         }
     ]
 }
