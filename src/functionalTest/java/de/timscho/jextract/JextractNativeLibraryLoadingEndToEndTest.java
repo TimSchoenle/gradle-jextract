@@ -44,17 +44,23 @@ class JextractNativeLibraryLoadingEndToEndTest extends AbstractJextractFunctiona
         final String osNameProperty = System.getProperty("os.name").toLowerCase();
         final String osArch = System.getProperty("os.arch").toLowerCase();
 
+        // The generated loader spells the file the way the platform spells a library, so the
+        // `lib` prefix is part of the name everywhere except Windows.
         final String platformName;
+        final String libPrefix;
         final String libExtension;
 
         if (osNameProperty.contains("win")) {
             platformName = "windows";
+            libPrefix = "";
             libExtension = ".dll";
         } else if (osNameProperty.contains("mac")) {
             platformName = "macos";
+            libPrefix = "lib";
             libExtension = ".dylib";
         } else {
             platformName = "linux";
+            libPrefix = "lib";
             libExtension = ".so";
         }
 
@@ -71,7 +77,7 @@ class JextractNativeLibraryLoadingEndToEndTest extends AbstractJextractFunctiona
         final Path libDir = this.testProjectDir.resolve("src/main/resources/" + resourcePath);
         Files.createDirectories(libDir);
 
-        final String libName = "math_lib" + libExtension;
+        final String libName = libPrefix + "math_lib" + libExtension;
         final Path libFile = libDir.resolve(libName);
 
         this.compileSharedLibrary(cSource, libFile);
