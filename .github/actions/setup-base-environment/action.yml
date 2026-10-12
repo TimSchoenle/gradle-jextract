@@ -1,4 +1,4 @@
-﻿name: "Setup Java and Gradle Environment"
+name: "Setup Java and Gradle Environment"
 description: "Setup Java and Gradle environment for building"
 
 runs:
