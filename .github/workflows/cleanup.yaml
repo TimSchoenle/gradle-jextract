@@ -1,4 +1,4 @@
-﻿name: Cleanup Branch Caches After Deletion
+name: Cleanup Branch Caches After Deletion
 on:
   delete:
 
