@@ -19,6 +19,7 @@ Gradle plugin that downloads jextract and generates Java FFM bindings, with opti
 
 [![Maven Central](https://img.shields.io/maven-central/v/de.timscho/gradle-jextract)](https://central.sonatype.com/artifact/de.timscho/gradle-jextract)
 [![Build](https://img.shields.io/github/actions/workflow/status/TimSchoenle/gradle-jextract/build.yml?branch=main)](https://github.com/TimSchoenle/gradle-jextract/actions/workflows/build.yml)
+[![Codecov](https://codecov.io/gh/TimSchoenle/gradle-jextract/graph/badge.svg)](https://codecov.io/gh/TimSchoenle/gradle-jextract)
 [![License](https://img.shields.io/github/license/TimSchoenle/gradle-jextract)](LICENSE)
 [![JDK](https://img.shields.io/badge/JDK-25-orange)](https://openjdk.org/projects/jdk/25/)
 
