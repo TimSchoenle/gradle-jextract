@@ -70,7 +70,7 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@1e89d598e447ab05d36edc9e9d18e8771adf6426 # tag=actions-common-readme-variables-v1.2.6
+        uses: TimSchoenle/actions/actions/common/readme-variables@f33849da61e2397d3a9277762d09a1bf0d2b9d7c # tag=actions-common-readme-variables-v1.2.7
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
@@ -89,7 +89,7 @@ jobs:
       # pushes carries one comment rather than one per push.
       - name: Comment on PR
         if: steps.auto-commit.outputs.changes_detected == 'true'
-        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@1e89d598e447ab05d36edc9e9d18e8771adf6426 # tag=actions-common-upsert-pr-comment-v1.2.2
+        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@f33849da61e2397d3a9277762d09a1bf0d2b9d7c # tag=actions-common-upsert-pr-comment-v1.2.3
         with:
           token: ${{ steps.generate_token.outputs.token }}
           identifier: readme-render
@@ -133,13 +133,13 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@1e89d598e447ab05d36edc9e9d18e8771adf6426 # tag=actions-common-readme-variables-v1.2.6
+        uses: TimSchoenle/actions/actions/common/readme-variables@f33849da61e2397d3a9277762d09a1bf0d2b9d7c # tag=actions-common-readme-variables-v1.2.7
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Verify README.md is current
-        uses: TimSchoenle/actions/actions/common/render-template@1e89d598e447ab05d36edc9e9d18e8771adf6426 # tag=actions-common-render-template-v1.2.6
+        uses: TimSchoenle/actions/actions/common/render-template@f33849da61e2397d3a9277762d09a1bf0d2b9d7c # tag=actions-common-render-template-v1.2.7
         with:
           template: .github/templates/README.md.hbs
           output: README.md
