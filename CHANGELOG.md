@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.24](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.23...v0.3.24) (2026-10-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.fasterxml.jackson:jackson-bom to v2.22.3 ([#300](https://github.com/TimSchoenle/gradle-jextract/issues/300)) ([e2cabea](https://github.com/TimSchoenle/gradle-jextract/commit/e2cabeae3ddfebb3ecf153ffedf34a217bbe805e))
+* **security:** resolve open code-scanning and Dependabot alerts ([#299](https://github.com/TimSchoenle/gradle-jextract/issues/299)) ([1d27e03](https://github.com/TimSchoenle/gradle-jextract/commit/1d27e03a743315e62c93d540a3e0a490fb2e93da))
+
+
+### Dependencies
+
+* **deps:** update dependency com.diffplug.spotless to v8.10.4 ([#314](https://github.com/TimSchoenle/gradle-jextract/issues/314)) ([269f845](https://github.com/TimSchoenle/gradle-jextract/commit/269f845b353adb29ce4db0d22e778caeb16b6b63))
+* **deps:** update gradle to v9.8.1 ([#307](https://github.com/TimSchoenle/gradle-jextract/issues/307)) ([b181c6f](https://github.com/TimSchoenle/gradle-jextract/commit/b181c6f045697ae2234cedefa7cc0ef7d4a1736f))
+
 ## [0.3.23](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.22...v0.3.23) (2026-10-09)
 
 
