@@ -70,14 +70,14 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-readme-variables-v1.2.8
+        uses: TimSchoenle/actions/actions/common/readme-variables@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-readme-variables-v1.2.9
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Render and commit the README
         id: auto-commit
-        uses: TimSchoenle/actions/actions/common/render-template-and-commit@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-render-template-and-commit-v1.1.15
+        uses: TimSchoenle/actions/actions/common/render-template-and-commit@81e4009704e0963651bbd8275e31244c1d1e220d # tag=actions-common-render-template-and-commit-v1.1.17
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -89,7 +89,7 @@ jobs:
       # pushes carries one comment rather than one per push.
       - name: Comment on PR
         if: steps.auto-commit.outputs.changes_detected == 'true'
-        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-upsert-pr-comment-v1.2.4
+        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@9414b1c665d3676efe832978d4e1728cf53119fd # tag=actions-common-upsert-pr-comment-v1.3.0
         with:
           token: ${{ steps.generate_token.outputs.token }}
           identifier: readme-render
@@ -133,13 +133,13 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-readme-variables-v1.2.8
+        uses: TimSchoenle/actions/actions/common/readme-variables@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-readme-variables-v1.2.9
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Verify README.md is current
-        uses: TimSchoenle/actions/actions/common/render-template@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-render-template-v1.2.8
+        uses: TimSchoenle/actions/actions/common/render-template@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-render-template-v1.2.9
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -161,7 +161,7 @@ jobs:
           egress-policy: audit
 
       - name: Auto-Format Code
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-java-gradle-auto-spotless-v1.1.30
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@81e4009704e0963651bbd8275e31244c1d1e220d # tag=actions-java-gradle-auto-spotless-v1.1.32
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'

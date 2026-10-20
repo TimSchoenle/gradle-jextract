@@ -110,7 +110,7 @@ jobs:
           egress-policy: audit
 
       - name: Run Coverage
-        uses: TimSchoenle/actions/actions/java-gradle/coverage-codecov@ff1e7853c7953c8d7176325ea4912add4a3c5398 # tag=actions-java-gradle-coverage-codecov-v1.1.1
+        uses: TimSchoenle/actions/actions/java-gradle/coverage-codecov@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-java-gradle-coverage-codecov-v1.1.2
         with:
           java_version: '25'
           flags: java
