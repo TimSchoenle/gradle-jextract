@@ -77,7 +77,7 @@ jobs:
 
       - name: Render and commit the README
         id: auto-commit
-        uses: TimSchoenle/actions/actions/common/render-template-and-commit@81e4009704e0963651bbd8275e31244c1d1e220d # tag=actions-common-render-template-and-commit-v1.1.17
+        uses: TimSchoenle/actions/actions/common/render-template-and-commit@ea4465fbe2bec98efad19b63849f8d1ac67b5c88 # tag=actions-common-render-template-and-commit-v1.1.18
         with:
           template: .github/templates/README.md.hbs
           output: README.md
