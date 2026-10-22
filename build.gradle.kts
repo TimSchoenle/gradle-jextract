@@ -31,6 +31,20 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
+
+    // The rewrite classpath pulls `org.openrewrite` artifacts that only the Code Genome Project
+    // carries, so the same credentialed repository `settings.gradle.kts` adds for the plugin itself
+    // is needed here. Central stays ahead of it: `org.openrewrite.recipe` still publishes there, and
+    // an unauthenticated hit costs nothing when Central already has the artifact.
+    maven {
+        name = "codegenome"
+        url = uri("https://artifacts.codegenomeproject.org/maven")
+        credentials(PasswordCredentials::class)
+        content {
+            includeGroupByRegex("""org\.openrewrite(\..*)?""")
+            includeGroupByRegex("""io\.moderne(\..*)?""")
+        }
+    }
 }
 
 dependencies {
