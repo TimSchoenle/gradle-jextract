@@ -1,0 +1,106 @@
+# yaml-language-server: $schema=https://storage.googleapis.com/coderabbit_public_assets/schema.v2.json
+tone_instructions: "Direct, no filler, no praise."
+
+reviews:
+  profile: assertive
+
+  auto_review:
+    # CodeRabbit cannot filter by head branch, so automated pull requests are
+    # skipped by author: Renovate opens `renovate/*`, the release manager app
+    # opens `release-please--*`. Both the bot login and the bare app slug are
+    # listed because the match is exact.
+    ignore_usernames:
+      - "renovate[bot]"
+      - "renovate"
+      - "automatic-release-manager[bot]"
+      - "automatic-release-manager"
+
+  # Generated or tool-owned files. Review their sources instead.
+  path_filters:
+    - "!gradle/wrapper/gradle-wrapper.jar"
+    - "!gradlew"
+    - "!gradlew.bat"
+    - "!build/**"
+    - "!CHANGELOG.md"
+    - "!.release-please-manifest.json"
+    - "!README.md" # rendered from .github/templates/README.md.hbs
+
+  path_instructions:
+    - path: "src/main/java/**/*.java"
+      instructions: |
+        Published Gradle plugin (`de.timscho.jextract`, Java toolchain from gradle.properties, Gradle 9 floor).
+        Flag:
+        - Configuration-cache and lazy-API violations: `Project`, `Task` or extension access at execution
+          time, eager `.get()` on providers during configuration, `tasks.create`/`getByName` instead of
+          `register`/`named`, `afterEvaluate`, captured non-serializable state in task actions.
+        - Task inputs/outputs: every value that affects output must be an annotated `@Input`/`@InputFile`/
+          `@Nested`/`@OutputDirectory` property with correct path sensitivity; missing annotations break
+          up-to-date checks and the build cache. `@Internal` needs a reason.
+        - `JextractToolService` is a build service shared by parallel tasks and wired via
+          `@ServiceReference`: check thread safety, that download and `.tar.gz` extraction stay atomic
+          behind the integrity marker, partial files are cleaned up on failure, and archive entries
+          cannot escape the target directory.
+        - `ExecOperations` usage: argument lists, never shell strings; exit codes and stderr surfaced in
+          the failure message.
+        - `extension`, `task` and the plugin class are public API with a compatibility promise; anything
+          under `internal` is not. Flag breaking changes to public types, property names or defaults, and
+          new public types that belong under `internal`.
+        - Null-safety per JSpecify; resources closed via try-with-resources; exceptions that lose the cause
+          or swallow `InterruptedException`.
+        Prefer plain loops over the Stream API. Lombok is applied: suggest it instead of hand-written
+        boilerplate, but not where Gradle managed types require abstract getters or injected constructors.
+    - path: "src/main/java/de/timscho/jextract/internal/generation/**"
+      instructions: |
+        Emits Java source (via JavaParser and string templates) that runs inside consumers' applications to
+        extract and load bundled native libraries. Review the generated code as production code: temp-file
+        and extraction-directory races, path traversal from resource names, file permissions, checksum
+        verification before `System.load`, platform/arch detection, and concurrent first-load from
+        multiple threads. Emitted code must compile on the configured toolchain without extra dependencies.
+    - path: "src/test/java/**/*.java"
+      instructions: |
+        Unit tests (JUnit Jupiter, AssertJ). Require assertions on behaviour, not just absence of exceptions;
+        flag tests that cannot fail, order-dependent state, and real network access.
+    - path: "src/functionalTest/java/**/*.java"
+      instructions: |
+        Gradle TestKit functional tests. Check that each test asserts task outcome and produced files,
+        exercises the configuration cache where relevant, isolates its project directory, and that
+        network-dependent tests (real jextract download) are clearly separated from hermetic ones.
+    - path: "src/functionalTest/resources/**"
+      instructions: |
+        Test fixtures: C headers/sources fed to jextract and expected-output descriptors. Not production
+        code; check only that the expectations in the JSON match the headers and the asserting tests.
+    - path: "*.gradle.kts"
+      instructions: |
+        Build logic. Flag eager task configuration, configuration-cache incompatible constructs,
+        undeclared task inputs, and changes that alter the published coordinates, POM or signing.
+    - path: ".github/{workflows,actions}/**"
+      instructions: |
+        Every third-party action must be pinned to a full commit SHA with a version comment.
+        Require least-privilege `permissions:` at workflow or job level, `persist-credentials: false`
+        on checkout unless pushing, no untrusted `${{ github.event.* }}` interpolation into `run:`,
+        and no `pull_request_target` that checks out or executes PR code.
+    - path: ".github/templates/**"
+      instructions: |
+        Source of the generated README.md. Review rendered wording, links and badge URLs here.
+
+  pre_merge_checks:
+    title:
+      mode: error
+      requirements: |
+        Must follow Conventional Commits: `type(scope)?!?: subject`. Allowed types: feat, fix, perf,
+        revert, docs, refactor, test, style, ci, build, chore, deps. Lowercase, imperative subject,
+        no trailing period. release-please derives version bumps and the changelog from this title.
+
+  tools:
+    # CI already runs Checkstyle (config/checkstyle), Spotless and the OpenRewrite static-analysis
+    # style recipe; PMD would duplicate them.
+    pmd:
+      enabled: false
+    actionlint:
+      enabled: true
+    zizmor:
+      enabled: true
+    gitleaks:
+      enabled: true
+    markdownlint:
+      enabled: true
