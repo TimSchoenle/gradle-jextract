@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.25](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.24...v0.3.25) (2026-10-22)
+
+
+### Build System
+
+* mark gradlew executable ([#328](https://github.com/TimSchoenle/gradle-jextract/issues/328)) ([439dfb1](https://github.com/TimSchoenle/gradle-jextract/commit/439dfb1f4f71d13662c43dd66a407af09f8a8112))
+
+
+### Dependencies
+
+* **deps:** update dependency com.fasterxml.jackson:jackson-bom to v2.22.4 ([#326](https://github.com/TimSchoenle/gradle-jextract/issues/326)) ([52403b4](https://github.com/TimSchoenle/gradle-jextract/commit/52403b4addda16dcb1af8031c286e836bfa232fd))
+* **deps:** update dependency io.freefair.lombok to v9.8.1 ([#320](https://github.com/TimSchoenle/gradle-jextract/issues/320)) ([2c2e66c](https://github.com/TimSchoenle/gradle-jextract/commit/2c2e66c7e7734e655349fd941cd35abdc5be9ffd))
+* **deps:** update dependency io.freefair.lombok to v9.8.2 ([#323](https://github.com/TimSchoenle/gradle-jextract/issues/323)) ([7ef060a](https://github.com/TimSchoenle/gradle-jextract/commit/7ef060a1daf6e72d0c14b8ba7d65e9f8b2b53ff6))
+
 ## [0.3.24](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.23...v0.3.24) (2026-10-16)
 
 
