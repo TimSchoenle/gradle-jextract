@@ -146,24 +146,99 @@ jobs:
           variables: ${{ steps.variables.outputs.variables }}
           check: 'true'
 
+  # Spotless and OpenRewrite run through ./gradlew, so on a pull request they run that pull
+  # request's wrapper, build script and plugins. Code running in a job can read every credential
+  # that job holds, so the work is split in two: auto-format runs `rewriteAndFormat` with no secret,
+  # no environment and no write permission, and only uploads what it changed as a patch artifact;
+  # commit-format mints the App token and commits that patch with common/commit-patch. It runs no
+  # repository code: it checks out the head for git's objects only, and commit-patch refuses any
+  # path outside allowed_paths.
   auto-format:
-    environment:
-      name: ci
-      deployment: false
     name: Auto-Format
     needs: update-readme
     if: github.event_name == 'pull_request' && needs.update-readme.outputs.changes_detected == 'false'
     runs-on: ubuntu-latest
+    outputs:
+      changes_detected: ${{ steps.spotless.outputs.changes_detected }}
+    permissions:
+      contents: read # to read code
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
         with:
           egress-policy: audit
 
+      # The pull request head, not the merge commit: the patch is committed to the branch, so it has
+      # to be computed against the commit the branch points at.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
       - name: Auto-Format Code
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@81e4009704e0963651bbd8275e31244c1d1e220d # tag=actions-java-gradle-auto-spotless-v1.1.32
+        id: spotless
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@495fd50fd4a5ae3d9fb1496c96eada74c6f2529a # tag=actions-java-gradle-auto-spotless-v2.0.0
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
-          bot_private_key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
-          bot_app_id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          artifact_name: auto-spotless
+
+  commit-format:
+    environment:
+      name: ci
+      deployment: false
+    name: Commit Auto-Format
+    needs: auto-format
+    # A fork's pull request gets no secrets, and its branch is not in this repository.
+    if: >-
+      github.event_name == 'pull_request' &&
+      needs.auto-format.outputs.changes_detected == 'true' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # to fetch the commit the patch applies to
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+
+      # Only git's objects are needed. Nothing in this checkout is executed.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      # Scoped to what this job does; without a `permission-*` input the token would inherit the
+      # whole installation.
+      - name: Generate Bot Token
+        id: generate_token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
+          permission-contents: write # to commit the formatted files
+          permission-pull-requests: write # to comment on the pull request
+
+      # The artifact name is a literal on purpose: the auto-format job's outputs come from pull
+      # request code. Both halves of `rewriteAndFormat` only touch Java sources: the spotless block
+      # formats `java` alone, and the de.timscho.rewrite.Style recipe is Java static analysis.
+      - name: Commit Patch
+        id: commit
+        uses: TimSchoenle/actions/actions/common/commit-patch@bbc2c5e2a0f9345cb2e84946846736f047a6eae3 # tag=actions-common-commit-patch-v1.1.0
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          artifact_name: auto-spotless
+          allowed_paths: 'src/**/*.java'
+          commit_message: 'style: apply spotless formatting'
+
+      # The comment auto-spotless v1 posted itself.
+      - name: Comment on PR
+        if: steps.commit.outputs.changes_committed == 'true'
+        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@495fd50fd4a5ae3d9fb1496c96eada74c6f2529a # tag=actions-common-upsert-pr-comment-v2.0.0
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          identifier: 'java-gradle-auto-spotless'
+          body: 'Applied spotless formatting.'
