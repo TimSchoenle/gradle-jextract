@@ -241,4 +241,6 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
           identifier: 'java-gradle-auto-spotless'
+          # Only this App's own comment is updated; a pasted marker cannot redirect the edit.
+          author: '${{ steps.generate_token.outputs.app-slug }}[bot]'
           body: 'Applied spotless formatting.'
