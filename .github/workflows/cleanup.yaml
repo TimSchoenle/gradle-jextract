@@ -2,8 +2,11 @@ name: Cleanup Branch Caches After Deletion
 on:
   delete:
 
+# Keyed on the deleted ref, not `github.ref`: on a `delete` event `github.ref` is the default
+# branch, so a shared group would let a burst of deletions cancel each other's pending runs and
+# leave caches behind.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.ref }}
   cancel-in-progress: false
 
 permissions: {}
@@ -12,12 +15,20 @@ jobs:
   cleanup-caches:
     name: Cleanup Caches
     if: github.event.ref_type == 'branch'
-    uses: TimSchoenle/actions/.github/workflows/maintenance-wipe-cache.yaml@103a601a6e8778074ac41d9dd03870d1989463b6 # tag=workflows-maintenance-wipe-cache-v1.1.13
+    runs-on: ubuntu-latest
     permissions:
-      actions: write # to delete caches
-      contents: read # to list cache keys
-    with:
-      branch: '${{ github.event.ref }}'
-      repository: '${{ github.repository }}'
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      actions: write # to list and delete the caches of the deleted branch
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+
+      # `branch` is left empty on purpose: the action then reads the deleted branch from the
+      # `delete` payload, and refuses every other event and the default branch.
+      - name: Cleanup Caches
+        uses: TimSchoenle/actions/actions/maintenance/wipe-cache@495fd50fd4a5ae3d9fb1496c96eada74c6f2529a # tag=actions-maintenance-wipe-cache-v3.0.0
+        with:
+          token: ${{ github.token }}
