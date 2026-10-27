@@ -66,9 +66,8 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     permissions:
-      contents: write # to write junit reports
-      checks: write # to write junit reports
-      id-token: write # to write junit reports
+      contents: read # to fetch code
+      checks: write # for action-junit-report to publish the test report as a check run
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
