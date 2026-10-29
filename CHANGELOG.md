@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.26](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.25...v0.3.26) (2026-10-29)
+
+
+### Dependencies
+
+* **deps:** update gradle to v9.8.2 ([#330](https://github.com/TimSchoenle/gradle-jextract/issues/330)) ([d44b1fe](https://github.com/TimSchoenle/gradle-jextract/commit/d44b1fed9d51d7f5ae8b5d99203a97263e045b2f))
+
 ## [0.3.25](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.24...v0.3.25) (2026-10-22)
 
 
