@@ -20,7 +20,7 @@ jobs:
       actions: write # to list and delete the caches of the deleted branch
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -29,6 +29,6 @@ jobs:
       # `branch` is left empty on purpose: the action then reads the deleted branch from the
       # `delete` payload, and refuses every other event and the default branch.
       - name: Cleanup Caches
-        uses: TimSchoenle/actions/actions/maintenance/wipe-cache@495fd50fd4a5ae3d9fb1496c96eada74c6f2529a # tag=actions-maintenance-wipe-cache-v3.0.0
+        uses: TimSchoenle/actions/actions/maintenance/wipe-cache@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-maintenance-wipe-cache-v3.0.1
         with:
           token: ${{ github.token }}
