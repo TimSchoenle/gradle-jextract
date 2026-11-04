@@ -178,7 +178,7 @@ jobs:
 
       - name: Auto-Format Code
         id: spotless
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@495fd50fd4a5ae3d9fb1496c96eada74c6f2529a # tag=actions-java-gradle-auto-spotless-v2.0.0
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@e4229b81c3c3c880b9561dc4d53bd87ccf49eaf3 # tag=actions-java-gradle-auto-spotless-v2.0.1
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
