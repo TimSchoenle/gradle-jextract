@@ -20,7 +20,7 @@ rewrite = "7.39.0"
 rewrite-catalog = "0.1.2"
 
 # Tools
-checkstyle = "14.3.0"
+checkstyle = "14.4.0"
 
 # Security floors for tool classpaths
 jackson = "2.22.4"
