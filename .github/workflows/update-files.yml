@@ -175,3 +175,11 @@ jobs:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
           artifact_name: auto-spotless
+
+      # The patch is committed by update-files-commit.yml after this run has finished. While it is
+      # non-empty this head is not the one to merge: the run on the bot commit decides.
+      - name: Fail while the patch is uncommitted
+        if: steps.spotless.outputs.changes_detected == 'true'
+        run: |
+          echo "::error::rewriteAndFormat changed files; update-files-commit.yml commits them and the run on that commit decides. If no bot commit appears, run it locally and push."
+          exit 1
