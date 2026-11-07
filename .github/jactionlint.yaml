@@ -10,8 +10,9 @@
 profile: pedantic
 
 rules:
-  # Every step inherits bash from the runner's default; naming it on each step adds noise without
-  # changing what runs.
+  # The runner's implicit shell is `bash -e {0}`. An explicit `shell: bash` would add pipefail; instead
+  # the pipeline-without-pipefail rule flags each pipeline that needs it, so the key is not required
+  # on every step.
   require-shell: off
   # `if: steps.x.outputs.y == 'true'` is valid syntax, and the workflows write conditions both ways.
   require-expression-wrapping: off

@@ -16,7 +16,7 @@ jobs:
     name: Cleanup Caches
     if: github.event.ref_type == 'branch'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     permissions:
       actions: write # to list and delete the caches of the deleted branch
     steps:
