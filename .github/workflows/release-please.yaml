@@ -18,9 +18,9 @@ jobs:
       deployment: false
     name: Release Please
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
     permissions:
       contents: write # to create release tags/commits
       issues: write # to comment on release issues
@@ -35,7 +35,7 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          client-id: ${{ secrets.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
           # release-please pushes the release commit and tag, opens the release PR and labels it.
           permission-contents: write
@@ -56,6 +56,7 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: read # to fetch code
     steps:
