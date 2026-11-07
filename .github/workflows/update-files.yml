@@ -23,6 +23,7 @@ jobs:
     name: Update README
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       changes_detected: ${{ steps.auto-commit.outputs.changes_detected }}
     permissions:
@@ -38,7 +39,7 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          app-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
           private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
@@ -101,6 +102,7 @@ jobs:
     name: readme
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read # to read code
     steps:
@@ -158,6 +160,7 @@ jobs:
     needs: update-readme
     if: github.event_name == 'pull_request' && needs.update-readme.outputs.changes_detected == 'false'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       changes_detected: ${{ steps.spotless.outputs.changes_detected }}
     permissions:
@@ -196,6 +199,7 @@ jobs:
       needs.auto-format.outputs.changes_detected == 'true' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read # to fetch the commit the patch applies to
     steps:
@@ -217,7 +221,7 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          app-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
           private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
           permission-contents: write # to commit the formatted files
           permission-pull-requests: write # to comment on the pull request

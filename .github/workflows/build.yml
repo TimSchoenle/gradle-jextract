@@ -16,6 +16,7 @@ jobs:
   checkstyle:
     name: CheckStyle
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read # to read code
     steps:
@@ -38,6 +39,7 @@ jobs:
   build:
     name: Build(Without Test)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: checkstyle
     permissions:
       contents: read # to read code
@@ -60,11 +62,12 @@ jobs:
 
   test:
     name: Test
-    needs: [checkstyle, build]
+    needs: build
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     permissions:
       contents: read # to fetch code
       checks: write # for action-junit-report to publish the test report as a check run
@@ -90,6 +93,7 @@ jobs:
         if: success() || failure()
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
+          require_tests: true
 
   # Kept apart from `test`, so a Codecov outage fails this job alone. The upload authenticates
   # with this job's OIDC token, so the job needs no environment and no secret.
