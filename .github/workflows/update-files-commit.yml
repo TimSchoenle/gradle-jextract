@@ -1,0 +1,226 @@
+name: Update Files Commit
+
+# Commits what `Update Files` generated on a pull request. A pull_request run executes the pull
+# request's own copy of its workflow, so a job there holding the maintenance App's key hands it to
+# anyone who can push a branch. This workflow_run job runs the default branch's copy, which a pull
+# request cannot change, and only reads the patch the pull_request run uploaded: commit-patch refuses
+# anything outside allowed_paths or made from another head, and nothing from the branch executes.
+
+on:
+  workflow_run:
+    workflows: ['Update Files']
+    types: [completed]
+
+# One queue per pull request branch, keyed on the head repository too. Runs wait rather than
+# cancel: an older run completing late (a re-run, say) must not drop the run for the current
+# head, and its own patch is skipped as branch_moved by commit-patch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_repository.full_name }}:${{ github.event.workflow_run.head_branch }}
+  queue: max
+
+permissions: {}
+
+jobs:
+  # Holds no secret and no environment. The pull_request run uploads the patch empty when nothing
+  # changed and not at all when the job making it was skipped; in both cases there is nothing to
+  # commit, so the commit job below is skipped without minting a token.
+  find-readme-commit-patch:
+    name: Find The README Patch
+    # A finished pull_request run, not a cancelled one: another job failing does not make the patch
+    # wrong. From a branch of this repository, never the default branch.
+    if: >-
+      (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure') &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.head_branch != github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read # to list and download the pull_request run's artifacts
+    outputs:
+      has_changes: ${{ steps.patch.outputs.has_changes }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+
+      # Validates the patch exactly as commit-patch will, against the head the pull_request run
+      # checked out, and reports whether it holds anything to commit. Nothing in it is executed.
+      - name: Find The Patch
+        id: patch
+        uses: TimSchoenle/actions/actions/common/find-patch@7b20a67f0b18a6e64c30e5f47c92636729f6ad41 # tag=actions-common-find-patch-v1.1.0
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          artifact_name: readme-render
+          expected_head_sha: ${{ github.event.workflow_run.head_sha }}
+
+  # Commits what `update-readme` rendered.
+  readme-commit:
+    name: Commit README
+    needs: [find-readme-commit-patch]
+    if: needs.find-readme-commit-patch.outputs.has_changes == 'true'
+    environment:
+      name: ci
+      deployment: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read # to download the patch from the pull_request run
+      contents: read # to fetch the commit the patch applies to
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: audit
+
+      # Only git's objects are needed. Nothing in this checkout is executed.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Generate Bot Token
+        id: generate_token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      # The artifact name is a literal, and `allowed_paths` is the one file the render writes.
+      - name: Commit the README
+        id: commit
+        uses: TimSchoenle/actions/actions/common/commit-patch@7b20a67f0b18a6e64c30e5f47c92636729f6ad41 # tag=actions-common-commit-patch-v1.3.0
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          run_id: ${{ github.event.workflow_run.id }}
+          branch: ${{ github.event.workflow_run.head_branch }}
+          expected_head_sha: ${{ github.event.workflow_run.head_sha }}
+          artifact_name: readme-render
+          allowed_paths: README.md
+          commit_message: 'docs: render README from its template'
+
+      # Upserted under one identifier, so a pull request that re-renders the README on several
+      # pushes carries one comment rather than one per push.
+      - name: Comment on PR
+        if: >-
+          steps.commit.outputs.changes_committed == 'true' &&
+          github.event.workflow_run.pull_requests[0].number
+        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-upsert-pr-comment-v2.0.1
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          pr_url: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.workflow_run.pull_requests[0].number }}
+          identifier: readme-render
+          # Only this App's own comment is updated; a pasted marker cannot redirect the edit.
+          author: '${{ steps.generate_token.outputs.app-slug }}[bot]'
+          body: '`README.md` has been re-rendered from `.github/templates/README.md.hbs`.'
+
+  # Holds no secret and no environment. The pull_request run uploads the patch empty when nothing
+  # changed and not at all when the job making it was skipped; in both cases there is nothing to
+  # commit, so the commit job below is skipped without minting a token.
+  find-commit-format-patch:
+    name: Find The Format Patch
+    # A finished pull_request run, not a cancelled one: another job failing does not make the patch
+    # wrong. From a branch of this repository, never the default branch.
+    if: >-
+      (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure') &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.head_branch != github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read # to list and download the pull_request run's artifacts
+    outputs:
+      has_changes: ${{ steps.patch.outputs.has_changes }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+
+      # Validates the patch exactly as commit-patch will, against the head the pull_request run
+      # checked out, and reports whether it holds anything to commit. Nothing in it is executed.
+      - name: Find The Patch
+        id: patch
+        uses: TimSchoenle/actions/actions/common/find-patch@7b20a67f0b18a6e64c30e5f47c92636729f6ad41 # tag=actions-common-find-patch-v1.1.0
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          artifact_name: auto-spotless
+          expected_head_sha: ${{ github.event.workflow_run.head_sha }}
+
+  commit-format:
+    environment:
+      name: ci
+      deployment: false
+    name: Commit Auto-Format
+    needs: [find-commit-format-patch]
+    if: needs.find-commit-format-patch.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read # to download the patch from the pull_request run
+      contents: read # to fetch the commit the patch applies to
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: audit
+
+      # Only git's objects are needed. Nothing in this checkout is executed.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      # Scoped to what this job does; without a `permission-*` input the token would inherit the
+      # whole installation.
+      - name: Generate Bot Token
+        id: generate_token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
+          permission-contents: write # to commit the formatted files
+          permission-pull-requests: write # to comment on the pull request
+
+      # The artifact name is a literal on purpose: the auto-format job's outputs come from pull
+      # request code. Both halves of `rewriteAndFormat` only touch Java sources: the spotless block
+      # formats `java` alone, and the de.timscho.rewrite.Style recipe is Java static analysis.
+      - name: Commit Patch
+        id: commit
+        uses: TimSchoenle/actions/actions/common/commit-patch@7b20a67f0b18a6e64c30e5f47c92636729f6ad41 # tag=actions-common-commit-patch-v1.3.0
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          run_id: ${{ github.event.workflow_run.id }}
+          branch: ${{ github.event.workflow_run.head_branch }}
+          expected_head_sha: ${{ github.event.workflow_run.head_sha }}
+          artifact_name: auto-spotless
+          allowed_paths: 'src/**/*.java'
+          commit_message: 'style: apply spotless formatting'
+
+      # The comment auto-spotless v1 posted itself.
+      - name: Comment on PR
+        if: >-
+          steps.commit.outputs.changes_committed == 'true' &&
+          github.event.workflow_run.pull_requests[0].number
+        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-upsert-pr-comment-v2.0.1
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          pr_url: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.workflow_run.pull_requests[0].number }}
+          identifier: 'java-gradle-auto-spotless'
+          # Only this App's own comment is updated; a pasted marker cannot redirect the edit.
+          author: '${{ steps.generate_token.outputs.app-slug }}[bot]'
+          body: 'Applied spotless formatting.'

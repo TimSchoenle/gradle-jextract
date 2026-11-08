@@ -13,44 +13,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Renders README.md from its template and commits the result back to the pull request. An
-  # unchanged render produces no commit. A fork's pull request gets no bot token, so it is verified
-  # by the job below instead.
+  # Renders README.md from its template on a pull request and hands the result on as a patch, which
+  # `readme-commit` in update-files-commit.yml (a workflow_run workflow the pull request cannot
+  # edit) commits. An unchanged render produces no commit. A fork's pull request has no branch here
+  # to commit to, so it is verified by the job below instead.
+  #
+  # This job is a required check, so it fails while its render is uncommitted: the head it ran on
+  # is not the one to merge, and the run on the commit decides instead.
   update-readme:
-    environment:
-      name: ci
-      deployment: false
     name: Update README
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
-      changes_detected: ${{ steps.auto-commit.outputs.changes_detected }}
+      changes_detected: ${{ steps.patch.outputs.has_changes }}
     permissions:
-      contents: write # to push readme changes
-      pull-requests: write # to comment on PRs
+      contents: read # to read code
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
         with:
           egress-policy: audit
 
-      - name: Generate Bot Token
-        id: generate_token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with:
-          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
-          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
-          permission-contents: write
-          permission-pull-requests: write
-
+      # The pull request head, not the merge commit: the patch is committed to the branch, so it has
+      # to be computed against the commit the branch points at.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-          fetch-depth: 0
-          ref: ${{ github.head_ref }}
-          token: ${{ steps.generate_token.outputs.token }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       # The half of the payload readme-variables cannot derive: the plugin id this build registers
       # and the jextract build it defaults to. Both are read straight out of the files that hold
@@ -76,25 +67,25 @@ jobs:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
-      - name: Render and commit the README
-        id: auto-commit
-        uses: TimSchoenle/actions/actions/common/render-template-and-commit@ea4465fbe2bec98efad19b63849f8d1ac67b5c88 # tag=actions-common-render-template-and-commit-v1.1.18
+      - name: Render the README
+        uses: TimSchoenle/actions/actions/common/render-template@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-render-template-v3.0.1
         with:
           template: .github/templates/README.md.hbs
           output: README.md
           variables: ${{ steps.variables.outputs.variables }}
-          token: ${{ steps.generate_token.outputs.token }}
-          commit_message: 'docs: render README from its template'
 
-      # Upserted under one identifier, so a pull request that re-renders the README on several
-      # pushes carries one comment rather than one per push.
-      - name: Comment on PR
-        if: steps.auto-commit.outputs.changes_detected == 'true'
-        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-upsert-pr-comment-v2.0.1
+      - name: Create Patch
+        id: patch
+        uses: TimSchoenle/actions/actions/common/create-patch@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-create-patch-v1.1.1
         with:
-          token: ${{ steps.generate_token.outputs.token }}
-          identifier: readme-render
-          body: '`README.md` has been re-rendered from `.github/templates/README.md.hbs`.'
+          artifact_name: readme-render
+          paths: README.md
+
+      - name: Fail while the render is uncommitted
+        if: steps.patch.outputs.has_changes == 'true'
+        run: |
+          echo "::error::README.md is stale; update-files-commit.yml commits the render and the run on that commit decides."
+          exit 1
 
   # The drift gate. Renders without writing and fails when the committed README.md differs, which is
   # what makes the template the source rather than a suggestion.
@@ -152,17 +143,15 @@ jobs:
   # request's wrapper, build script and plugins. Code running in a job can read every credential
   # that job holds, so the work is split in two: auto-format runs `rewriteAndFormat` with no secret,
   # no environment and no write permission, and only uploads what it changed as a patch artifact;
-  # commit-format mints the App token and commits that patch with common/commit-patch. It runs no
-  # repository code: it checks out the head for git's objects only, and commit-patch refuses any
-  # path outside allowed_paths.
+  # `commit-format` in update-files-commit.yml mints the App token and commits that patch with
+  # common/commit-patch. It runs no repository code: it checks out the head for git's objects only,
+  # and commit-patch refuses any path outside allowed_paths.
   auto-format:
     name: Auto-Format
     needs: update-readme
     if: github.event_name == 'pull_request' && needs.update-readme.outputs.changes_detected == 'false'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    outputs:
-      changes_detected: ${{ steps.spotless.outputs.changes_detected }}
     permissions:
       contents: read # to read code
     steps:
@@ -187,64 +176,10 @@ jobs:
           gradle_spotless_command: 'rewriteAndFormat'
           artifact_name: auto-spotless
 
-  commit-format:
-    environment:
-      name: ci
-      deployment: false
-    name: Commit Auto-Format
-    needs: auto-format
-    # A fork's pull request gets no secrets, and its branch is not in this repository.
-    if: >-
-      github.event_name == 'pull_request' &&
-      needs.auto-format.outputs.changes_detected == 'true' &&
-      github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read # to fetch the commit the patch applies to
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
-        with:
-          egress-policy: audit
-
-      # Only git's objects are needed. Nothing in this checkout is executed.
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      # Scoped to what this job does; without a `permission-*` input the token would inherit the
-      # whole installation.
-      - name: Generate Bot Token
-        id: generate_token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with:
-          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
-          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
-          permission-contents: write # to commit the formatted files
-          permission-pull-requests: write # to comment on the pull request
-
-      # The artifact name is a literal on purpose: the auto-format job's outputs come from pull
-      # request code. Both halves of `rewriteAndFormat` only touch Java sources: the spotless block
-      # formats `java` alone, and the de.timscho.rewrite.Style recipe is Java static analysis.
-      - name: Commit Patch
-        id: commit
-        uses: TimSchoenle/actions/actions/common/commit-patch@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-commit-patch-v1.1.1
-        with:
-          token: ${{ steps.generate_token.outputs.token }}
-          artifact_name: auto-spotless
-          allowed_paths: 'src/**/*.java'
-          commit_message: 'style: apply spotless formatting'
-
-      # The comment auto-spotless v1 posted itself.
-      - name: Comment on PR
-        if: steps.commit.outputs.changes_committed == 'true'
-        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-upsert-pr-comment-v2.0.1
-        with:
-          token: ${{ steps.generate_token.outputs.token }}
-          identifier: 'java-gradle-auto-spotless'
-          # Only this App's own comment is updated; a pasted marker cannot redirect the edit.
-          author: '${{ steps.generate_token.outputs.app-slug }}[bot]'
-          body: 'Applied spotless formatting.'
+      # The patch is committed by update-files-commit.yml after this run has finished. While it is
+      # non-empty this head is not the one to merge: the run on the bot commit decides.
+      - name: Fail while the patch is uncommitted
+        if: steps.spotless.outputs.changes_detected == 'true'
+        run: |
+          echo "::error::rewriteAndFormat changed files; update-files-commit.yml commits them and the run on that commit decides. If no bot commit appears, run it locally and push."
+          exit 1
