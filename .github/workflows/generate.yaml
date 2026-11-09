@@ -1,4 +1,16 @@
-name: Update Files
+name: Generate
+
+# Every file a tool writes rather than a person. Each generator job runs on the pull request's head
+# and uploads a patch; the Generated Files job is the required check and fails while a patch is not
+# committed yet or a generator failed. generate-commit.yaml, a workflow_run workflow the pull request
+# cannot edit, commits the merged patch to the branch, and the run on that commit decides.
+#
+# Spotless and OpenRewrite run through ./gradlew, so on a pull request they run that pull request's
+# wrapper, build script and plugins. The generator jobs therefore hold no secret and no write
+# permission and hand on only a patch; the App key lives in generate-commit.yaml, which runs nothing
+# from the checkout.
+#
+# No `paths` filter: the Generated Files check has to report on every pull request to be required.
 
 on:
   pull_request:
@@ -13,22 +25,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Renders README.md from its template on a pull request and hands the result on as a patch, which
-  # `readme-commit` in update-files-commit.yml (a workflow_run workflow the pull request cannot
-  # edit) commits. An unchanged render produces no commit. A fork's pull request has no branch here
-  # to commit to, so it is verified by the job below instead.
-  #
-  # This job is a required check, so it fails while its render is uncommitted: the head it ran on
-  # is not the one to merge, and the run on the commit decides instead.
-  update-readme:
+  # Renders README.md from its template and hands the result on as a patch.
+  readme:
     name: Update README
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    outputs:
-      changes_detected: ${{ steps.patch.outputs.has_changes }}
     permissions:
       contents: read # to read code
+    outputs:
+      has_changes: ${{ steps.patch.outputs.has_changes }}
+      artifact_name: ${{ steps.patch.outputs.artifact_name }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
@@ -81,17 +88,68 @@ jobs:
           artifact_name: readme-render
           paths: README.md
 
-      - name: Fail while the render is uncommitted
-        if: steps.patch.outputs.has_changes == 'true'
-        run: |
-          echo "::error::README.md is stale; update-files-commit.yml commits the render and the run on that commit decides."
-          exit 1
+  # Runs `rewriteAndFormat` and hands on what it changed as a patch.
+  auto-format:
+    name: Auto-Format
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # to read code
+    outputs:
+      has_changes: ${{ steps.spotless.outputs.changes_detected }}
+      artifact_name: ${{ steps.spotless.outputs.artifact_name }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: audit
 
-  # The drift gate. Renders without writing and fails when the committed README.md differs, which is
-  # what makes the template the source rather than a suggestion.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Auto-Format Code
+        id: spotless
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@c13315fe3d8db7f1de82306a9d56b35c4fbf0fbb # tag=actions-java-gradle-auto-spotless-v2.0.2
+        with:
+          java_version: '25'
+          gradle_spotless_command: 'rewriteAndFormat'
+          artifact_name: auto-spotless
+
+  # The required check. It needs every generator above and runs whatever their result, so it
+  # reports on every pull request.
+  verdict:
+    name: Generated Files
+    needs: [ readme, auto-format ]
+    if: always() && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # to check out the commit the merged patch is made from
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            github.com:443
+            api.github.com:443
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+
+      - name: Generated Files Verdict
+        uses: TimSchoenle/actions/actions/common/generated-files-verdict@ad314497a72ffde698037b8547e0aedcceff7475 # tag=actions-common-generated-files-verdict-v1.1.0
+        with:
+          needs: ${{ toJSON(needs) }}
+
+  # The drift gate on the default branch. Renders without writing and fails when the committed
+  # README.md differs, which is what makes the template the source rather than a suggestion.
   verify:
     name: readme
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -107,12 +165,7 @@ jobs:
         with:
           persist-credentials: false
 
-      # The half of the payload readme-variables cannot derive: the plugin id this build registers
-      # and the jextract build it defaults to. Both are read straight out of the files that hold
-      # them rather than through Gradle, because a build that cannot configure would otherwise
-      # leave this step green with an empty payload and surface as a strict-mode error in the
-      # render, three steps away from the cause. Each value is its own assignment so `set -e`
-      # sees a failure; a `$(...)` inside `echo` would not fail the step.
+      # The same payload as the readme job above; any difference would pass a stale file.
       - name: Generate the configuration payload
         id: config
         run: |
@@ -138,48 +191,3 @@ jobs:
           output: README.md
           variables: ${{ steps.variables.outputs.variables }}
           check: 'true'
-
-  # Spotless and OpenRewrite run through ./gradlew, so on a pull request they run that pull
-  # request's wrapper, build script and plugins. Code running in a job can read every credential
-  # that job holds, so the work is split in two: auto-format runs `rewriteAndFormat` with no secret,
-  # no environment and no write permission, and only uploads what it changed as a patch artifact;
-  # `commit-format` in update-files-commit.yml mints the App token and commits that patch with
-  # common/commit-patch. It runs no repository code: it checks out the head for git's objects only,
-  # and commit-patch refuses any path outside allowed_paths.
-  auto-format:
-    name: Auto-Format
-    needs: update-readme
-    if: github.event_name == 'pull_request' && needs.update-readme.outputs.changes_detected == 'false'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read # to read code
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
-        with:
-          egress-policy: audit
-
-      # The pull request head, not the merge commit: the patch is committed to the branch, so it has
-      # to be computed against the commit the branch points at.
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Auto-Format Code
-        id: spotless
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@c13315fe3d8db7f1de82306a9d56b35c4fbf0fbb # tag=actions-java-gradle-auto-spotless-v2.0.2
-        with:
-          java_version: '25'
-          gradle_spotless_command: 'rewriteAndFormat'
-          artifact_name: auto-spotless
-
-      # The patch is committed by update-files-commit.yml after this run has finished. While it is
-      # non-empty this head is not the one to merge: the run on the bot commit decides.
-      - name: Fail while the patch is uncommitted
-        if: steps.spotless.outputs.changes_detected == 'true'
-        run: |
-          echo "::error::rewriteAndFormat changed files; update-files-commit.yml commits them and the run on that commit decides. If no bot commit appears, run it locally and push."
-          exit 1
