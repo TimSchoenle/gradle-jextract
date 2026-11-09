@@ -3,7 +3,7 @@ Generated from .github/templates/README.md.hbs — edit that file, not this one.
 
 CI renders it on every pull request and commits the result back to the branch. A push to `main`
 whose README.md does not match its template fails the `readme` job in
-.github/workflows/update-files.yml, which is a required check.
+.github/workflows/generate.yaml.
 
 The payload has two halves. The readme-variables action reads gradle.properties and walks docs/.
 The plugin id and the default jextract build reach it through `extra`: the workflow's "Generate the
