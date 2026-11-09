@@ -27,7 +27,7 @@ concurrency:
 jobs:
   # Renders README.md from its template and hands the result on as a patch.
   readme:
-    name: Update README
+    name: Render README
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
