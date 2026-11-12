@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.27](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.26...v0.3.27) (2026-11-12)
+
+
+### Dependencies
+
+* **deps:** update checkstyle to v14.4.0 ([#343](https://github.com/TimSchoenle/gradle-jextract/issues/343)) ([a762f3d](https://github.com/TimSchoenle/gradle-jextract/commit/a762f3dd4d580e3ed9a176b045ad0822e530cdd0))
+* **deps:** update dependency com.diffplug.spotless to v8.11.0 ([#349](https://github.com/TimSchoenle/gradle-jextract/issues/349)) ([66fbef6](https://github.com/TimSchoenle/gradle-jextract/commit/66fbef6b3686f3e1048f53276c365d72919c0056))
+* **deps:** update dependency com.fasterxml.jackson:jackson-bom to v2.23.0 ([#354](https://github.com/TimSchoenle/gradle-jextract/issues/354)) ([34b584d](https://github.com/TimSchoenle/gradle-jextract/commit/34b584d5908b3092ff2235263381f0c4d651b972))
+* **deps:** update dependency io.freefair.lombok to v9.8.3 ([#342](https://github.com/TimSchoenle/gradle-jextract/issues/342)) ([0ec4b14](https://github.com/TimSchoenle/gradle-jextract/commit/0ec4b148fba93b60b00ab5e8d176d24656b49267))
+
 ## [0.3.26](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.25...v0.3.26) (2026-11-02)
 
 
