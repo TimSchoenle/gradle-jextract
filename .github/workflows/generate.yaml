@@ -69,13 +69,13 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@7c1147cf1e275c068a8484fa9a2dcb38a8b1f92f # tag=actions-common-readme-variables-v2.1.4
+        uses: TimSchoenle/actions/actions/common/readme-variables@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-common-readme-variables-v2.1.6
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Render the README
-        uses: TimSchoenle/actions/actions/common/render-template@7c1147cf1e275c068a8484fa9a2dcb38a8b1f92f # tag=actions-common-render-template-v3.0.4
+        uses: TimSchoenle/actions/actions/common/render-template@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-common-render-template-v3.0.6
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -83,7 +83,7 @@ jobs:
 
       - name: Create Patch
         id: patch
-        uses: TimSchoenle/actions/actions/common/create-patch@b37134ffa35b3ce98437447e3b4c76933eb65c04 # tag=actions-common-create-patch-v1.1.2
+        uses: TimSchoenle/actions/actions/common/create-patch@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-common-create-patch-v2.1.1
         with:
           artifact_name: readme-render
           paths: README.md
@@ -113,7 +113,7 @@ jobs:
 
       - name: Auto-Format Code
         id: spotless
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@6a49261c7bbd756b4ceca9b1c168dfc7dc095e64 # tag=actions-java-gradle-auto-spotless-v2.0.3
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-java-gradle-auto-spotless-v2.0.5
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
@@ -141,7 +141,7 @@ jobs:
             *.blob.core.windows.net:443
 
       - name: Generated Files Verdict
-        uses: TimSchoenle/actions/actions/common/generated-files-verdict@7c1147cf1e275c068a8484fa9a2dcb38a8b1f92f # tag=actions-common-generated-files-verdict-v1.2.3
+        uses: TimSchoenle/actions/actions/common/generated-files-verdict@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-common-generated-files-verdict-v1.2.6
         with:
           needs: ${{ toJSON(needs) }}
 
@@ -179,13 +179,13 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@7c1147cf1e275c068a8484fa9a2dcb38a8b1f92f # tag=actions-common-readme-variables-v2.1.4
+        uses: TimSchoenle/actions/actions/common/readme-variables@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-common-readme-variables-v2.1.6
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Verify README.md is current
-        uses: TimSchoenle/actions/actions/common/render-template@7c1147cf1e275c068a8484fa9a2dcb38a8b1f92f # tag=actions-common-render-template-v3.0.4
+        uses: TimSchoenle/actions/actions/common/render-template@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-common-render-template-v3.0.6
         with:
           template: .github/templates/README.md.hbs
           output: README.md
