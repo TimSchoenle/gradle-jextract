@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.28](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.27...v0.3.28) (2026-11-19)
+
+
+### Build System
+
+* **gradle:** pin the Gradle wrapper distribution by checksum ([#357](https://github.com/TimSchoenle/gradle-jextract/issues/357)) ([6090643](https://github.com/TimSchoenle/gradle-jextract/commit/6090643e099c60399124085c100045befb813bcd))
+
+
+### Dependencies
+
+* **deps:** update gradle to v9.9.1 ([#362](https://github.com/TimSchoenle/gradle-jextract/issues/362)) ([dbc5c57](https://github.com/TimSchoenle/gradle-jextract/commit/dbc5c57afb8b3c7c2d0090e4bf6ca2e4f43926b1))
+
 ## [0.3.27](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.26...v0.3.27) (2026-11-12)
 
 
