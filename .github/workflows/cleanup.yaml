@@ -30,6 +30,6 @@ jobs:
       # `branch` is left empty on purpose: the action then reads the deleted branch from the
       # `delete` payload, and refuses every other event and the default branch.
       - name: Cleanup Caches
-        uses: TimSchoenle/actions/actions/maintenance/wipe-cache@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-maintenance-wipe-cache-v3.1.1
+        uses: TimSchoenle/actions/actions/maintenance/wipe-cache@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-maintenance-wipe-cache-v3.1.2
         with:
           token: ${{ github.token }}

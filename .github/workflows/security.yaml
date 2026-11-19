@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
 
       - name: Run jactionlint
-        uses: TimSchoenle/actions/actions/security/jactionlint@0b3967d3d992d12aa88da1f8facf412b162d5ab2 # tag=actions-security-jactionlint-v1.1.4
+        uses: TimSchoenle/actions/actions/security/jactionlint@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-security-jactionlint-v1.1.5
         with:
           online: 'true'
           strict-exit: 'true'
