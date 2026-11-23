@@ -38,7 +38,7 @@ jobs:
       artifact_name: ${{ steps.patch.outputs.artifact_name }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: audit
 
@@ -101,7 +101,7 @@ jobs:
       artifact_name: ${{ steps.spotless.outputs.artifact_name }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: audit
 
@@ -113,7 +113,7 @@ jobs:
 
       - name: Auto-Format Code
         id: spotless
-        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-java-gradle-auto-spotless-v2.0.6
+        uses: TimSchoenle/actions/actions/java-gradle/auto-spotless@ded012bb09f11e42381c9b1b7c3ff0dbc09156bf # tag=actions-java-gradle-auto-spotless-v2.0.7
         with:
           java_version: '25'
           gradle_spotless_command: 'rewriteAndFormat'
@@ -131,7 +131,7 @@ jobs:
       contents: read # to check out the commit the merged patch is made from
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -141,7 +141,7 @@ jobs:
             *.blob.core.windows.net:443
 
       - name: Generated Files Verdict
-        uses: TimSchoenle/actions/actions/common/generated-files-verdict@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-common-generated-files-verdict-v1.2.7
+        uses: TimSchoenle/actions/actions/common/generated-files-verdict@ded012bb09f11e42381c9b1b7c3ff0dbc09156bf # tag=actions-common-generated-files-verdict-v1.2.8
         with:
           needs: ${{ toJSON(needs) }}
 
@@ -156,7 +156,7 @@ jobs:
       contents: read # to read code
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: audit
 
