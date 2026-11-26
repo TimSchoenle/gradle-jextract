@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.29](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.28...v0.3.29) (2026-11-26)
+
+
+### Dependencies
+
+* **deps:** update dependency com.diffplug.spotless to v8.12.0 ([#368](https://github.com/TimSchoenle/gradle-jextract/issues/368)) ([d295e9b](https://github.com/TimSchoenle/gradle-jextract/commit/d295e9b17f5ee2aa4db143cf59b687ef5cd70f6c))
+* **deps:** update gradle to v9.9.2 ([#365](https://github.com/TimSchoenle/gradle-jextract/issues/365)) ([a66957b](https://github.com/TimSchoenle/gradle-jextract/commit/a66957b894d6f2183b3ff452e63c1694fd8ec3d9))
+
 ## [0.3.28](https://github.com/TimSchoenle/gradle-jextract/compare/v0.3.27...v0.3.28) (2026-11-19)
 
 
