@@ -63,7 +63,7 @@ jobs:
       #   src/**/*.java    rewriteAndFormat: the spotless block formats `java` alone, and the
       #                    de.timscho.rewrite.Style recipe is Java static analysis
       - name: Commit Generated Files
-        uses: TimSchoenle/actions/actions/common/commit-generated-files@ded012bb09f11e42381c9b1b7c3ff0dbc09156bf # tag=actions-common-commit-generated-files-v1.3.4
+        uses: TimSchoenle/actions/actions/common/commit-generated-files@7594d1c64de290a99195e47fc6d7b5699243b951 # tag=actions-common-commit-generated-files-v1.3.5
         with:
           client_id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
           private_key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}

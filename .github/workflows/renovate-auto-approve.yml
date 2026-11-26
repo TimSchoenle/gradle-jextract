@@ -63,7 +63,7 @@ jobs:
           permission-pull-requests: write # to read the pull request and its commits, and to approve it
 
       - name: Auto-approve Renovate PRs
-        uses: TimSchoenle/actions/actions/maintenance/auto-approve-pr@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-maintenance-auto-approve-pr-v3.0.7
+        uses: TimSchoenle/actions/actions/maintenance/auto-approve-pr@7594d1c64de290a99195e47fc6d7b5699243b951 # tag=actions-maintenance-auto-approve-pr-v3.0.8
         with:
           token: ${{ steps.token.outputs.token }}
           pr_url: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.workflow_run.pull_requests[0].number }}

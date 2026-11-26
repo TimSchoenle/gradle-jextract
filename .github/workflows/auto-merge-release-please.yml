@@ -50,7 +50,7 @@ jobs:
           permission-pull-requests: write # To list the pull requests and approve them
 
       - name: Approve and Auto-merge
-        uses: TimSchoenle/actions/actions/maintenance/timed-auto-merge@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-maintenance-timed-auto-merge-v3.1.1
+        uses: TimSchoenle/actions/actions/maintenance/timed-auto-merge@7594d1c64de290a99195e47fc6d7b5699243b951 # tag=actions-maintenance-timed-auto-merge-v3.1.2
         with:
           token: ${{ steps.token.outputs.token }}
           trusted_authors: '253958393,248313786' # actions-maintenance-bot, automatic-release-manager
